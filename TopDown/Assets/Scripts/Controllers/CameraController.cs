@@ -9,23 +9,23 @@ public class CameraController : MonoBehaviour
     private Define.CameraMode _mode = Define.CameraMode.QuarterView;
 
     [SerializeField]
-    private Vector3 _delta = new Vector3(0.0f, 0.0f, 0.0f);
+    private Vector3 _delta = new Vector3(0.0f, 6.0f, -5.0f);
 
     [SerializeField]
-    private GameObject _player = null;
+    private GameObject _player { get; set; } = null;
 
-    private Vector3[] CameraModePos = { new Vector3(0.0f, 6.0f, -5.0f) };
+    //private Vector3[] CameraModePos = { new Vector3(0.0f, 6.0f, -5.0f) };
 
-    public void SetPlayer(GameObject player)
-    {
-        _player = player;
-    }
-
-    void Start()
+    void Init()
     {
         _player = GameObject.Find("Player");
         if (_player == null)
             Debug.LogWarning("CameraController Searching Player Failed!");
+    }
+
+    void Start()
+    {
+        Init();
     }
 
     void LateUpdate()
@@ -43,13 +43,13 @@ public class CameraController : MonoBehaviour
         switch (mode)
         {
             case Define.CameraMode.QuarterView:
-                _delta = CameraModePos[(int)mode];
+                //_delta = CameraModePos[(int)mode];
                 transform.position = _player.transform.position + _delta + Vector3.up * 2.0f;
                 transform.LookAt(_player.transform);
                 break;
 
             default:
-                _delta = CameraModePos[(int)Define.CameraMode.QuarterView];
+                //_delta = CameraModePos[(int)Define.CameraMode.QuarterView];
                 transform.position = _player.transform.position + _delta + Vector3.up * 2.0f;
                 transform.LookAt(_player.transform);
                 break;

@@ -11,9 +11,10 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController _characterController;
     private NavMeshAgent _navAgent;
-    private Camera camera;
-    private bool _isGrounded = false;
-    private Vector3 calcVelocity;
+    private Camera _camera;
+    private Animator _animator;
+
+    readonly int moveHash = Animator.StringToHash("Move");
 
 
 
@@ -25,7 +26,8 @@ public class PlayerController : MonoBehaviour
         _navAgent = GetComponent<NavMeshAgent>();
         _navAgent.updatePosition = false; //이동은 컨트롤러가 시행
         _navAgent.updateRotation = true; // 회전은 네비가 하도록
-        camera = Camera.main;
+        _camera = Camera.main;
+        _animator = GetComponent<Animator>();
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = _navAgent.nextPosition;
+        transform.position = new Vector3(transform.position.x,_navAgent.nextPosition.y,transform.position.z);
     }
 
     private void OnMouseEvent(Define.MouseEvent evt)
@@ -73,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnMousePicking()
     {
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
         {
@@ -86,11 +88,13 @@ public class PlayerController : MonoBehaviour
     {
         if (_navAgent.remainingDistance > _navAgent.stoppingDistance)
         {
-            _characterController.SimpleMove(_navAgent.velocity);
+            _characterController.Move(_navAgent.velocity * Time.deltaTime);
+            _animator.SetBool(moveHash, true);
         }
         else
         {
             _characterController.Move(Vector3.zero);
+            _animator.SetBool(moveHash, false);
         }
     }
 }
