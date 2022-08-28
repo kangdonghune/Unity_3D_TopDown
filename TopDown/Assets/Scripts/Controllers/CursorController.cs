@@ -36,7 +36,7 @@ public class CursorController : MonoBehaviour
 		{
 			if (hit.collider.gameObject.layer == (int)Define.Layer.Wall)
 			{
-				Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
+				//Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 				if (_cursorType != CursorType.Attack)
 				{
 					Cursor.SetCursor(_attackIcon, new Vector2(_attackIcon.width / 5, 0), CursorMode.Auto);
@@ -45,7 +45,7 @@ public class CursorController : MonoBehaviour
 			}
 			else
 			{
-				Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.blue, 1.0f);
+				//Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.blue, 1.0f);
 				if (_cursorType != CursorType.Hand)
 				{
 					Cursor.SetCursor(_handIcon, new Vector2(_handIcon.width / 3, 0), CursorMode.Auto);
