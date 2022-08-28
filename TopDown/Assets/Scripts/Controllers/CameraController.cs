@@ -22,6 +22,9 @@ public class CameraController : MonoBehaviour
     private Vector3 refVelocity;
 
 
+    private Vector3 _lookTargetPosition;
+    private bool _isSmooth = true;
+
     void Init()
     {
         _target = GameObject.Find("Player");
@@ -44,6 +47,9 @@ public class CameraController : MonoBehaviour
     {
         if (_target.IsValid() == false)
             return;
+
+        _lookTargetPosition = _target.transform.position;
+        _lookTargetPosition.y += lookAtHeight;
 
         CameraSetting(_mode); // default 위치 지정
         CameraRayCast(_mode); // 카메라와 플레이어 레이캐스팅 후 위치 조정
@@ -70,17 +76,13 @@ public class CameraController : MonoBehaviour
 
         Vector3 rotateVector = Quaternion.AngleAxis(angle, Vector3.up) * worldPositon;
         Debug.DrawLine(_target.transform.position, rotateVector, Color.green);
-
-
-        Vector3 target = _target.transform.position;
-        target.y += lookAtHeight;
      
 
-        Vector3 finalPosition = target + rotateVector;
+        Vector3 finalPosition = _lookTargetPosition + rotateVector;
         Debug.DrawLine(_target.transform.position, finalPosition, Color.blue);
 
         transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
-        transform.LookAt(target);
+        transform.LookAt(_lookTargetPosition);
 
     }
 
@@ -95,10 +97,17 @@ public class CameraController : MonoBehaviour
 
             case Define.CameraMode.QuarterView:
                 _delta = CameraModePos[(int)mode];
-                transform.position = _target.transform.position + _delta + Vector3.up * 2.0f;
-                Vector3 target = _target.transform.position;
-                target.y += lookAtHeight;
-                transform.LookAt(target);
+                if(_isSmooth)
+                {
+                    Vector3 finalPosition = _target.transform.position + _delta;
+                    transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
+                }
+                else
+                {
+                    transform.position = _target.transform.position + _delta;
+                }
+
+                transform.LookAt(_lookTargetPosition);
                 break;
 
             default:
@@ -119,7 +128,8 @@ public class CameraController : MonoBehaviour
 
         Vector3 dir = _target.transform.position - transform.position;
         RaycastHit hit;
-        LayerMask mask = LayerMask.GetMask("Block");
+        LayerMask mask = LayerMask.GetMask("Wall");
+        
         Debug.DrawRay(transform.position, dir.normalized * dir.magnitude, Color.green);
         if (Physics.Raycast(transform.position, dir.normalized, out hit, dir.magnitude, mask))
         {
@@ -127,10 +137,14 @@ public class CameraController : MonoBehaviour
             float dist = hitDir.magnitude;
             transform.position = _target.transform.position + hitDir.normalized * dist * 0.7f;
             CameraRayCast(mode);
+            _isSmooth = false;
         }
 
         else
+        {
+            _isSmooth = true;
             return;
+        }
     }
 
     private void OnDrawGizmos()
