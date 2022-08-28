@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
-	int _mask = (1 << (int)Define.Layer.Plane) | (1 << (int)Define.Layer.Monster);
+	int _mask = (1 << (int)Define.Layer.Ground) | (1 << (int)Define.Layer.Monster) | (1 << (int)Define.Layer.Wall);
 
 	Texture2D _attackIcon;
 	Texture2D _handIcon;
@@ -34,7 +34,7 @@ public class CursorController : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, 100.0f, _mask))
 		{
-			if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
+			if (hit.collider.gameObject.layer == (int)Define.Layer.Wall)
 			{
 				Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 				if (_cursorType != CursorType.Attack)

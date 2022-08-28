@@ -10,8 +10,10 @@ public class InputManager
     public Action KeyAction = null;
     public Action<Define.MouseEvent> MouseAction = null;
 
-    bool _pressed = false;
-    float _pressedTime = 0;
+    bool _LBpressed = false;
+    bool _RBpressed = false;
+    float _LBpressedTime = 0;
+    float _RBpressedTime = 0;
 
     public void OnUpdate()
     {
@@ -29,26 +31,50 @@ public class InputManager
         {
             if(Input.GetMouseButton(0)) // ¿ÞÂÊ 0
             {
-                if(!_pressed)
+                if(!_LBpressed)
                 {
-                    MouseAction.Invoke(Define.MouseEvent.PointerDown);
-                    _pressedTime = Time.time;
+                    MouseAction.Invoke(Define.MouseEvent.LPointerDown);
+                    _LBpressedTime = Time.time;
                 }
-                MouseAction.Invoke(Define.MouseEvent.Press);
-                _pressed = true;
+                MouseAction.Invoke(Define.MouseEvent.LPress);
+                _LBpressed = true;
 
             }
 
             else
             {
-                if(_pressed)
+                if(_LBpressed)
                 {
-                    if(Time.time < _pressedTime +0.2f)
-                        MouseAction.Invoke(Define.MouseEvent.Click);
-                    MouseAction.Invoke(Define.MouseEvent.PointerUp);   
+                    if(Time.time < _LBpressedTime + 0.2f)
+                        MouseAction.Invoke(Define.MouseEvent.LClick);
+                    MouseAction.Invoke(Define.MouseEvent.LPointerUp);   
                 }
-                _pressed = false;
-                _pressedTime = 0;
+                _LBpressed = false;
+                _LBpressedTime = 0;
+            }
+
+            if (Input.GetMouseButton(1)) // ¿À¸¥ÂÊ 0
+            {
+                if (!_RBpressed)
+                {
+                    MouseAction.Invoke(Define.MouseEvent.RPointerDown);
+                    _RBpressedTime = Time.time;
+                }
+                MouseAction.Invoke(Define.MouseEvent.RPress);
+                _RBpressed = true;
+
+            }
+
+            else
+            {
+                if (_RBpressed)
+                {
+                    if (Time.time < _RBpressedTime + 0.2f)
+                        MouseAction.Invoke(Define.MouseEvent.RClick);
+                    MouseAction.Invoke(Define.MouseEvent.RPointerUp);
+                }
+                _RBpressed = false;
+                _RBpressedTime = 0;
             }
 
         }

@@ -1,21 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
     #region Variable
-
-    public float speed = 5.0f;
-    public float jumpHeight = 2.0f;
-    public float dashDistance = 5.0f;
-    public float gravity = -9.81f;
-    public Vector3 drags;
     public LayerMask groundLayerMask;
     public float groundCheckDistance = 0.3f;
 
     private CharacterController _characterController;
-    private Vector3 inputDirection = Vector3.zero;
+    private NavMeshAgent _navAgent;
+    private Camera camera;
     private bool _isGrounded = false;
     private Vector3 calcVelocity;
 
@@ -23,46 +19,78 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    void Start()
+    private void Init()
     {
         _characterController = GetComponent<CharacterController>();
+        _navAgent = GetComponent<NavMeshAgent>();
+        _navAgent.updatePosition = false; //이동은 컨트롤러가 시행
+        _navAgent.updateRotation = true; // 회전은 네비가 하도록
+        camera = Camera.main;
+
+        Managers.Input.MouseAction -= OnMouseEvent;
+        Managers.Input.MouseAction += OnMouseEvent;
+    }
+
+    void Start()
+    {
+        Init();
     }
 
     void Update()
     {
-        _isGrounded = _characterController.isGrounded;
-        if (_isGrounded && calcVelocity.y < 0)
-            calcVelocity.y = 0.0f;
+        PlayerMove();
+    }
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        _characterController.Move(move * Time.deltaTime * speed); //move는 중력계산 x SimpleMove는 중력 계산 및 델타타임도 자동으로 곱해줌
+    private void LateUpdate()
+    {
+        transform.position = _navAgent.nextPosition;
+    }
 
-        if(move != Vector3.zero)
+    private void OnMouseEvent(Define.MouseEvent evt)
+    {
+        switch(evt)
         {
-            transform.forward = move;
+            case Define.MouseEvent.LClick:
+                OnMousePicking();
+                break;
+            case Define.MouseEvent.LPointerDown:
+                break;
+            case Define.MouseEvent.LPointerUp:
+                break;
+            case Define.MouseEvent.LPress:
+                break;
+            case Define.MouseEvent.RClick:
+                OnMousePicking();
+                break;
+            case Define.MouseEvent.RPointerDown:
+                break;
+            case Define.MouseEvent.RPointerUp:
+                break;
+            case Define.MouseEvent.RPress:
+                break;
         }
+    }
 
-        if(Input.GetButton("Jump") && _isGrounded)
+    private void OnMousePicking()
+    {
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
         {
-            calcVelocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravity);
+            Debug.Log("We hit " + hit.collider.name + " " + hit.point);
+            _navAgent.SetDestination(hit.point);
         }
+    }
 
-        if(Input.GetButtonDown("Dash"))
+    private void PlayerMove()
+    {
+        if (_navAgent.remainingDistance > _navAgent.stoppingDistance)
         {
-            Debug.Log("Dash");
-            calcVelocity += Vector3.Scale(transform.forward, dashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime * drags.x + 1)) / -Time.deltaTime),
-                0,
-                (Mathf.Log(1f / (Time.deltaTime * drags.z + 1)) / -Time.deltaTime))
-                );
+            _characterController.SimpleMove(_navAgent.velocity);
         }
-
-        //
-        calcVelocity.y += gravity * Time.deltaTime;
-        calcVelocity.x /= 1 + drags.x * Time.deltaTime;
-        calcVelocity.y /= 1 + drags.y * Time.deltaTime;
-        calcVelocity.z /= 1 + drags.z * Time.deltaTime;
-
-        _characterController.Move(calcVelocity * Time.deltaTime);
-
+        else
+        {
+            _characterController.Move(Vector3.zero);
+        }
     }
 }
