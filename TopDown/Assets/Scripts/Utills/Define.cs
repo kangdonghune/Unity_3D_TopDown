@@ -10,7 +10,7 @@ public class Define
     public enum Scene { Unknown, Login, Lobby, Game,}
     public enum Sound {  BGM, Effect, MaxCount,}
     public enum UIEvent { Click, Drag,}
-    public enum CameraMode { TopView, QuarterView, End}    
+    public enum CameraMode { TopView, QuarterView, None,End}    
     public enum MouseEvent { LPress, LPointerDown, LPointerUp, LClick, RPress, RPointerDown, RPointerUp, RClick }
 
 

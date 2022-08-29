@@ -4,25 +4,35 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+ 
     public struct CameraValue
     {
         public float Distance;
         public float Height;
         public float Angle;
         public float LookAtHeight;
-        public bool isNotNull;
-        public float smoothSpeed;
+        public float SmoothSpeed;
+
+        public CameraValue(float Distance, float Height, float Angle, float LookAtHeight, float SmoothSpeed)
+        {
+            this.Distance = Distance;
+            this.Height = Height;
+            this.Angle = Angle;
+            this.LookAtHeight = LookAtHeight;
+            this.SmoothSpeed = SmoothSpeed;
+        }
     }
 
     [SerializeField]
     public Define.CameraMode mode = Define.CameraMode.TopView;
-
-    private Define.CameraMode oldMode = Define.CameraMode.TopView;
     
     [SerializeField]
     public GameObject target;
 
-    public CameraValue[] CameraValues = new CameraValue[(int)Define.CameraMode.End]; 
+    public CameraValue[] CameraValues = new CameraValue[(int)Define.CameraMode.End]
+                                        {new CameraValue(6f, 5f,45f,1.5f, 0.2f),
+                                         new CameraValue(8f, 8f,0f, 1f, 0.2f),
+                                          new CameraValue()}; 
 
     public float distance = 10f;
     public float height = 5f;
@@ -43,8 +53,13 @@ public class CameraController : MonoBehaviour
 
         Managers.Input.KeyAction -= SetCameraMode;
         Managers.Input.KeyAction += SetCameraMode;
-        CameraValueSave(mode);
-        DefaultCameraVaule();
+        //에디터에서 값을 넣어주고자 할 땐 넣어주고
+        if (mode == Define.CameraMode.None || mode == Define.CameraMode.End)
+            mode = Define.CameraMode.TopView;
+        //아니면 디펄트 값을 이용하고 모드는 탑 뷰로
+        else
+            CameraValueSave(mode);
+
     }
 
     void Start()
@@ -76,9 +91,8 @@ public class CameraController : MonoBehaviour
         {
             if(mode != Define.CameraMode.TopView)
             {
-                oldMode = mode;
+                CameraValueSave(mode);
                 mode = Define.CameraMode.TopView;
-                CameraValueSave(oldMode);
                 CameraValueLoad(mode);
                 _isSmooth = true;
             }
@@ -87,9 +101,8 @@ public class CameraController : MonoBehaviour
         {
             if (mode != Define.CameraMode.QuarterView)
             {
-                oldMode = mode;
+                CameraValueSave(mode);
                 mode = Define.CameraMode.QuarterView;
-                CameraValueSave(oldMode);
                 CameraValueLoad(mode);
             }
         }
@@ -132,26 +145,6 @@ public class CameraController : MonoBehaviour
         transform.LookAt(_lookTargetPosition);
     }
 
-    void DefaultCameraVaule()
-    {
-        if(mode != Define.CameraMode.TopView)
-        {
-            CameraValues[(int)Define.CameraMode.TopView].Distance = 6f;
-            CameraValues[(int)Define.CameraMode.TopView].Height = 5f;
-            CameraValues[(int)Define.CameraMode.TopView].Angle = 45.0f;
-            CameraValues[(int)Define.CameraMode.TopView].LookAtHeight = 2f;
-            CameraValues[(int)Define.CameraMode.TopView].smoothSpeed = 0.5f;
-        }
-
-        if (mode != Define.CameraMode.QuarterView)
-        {
-            CameraValues[(int)Define.CameraMode.QuarterView].Distance = 8f;
-            CameraValues[(int)Define.CameraMode.QuarterView].Height = 8f;
-            CameraValues[(int)Define.CameraMode.QuarterView].Angle = 0f;
-            CameraValues[(int)Define.CameraMode.QuarterView].LookAtHeight = 1f;
-            CameraValues[(int)Define.CameraMode.QuarterView].smoothSpeed = 0.5f;
-        }
-    }
 
     public void CameraValueSave(Define.CameraMode mode)
     {
