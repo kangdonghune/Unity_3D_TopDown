@@ -55,7 +55,10 @@ public class CameraController : MonoBehaviour
         Managers.Input.KeyAction += SetCameraMode;
         //에디터에서 값을 넣어주고자 할 땐 넣어주고
         if (mode == Define.CameraMode.None || mode == Define.CameraMode.End)
+        {
             mode = Define.CameraMode.TopView;
+            CameraValueLoad(mode);
+        }
         //아니면 디펄트 값을 이용하고 모드는 탑 뷰로
         else
             CameraValueSave(mode);
@@ -124,14 +127,27 @@ public class CameraController : MonoBehaviour
         Vector3 finalPosition = _lookTargetPosition + rotateVector;
         Debug.DrawLine(target.transform.position, finalPosition, Color.blue);
 
-        float cameraMoveDist = (finalPosition - transform.position).magnitude;
-        if (cameraMoveDist < 0.01f)
-            _isSmooth = false;
-
-        if (_isSmooth)
-            transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
+      
+        
+        if(_isSmooth == false)
+        {
+           transform.position = finalPosition;
+        }
         else
-            transform.position = finalPosition;
+        {
+            float cameraMoveDist = (finalPosition - transform.position).magnitude;
+            if (cameraMoveDist < 0.1f)
+            {
+                transform.position = finalPosition;
+                _isSmooth = false;
+            }
+            else
+            {
+                transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
+
+            }
+
+        }
 
        transform.LookAt(_lookTargetPosition);
     }
@@ -144,7 +160,7 @@ public class CameraController : MonoBehaviour
         Vector3 finalPosition = target.transform.position + worldPositon;
        
         float cameraMoveDist = (finalPosition - transform.position).magnitude;
-        if (cameraMoveDist < 0.01f)
+        if (cameraMoveDist < 0.1f)
             _isSmooth = false;
 
         if (_isSmooth)
