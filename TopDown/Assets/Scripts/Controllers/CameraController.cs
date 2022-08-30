@@ -30,8 +30,8 @@ public class CameraController : MonoBehaviour
     public GameObject target;
 
     public CameraValue[] CameraValues = new CameraValue[(int)Define.CameraMode.End]
-                                        {new CameraValue(6f, 5f,45f,1.5f, 0.2f),
-                                         new CameraValue(8f, 8f,0f, 1f, 0.2f),
+                                        {new CameraValue(6f, 5f,45f,1.5f, 0.8f),
+                                         new CameraValue(8f, 8f,0f, 1f, 0.8f),
                                           new CameraValue()}; 
 
     public float distance = 10f;
@@ -143,7 +143,7 @@ public class CameraController : MonoBehaviour
             }
             else
             {
-                transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
+                transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, CameraValues[(int)mode].SmoothSpeed);
 
             }
 
@@ -165,7 +165,7 @@ public class CameraController : MonoBehaviour
 
         if (_isSmooth)
         {
-            transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
+            transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, CameraValues[(int)mode].SmoothSpeed);
         }
         else
         {
@@ -184,6 +184,7 @@ public class CameraController : MonoBehaviour
         CameraValues[(int)mode].Height = height;
         CameraValues[(int)mode].Angle = angle;
         CameraValues[(int)mode].LookAtHeight = lookAtHeight;
+        CameraValues[(int)mode].SmoothSpeed = smoothSpeed;
 
     }
 
@@ -193,7 +194,7 @@ public class CameraController : MonoBehaviour
         height = CameraValues[(int)mode].Height;
         angle = CameraValues[(int)mode].Angle;
         lookAtHeight = CameraValues[(int)mode].LookAtHeight;
-
+        smoothSpeed = CameraValues[(int)mode].SmoothSpeed;
     }
 
     public void CameraSetting(Define.CameraMode mode)
@@ -233,6 +234,7 @@ public class CameraController : MonoBehaviour
             Vector3 hitDir = hit.point - _lookTargetPosition;
             float dist = hitDir.magnitude;
             transform.position = target.transform.position + hitDir.normalized * dist * 0.7f;
+            _isSmooth = false;
             CameraRayCast(mode);
         }
     }
