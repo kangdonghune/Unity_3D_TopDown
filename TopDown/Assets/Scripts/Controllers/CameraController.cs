@@ -41,8 +41,6 @@ public class CameraController : MonoBehaviour
     public float smoothSpeed = 0.5f;
     private Vector3 refVelocity;
 
-
-    private Vector3 _lookTargetPosition;
     private bool _isSmooth = true;
 
     void Init()
@@ -76,8 +74,7 @@ public class CameraController : MonoBehaviour
         if (target.IsValid() == false)
             return;
 
-        _lookTargetPosition = target.transform.position;
-        _lookTargetPosition.y += lookAtHeight;
+   
 
         CameraSetting(mode); // default 위치 지정
         CameraRayCast(mode); // 카메라와 플레이어 레이캐스팅 후 위치 조정
@@ -122,7 +119,10 @@ public class CameraController : MonoBehaviour
 
         Vector3 rotateVector = Quaternion.AngleAxis(CameraValues[(int)mode].Angle, Vector3.up) * worldPositon;
         Debug.DrawLine(target.transform.position, rotateVector, Color.green);
-     
+
+
+        Vector3 _lookTargetPosition = target.transform.position;
+        _lookTargetPosition.y += lookAtHeight;
 
         Vector3 finalPosition = _lookTargetPosition + rotateVector;
         Debug.DrawLine(target.transform.position, finalPosition, Color.blue);
@@ -149,7 +149,7 @@ public class CameraController : MonoBehaviour
 
         }
 
-       transform.LookAt(_lookTargetPosition);
+        transform.LookAt(_lookTargetPosition);
     }
 
     public void HandleQuarterViewViewCamera()
@@ -172,6 +172,8 @@ public class CameraController : MonoBehaviour
             transform.position = target.transform.position + worldPositon;
         }
 
+        Vector3  _lookTargetPosition = target.transform.position;
+        _lookTargetPosition.y += lookAtHeight;
         transform.LookAt(_lookTargetPosition);
     }
 
@@ -218,6 +220,9 @@ public class CameraController : MonoBehaviour
         //1. 플레이어와 카메라 사이에 물체 여부 확인
         //2. 플레이어 외에 ray hit가 발생하다면 hit point와 플레이어 사이의 70퍼 위치에 카메라 위치 이동.
 
+        Vector3 _lookTargetPosition = target.transform.position;
+        _lookTargetPosition.y += lookAtHeight;
+
         Vector3 dir = _lookTargetPosition - transform.position;
         RaycastHit hit;
         LayerMask mask = LayerMask.GetMask("Wall");
@@ -229,13 +234,6 @@ public class CameraController : MonoBehaviour
             float dist = hitDir.magnitude;
             transform.position = target.transform.position + hitDir.normalized * dist * 0.7f;
             CameraRayCast(mode);
-            _isSmooth = false;
-        }
-
-        else
-        {
-            _isSmooth = true;
-            return;
         }
     }
 
