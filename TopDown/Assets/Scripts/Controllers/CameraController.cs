@@ -104,6 +104,7 @@ public class CameraController : MonoBehaviour
                 CameraValueSave(mode);
                 mode = Define.CameraMode.QuarterView;
                 CameraValueLoad(mode);
+                _isSmooth = true;
             }
         }
 
@@ -123,8 +124,16 @@ public class CameraController : MonoBehaviour
         Vector3 finalPosition = _lookTargetPosition + rotateVector;
         Debug.DrawLine(target.transform.position, finalPosition, Color.blue);
 
-        transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
-        transform.LookAt(_lookTargetPosition);
+        float cameraMoveDist = (finalPosition - transform.position).magnitude;
+        if (cameraMoveDist < 0.01f)
+            _isSmooth = false;
+
+        if (_isSmooth)
+            transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
+        else
+            transform.position = finalPosition;
+
+       transform.LookAt(_lookTargetPosition);
     }
 
     public void HandleQuarterViewViewCamera()
@@ -132,9 +141,14 @@ public class CameraController : MonoBehaviour
         CameraValueSave(mode);
 
         Vector3 worldPositon = (Vector3.forward * -CameraValues[(int)mode].Distance) + (Vector3.up * CameraValues[(int)mode].Height);
+        Vector3 finalPosition = target.transform.position + worldPositon;
+       
+        float cameraMoveDist = (finalPosition - transform.position).magnitude;
+        if (cameraMoveDist < 0.01f)
+            _isSmooth = false;
+
         if (_isSmooth)
         {
-            Vector3 finalPosition = target.transform.position + worldPositon;
             transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, smoothSpeed);
         }
         else
