@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = new Vector3(transform.position.x,_navAgent.nextPosition.y,transform.position.z);
     }
 
     private void OnMouseEvent(Define.MouseEvent evt)
@@ -89,11 +88,13 @@ public class PlayerController : MonoBehaviour
         if (_navAgent.remainingDistance > _navAgent.stoppingDistance)
         {
             _characterController.Move(_navAgent.velocity * Time.deltaTime);
+            transform.position = new Vector3(transform.position.x, _navAgent.nextPosition.y, transform.position.z);
             _animator.SetBool(moveHash, true);
         }
         else
         {
             _characterController.Move(Vector3.zero);
+            transform.position = new Vector3(transform.position.x, _navAgent.nextPosition.y, transform.position.z);
             _animator.SetBool(moveHash, false);
         }
     }

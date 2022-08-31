@@ -17,7 +17,7 @@ public class InputManager
 
     public void OnUpdate()
     {
-        if(EventSystem.current.IsPointerOverGameObject()) // ui 버튼이 클릭되었는 지 여부 체크
+        if(EventSystem.current.IsPointerOverGameObject()) // ui 버튼이 클릭되었는 지 여부 체크rr
         {
             return;
         }
