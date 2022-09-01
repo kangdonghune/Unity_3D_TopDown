@@ -42,7 +42,7 @@ public sealed class StateMachine<T>
     public State<T> CurState { private get; set;}
     public State<T> PriState { private get; set; }
 
-    public float ElapsedTimeInState { private get; set; } = 0.0f;
+    public float ElapsedTimeInState { get; protected set; } = 0.0f;
 
     private Dictionary<System.Type, State<T>> _states = new Dictionary<System.Type, State<T>>();
 
