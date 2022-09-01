@@ -7,6 +7,12 @@ public class BearController : MonoBehaviour
 {
     #region Variable
     protected StateMachine<BearController> stateMachine;
+    public LayerMask targetMask;
+    private int _targetMask = 1 << (int)Define.Layer.Player;
+    public Transform target;
+    public float viewRadius;
+    public float attackRange;
+
     #endregion
 
     void Init()
@@ -25,8 +31,28 @@ public class BearController : MonoBehaviour
         stateMachine.Update(Time.deltaTime);
     }
 
+    public bool IsAvailableAttack
+    {
+        get
+        {
+            if (!target)
+            {
+                return false;
+            }
+            float distance = Vector3.Distance(transform.position, target.position);
+            return (distance <= attackRange);
+        }
+    }
+
     internal Transform SearchEnemy()
     {
-        return transform;
+        target = null;
+
+        Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, _targetMask);
+        if (targetInViewRadius.Length > 0)
+        {
+            target = targetInViewRadius[0].transform;
+        }
+        return target;
     }
 }

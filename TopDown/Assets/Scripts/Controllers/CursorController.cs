@@ -34,7 +34,7 @@ public class CursorController : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, 100.0f, _mask))
 		{
-			if (hit.collider.gameObject.layer == (int)Define.Layer.Wall)
+			if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
 			{
 				//Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 				if (_cursorType != CursorType.Attack)

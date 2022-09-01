@@ -9,7 +9,6 @@ public class IdleState : State<BearController>
 
     protected int hasMove = Animator.StringToHash("Move");
     protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
-    protected int hasAttack = Animator.StringToHash("Attack");
 
 
     public override void Init()
@@ -30,7 +29,7 @@ public class IdleState : State<BearController>
         Transform enemy = context.SearchEnemy();
         if(enemy)
         {
-            if(context.isAvailableAttack)
+            if(context.IsAvailableAttack)
             {
                 stateMachine.ChangeState<AttackState>();
             }
