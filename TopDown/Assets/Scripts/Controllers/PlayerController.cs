@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BaseController
 {
     #region Variable
     public LayerMask groundLayerMask;
@@ -20,8 +20,9 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    private void Init()
+    protected override void Init()
     {
+        WorldObjectType = Define.WorldObject.Player;
         _characterController = GetComponent<CharacterController>();
         _navAgent = GetComponent<NavMeshAgent>();
         _navAgent.updatePosition = false; //이동은 컨트롤러가 시행
@@ -31,11 +32,6 @@ public class PlayerController : MonoBehaviour
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
-    }
-
-    void Start()
-    {
-        Init();
     }
 
     void Update()

@@ -2,24 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class BearController : MonoBehaviour
+public class BearController : MonsterController
 {
-    #region Variable
-    protected StateMachine<BearController> stateMachine;
-    public LayerMask targetMask;
-    private int _targetMask = 1 << (int)Define.Layer.Player;
-    public Transform target;
-    public float viewRadius;
-    public float attackRange;
+    private StateMachine<BearController> _stateMachine;
+    public StateMachine<BearController> StateMachine { get { return _stateMachine; } }
 
-    #endregion
-
-    void Init()
+    protected override void Init()
     {
-        stateMachine = new StateMachine<BearController>(this, new IdleState());
-        stateMachine.AddState(new MoveState());
-        stateMachine.AddState(new AttackState());
+        base.Init();
+        WorldObjectType = Define.WorldObject.Monster;
+        _stateMachine = new StateMachine<BearController>(this, new IdleState());
+        _stateMachine.AddState(new MoveState());
+        _stateMachine.AddState(new AttackState());
     }
     void Start()
     {
@@ -28,31 +24,7 @@ public class BearController : MonoBehaviour
 
     void Update()
     {
-        stateMachine.Update(Time.deltaTime);
+        _stateMachine.Update(Time.deltaTime);
     }
 
-    public bool IsAvailableAttack
-    {
-        get
-        {
-            if (!target)
-            {
-                return false;
-            }
-            float distance = Vector3.Distance(transform.position, target.position);
-            return (distance <= attackRange);
-        }
-    }
-
-    internal Transform SearchEnemy()
-    {
-        target = null;
-
-        Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, _targetMask);
-        if (targetInViewRadius.Length > 0)
-        {
-            target = targetInViewRadius[0].transform;
-        }
-        return target;
-    }
 }

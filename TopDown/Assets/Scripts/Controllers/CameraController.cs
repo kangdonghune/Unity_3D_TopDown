@@ -74,8 +74,6 @@ public class CameraController : MonoBehaviour
         if (target.IsValid() == false)
             return;
 
-   
-
         CameraSetting(mode); // default 위치 지정
         CameraRayCast(mode); // 카메라와 플레이어 레이캐스팅 후 위치 조정
     }

@@ -34,14 +34,14 @@ public class MoveState : State<BearController>
             if (_agent.remainingDistance > _agent.stoppingDistance)
             {
                 _controller.Move(_agent.velocity * deltaTime);
+                //context.transform.position = new Vector3(context.transform.position.x, _agent.nextPosition.y, context.transform.position.z);
                 _animator.SetFloat(hasMoveSpeed, _agent.velocity.magnitude / _agent.speed, 1f, deltaTime);
                 return;
             }
         }
-        if(!enemy || _agent.remainingDistance <= _agent.stoppingDistance)
-        {
-            stateMachine.ChangeState<IdleState>();
-        }
+
+        stateMachine.ChangeState<IdleState>();
+
     }
     public override void Exit()
     {

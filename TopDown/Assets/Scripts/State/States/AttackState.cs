@@ -6,7 +6,7 @@ public class AttackState : State<BearController>
 {
     private Animator _animator;
 
-    protected int hasAttack = Animator.StringToHash("Attack");
+    protected int hashAttack = Animator.StringToHash("Attack");
 
     public override void Init()
     {
@@ -15,7 +15,7 @@ public class AttackState : State<BearController>
 
     public override void Enter()
     {
-       _animator.SetTrigger(hasAttack); 
+        _animator.SetTrigger(hashAttack);
     }
     
     public override void Update(float deltaTime)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class State<T>
+public abstract class State<T> 
 {
     protected StateMachine<T> stateMachine;
     protected T context;
