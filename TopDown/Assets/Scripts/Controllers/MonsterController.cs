@@ -6,9 +6,9 @@ using UnityEngine.AI;
 public class MonsterController : BaseController
 {
     #region Variable
-
+    public float MoveSpeed { get; protected set; } = 5f;
     private int _targetMask = 1 << (int)Define.Layer.Player;
-    public Transform target;
+    public Transform Target { get; private set; }
     public float viewRadius = 5f;
     public float attackRange = 1.5f;
 
@@ -16,11 +16,11 @@ public class MonsterController : BaseController
     {
         get
         {
-            if (target == null)
+            if (Target == null)
             {
                 return false;
             }
-            float distance = Vector3.Distance(transform.position, target.position);
+            float distance = Vector3.Distance(transform.position, Target.position);
             return (distance <= attackRange);
         }
     }
@@ -28,14 +28,14 @@ public class MonsterController : BaseController
 
     internal Transform SearchEnemy()
     {
-        target = null;
+        Target = null;
 
         Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, _targetMask);
         if (targetInViewRadius.Length > 0)
         {
-            target = targetInViewRadius[0].transform;
+            Target = targetInViewRadius[0].transform;
         }
-        return target;
+        return Target;
     }
 
     private void OnDrawGizmos()

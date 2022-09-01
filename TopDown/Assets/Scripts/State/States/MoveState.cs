@@ -9,8 +9,8 @@ public class MoveState : State<BearController>
     private NavMeshAgent _agent;
     private CharacterController _controller;
 
-    protected int hasMove = Animator.StringToHash("Move");
-    protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
+    protected int hashMove = Animator.StringToHash("Move");
+    protected int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
 
     public override void Init()
     {
@@ -21,8 +21,8 @@ public class MoveState : State<BearController>
 
     public override void Enter()
     {
-        _agent.SetDestination(context.target.position);
-        _animator.SetBool(hasMove, true);
+        _agent.SetDestination(context.Target.position);
+        _animator.SetBool(hashMove, true);
     }
 
     public override void Update(float deltaTime)
@@ -30,12 +30,12 @@ public class MoveState : State<BearController>
         Transform enemy = context.SearchEnemy();
         if (enemy)
         {
-            _agent.SetDestination(context.target.position);
+            _agent.SetDestination(context.Target.position);
             if (_agent.remainingDistance > _agent.stoppingDistance)
             {
-                _controller.Move(_agent.velocity * deltaTime);
-                //context.transform.position = new Vector3(context.transform.position.x, _agent.nextPosition.y, context.transform.position.z);
-                _animator.SetFloat(hasMoveSpeed, _agent.velocity.magnitude / _agent.speed, 1f, deltaTime);
+                _controller.Move(_agent.velocity * Time.deltaTime * context.MoveSpeed);
+                context.transform.position = _agent.nextPosition;
+                _animator.SetFloat(hashMoveSpeed, _agent.velocity.magnitude / _agent.speed, .1f, Time.deltaTime);
                 return;
             }
         }
@@ -45,8 +45,8 @@ public class MoveState : State<BearController>
     }
     public override void Exit()
     {
-        _animator.SetBool(hasMove, false);
-        _animator.SetFloat(hasMoveSpeed, 0f);
+        _animator.SetBool(hashMove, false);
+        _animator.SetFloat(hashMoveSpeed, 0f);
 
         //더이상 길찾기 안하도록 해제
         _agent.ResetPath();
