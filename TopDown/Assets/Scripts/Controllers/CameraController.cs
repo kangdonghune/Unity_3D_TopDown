@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
- 
+
     public struct CameraValue
     {
         public float Distance;
@@ -25,9 +25,8 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     public Define.CameraMode mode = Define.CameraMode.TopView;
-    
-    [SerializeField]
-    public GameObject target;
+
+    public GameObject Target { get; private set; }
 
     public CameraValue[] CameraValues = new CameraValue[(int)Define.CameraMode.End]
                                         {new CameraValue(6f, 5f,45f,1.5f, 0.8f),
@@ -45,9 +44,9 @@ public class CameraController : MonoBehaviour
 
     void Init()
     {
-        target = GameObject.Find("Player");
-        if (target == null)
-            Debug.LogWarning("CameraController Searching Player Failed!");
+        //Target = GameObject.Find("Player");
+        //if (Target == null)
+        //    Debug.LogWarning("CameraController Searching Player Failed!");
 
         Managers.Input.KeyAction -= SetCameraMode;
         Managers.Input.KeyAction += SetCameraMode;
@@ -71,7 +70,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target.IsValid() == false)
+        if (Target.IsValid() == false)
             return;
 
         CameraSetting(mode); // default 위치 지정
@@ -80,7 +79,7 @@ public class CameraController : MonoBehaviour
 
     public void SetTarget(GameObject obj)
     {
-        target = obj;
+        Target = obj;
     }
 
     private void SetCameraMode()
@@ -113,17 +112,17 @@ public class CameraController : MonoBehaviour
         CameraValueSave(mode);
 
         Vector3 worldPositon = (Vector3.forward * -CameraValues[(int)mode].Distance) + (Vector3.up * CameraValues[(int)mode].Height);
-        Debug.DrawLine(target.transform.position, worldPositon, Color.black);
+        Debug.DrawLine(Target.transform.position, worldPositon, Color.black);
 
         Vector3 rotateVector = Quaternion.AngleAxis(CameraValues[(int)mode].Angle, Vector3.up) * worldPositon;
-        Debug.DrawLine(target.transform.position, rotateVector, Color.green);
+        Debug.DrawLine(Target.transform.position, rotateVector, Color.green);
 
 
-        Vector3 _lookTargetPosition = target.transform.position;
+        Vector3 _lookTargetPosition = Target.transform.position;
         _lookTargetPosition.y += lookAtHeight;
 
         Vector3 finalPosition = _lookTargetPosition + rotateVector;
-        Debug.DrawLine(target.transform.position, finalPosition, Color.blue);
+        Debug.DrawLine(Target.transform.position, finalPosition, Color.blue);
 
       
         
@@ -155,7 +154,7 @@ public class CameraController : MonoBehaviour
         CameraValueSave(mode);
 
         Vector3 worldPositon = (Vector3.forward * -CameraValues[(int)mode].Distance) + (Vector3.up * CameraValues[(int)mode].Height);
-        Vector3 finalPosition = target.transform.position + worldPositon;
+        Vector3 finalPosition = Target.transform.position + worldPositon;
        
         float cameraMoveDist = (finalPosition - transform.position).magnitude;
         if (cameraMoveDist < 0.1f)
@@ -167,10 +166,10 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            transform.position = target.transform.position + worldPositon;
+            transform.position = Target.transform.position + worldPositon;
         }
 
-        Vector3  _lookTargetPosition = target.transform.position;
+        Vector3  _lookTargetPosition = Target.transform.position;
         _lookTargetPosition.y += lookAtHeight;
         transform.LookAt(_lookTargetPosition);
     }
@@ -219,7 +218,7 @@ public class CameraController : MonoBehaviour
         //1. 플레이어와 카메라 사이에 물체 여부 확인
         //2. 플레이어 외에 ray hit가 발생하다면 hit point와 플레이어 사이의 70퍼 위치에 카메라 위치 이동.
 
-        Vector3 _lookTargetPosition = target.transform.position;
+        Vector3 _lookTargetPosition = Target.transform.position;
         _lookTargetPosition.y += lookAtHeight;
 
         Vector3 dir = _lookTargetPosition - transform.position;
@@ -231,7 +230,7 @@ public class CameraController : MonoBehaviour
         {
             Vector3 hitDir = hit.point - _lookTargetPosition;
             float dist = hitDir.magnitude;
-            transform.position = target.transform.position + hitDir.normalized * dist * 0.7f;
+            transform.position = Target.transform.position + hitDir.normalized * dist * 0.7f;
             _isSmooth = false;
             CameraRayCast(mode);
         }
@@ -240,9 +239,9 @@ public class CameraController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = new Color(1f, 0, 0, 0.5f);
-        if(target.IsValid())
+        if(Target.IsValid())
         {
-            Vector3 lookAtPosition = target.transform.position;
+            Vector3 lookAtPosition = Target.transform.position;
             lookAtPosition.y += lookAtHeight;
             Gizmos.DrawLine(transform.position, lookAtPosition);
             Gizmos.DrawSphere(lookAtPosition, 0.25f);

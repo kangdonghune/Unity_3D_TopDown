@@ -39,16 +39,14 @@ public class MoveState : State<BearController>
                 return;
             }
         }
-
         stateMachine.ChangeState<IdleState>();
 
     }
     public override void Exit()
     {
         _animator.SetBool(hashMove, false);
-        _animator.SetFloat(hashMoveSpeed, 0f);
-
         //더이상 길찾기 안하도록 해제
+        _agent.velocity = Vector3.zero;
         _agent.ResetPath();
     }
 

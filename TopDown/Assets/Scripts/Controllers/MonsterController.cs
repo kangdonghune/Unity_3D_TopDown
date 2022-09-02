@@ -11,6 +11,7 @@ public class MonsterController : BaseController
     public Transform Target { get; private set; }
     public float viewRadius = 5f;
     public float attackRange = 1.5f;
+    public bool isPatrol = false;
 
     public bool IsAvailableAttack
     {

@@ -1,17 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class IdleState : State<BearController>
 {
-    bool isPatrol = true;
-    private float minIdleTime = 0.0f;
-    private float maxIdleTime = 2.0f;
-    private float idleTime = 0.0f;
-
-
     private Animator _animator;
     private CharacterController _controller;
+    private NavMeshAgent _agent;
+    private WayPoint _wayPoint;
 
     protected int hasMove = Animator.StringToHash("Move");
     protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
@@ -21,6 +18,13 @@ public class IdleState : State<BearController>
     {
         _animator = context.GetComponent<Animator>();
         _controller = context.GetComponent<CharacterController>();
+        _agent = context.GetComponent<NavMeshAgent>();
+
+        if (context.GetComponent<WayPoint>())
+        {
+            _wayPoint = context.GetComponent<WayPoint>();
+            context.isPatrol = true;
+        }
 
     }
 
@@ -30,9 +34,9 @@ public class IdleState : State<BearController>
         _animator.SetFloat(hasMoveSpeed, 0f);
         _controller.Move(Vector3.zero);
 
-        if (isPatrol)
+        if (context.isPatrol)
         {
-            idleTime = Random.Range(minIdleTime, maxIdleTime);
+            _wayPoint.idleTime = Random.Range(_wayPoint.MinIdleTime, _wayPoint.MaxIdleTime);
         }
     }
 
@@ -51,7 +55,7 @@ public class IdleState : State<BearController>
             }
         }
 
-        else if (isPatrol && stateMachine.ElapsedTimeInState > idleTime)
+        else if (context.isPatrol && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
         {
             stateMachine.ChangeState<MoveToWayPointState>();
         }

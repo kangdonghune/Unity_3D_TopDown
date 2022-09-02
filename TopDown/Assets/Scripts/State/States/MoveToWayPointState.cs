@@ -8,6 +8,7 @@ public class MoveToWayPointState : State<BearController>
     private Animator _animator;
     private CharacterController _controller;
     private NavMeshAgent _agent;
+    private WayPoint _wayPoint;
 
     protected int hashMove = Animator.StringToHash("Move");
     protected int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
@@ -18,16 +19,17 @@ public class MoveToWayPointState : State<BearController>
         _animator = context.GetComponent<Animator>();
         _controller = context.GetComponent<CharacterController>();
         _agent = context.GetComponent<NavMeshAgent>();
+        _wayPoint = context.gameObject.GetOrAddComponent<WayPoint>();
     }
 
     public override void Enter()
     {
-        if(context.targetWayPoint == null)
-            context.FindNextWayPoint();
+        if(_wayPoint == null)
+            _wayPoint.FindNextWayPoint();
 
-        if(context.targetWayPoint)
+        if(_wayPoint.targetWayPoint)
         {
-            _agent.SetDestination(context.targetWayPoint.position);
+            _agent.SetDestination(_wayPoint.targetWayPoint.position);
             _animator.SetBool(hashMove, true);
         }
     }
@@ -51,7 +53,7 @@ public class MoveToWayPointState : State<BearController>
             //경로가 더 없거나 남은 거리가 정지 거리 이하일 경우
             if(!_agent.pathPending && (_agent.remainingDistance <= _agent.stoppingDistance))
             { 
-                Transform nextDest = context.FindNextWayPoint();
+                Transform nextDest = _wayPoint.FindNextWayPoint();
                 if(nextDest)
                 {
                     _agent.SetDestination(nextDest.position);
@@ -69,6 +71,7 @@ public class MoveToWayPointState : State<BearController>
 
     public override void Exit()
     {
+        _agent.velocity = Vector3.zero;
         _animator.SetBool(hashMove, false);
         _agent.ResetPath();
     }

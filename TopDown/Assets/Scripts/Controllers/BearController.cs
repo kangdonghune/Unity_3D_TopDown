@@ -9,11 +9,6 @@ public class BearController : FovMonsterController
     private StateMachine<BearController> _stateMachine;
     public StateMachine<BearController> StateMachine { get { return _stateMachine; } }
 
-    public Transform[] wayPoints;
-    [HideInInspector]
-    public Transform targetWayPoint = null;
-    private int wayPointIndex = 0;
-
     protected override void Init()
     {
         base.Init();
@@ -29,18 +24,6 @@ public class BearController : FovMonsterController
         _stateMachine.Update(Time.deltaTime);
     }
 
-    public Transform FindNextWayPoint()
-    {
-        targetWayPoint = null;
-        if(wayPoints.Length > 0)
-        {
-            targetWayPoint = wayPoints[wayPointIndex];
-        }
-
-        wayPointIndex = (wayPointIndex + 1) % wayPoints.Length;
-
-        return targetWayPoint;
-
-    }
+ 
 
 }

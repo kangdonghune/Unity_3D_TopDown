@@ -18,7 +18,7 @@ public class Camera_Editor : Editor
 
     private void OnSceneGUI()
     {
-        if(!targetCamera || !targetCamera.target)
+        if(!targetCamera || !targetCamera.Target)
         {
             return;
         }
@@ -26,7 +26,7 @@ public class Camera_Editor : Editor
         //변경 값 불러오기(비어있을 시 자동 저장.
         //targetCamera.CameraValueLoad(targetCamera.mode);
 
-        Transform cameraTarget = targetCamera.target.transform;
+        Transform cameraTarget = targetCamera.Target.transform;
         Vector3 targetPosition = cameraTarget.transform.position;
         targetPosition.y += targetCamera.lookAtHeight;
 

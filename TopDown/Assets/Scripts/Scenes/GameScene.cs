@@ -17,9 +17,10 @@ public class GameScene : BaseScene
         SceneType = Define.Scene.Game;
         //Managers.UI.ShowSceneUI<UI_Inven>();
 
-        //gameObject.GetOrAddComponent<CursorController>();
-        //GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "UnityChan");
-        //Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(player);
+        gameObject.GetOrAddComponent<CursorController>();
+        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Arisa");
+        Managers.Game.Spawn(Define.WorldObject.Monster, "Bear");
+        Camera.main.gameObject.GetOrAddComponent<CameraController>().SetTarget(player);
 
         //GameObject go = new GameObject { name = "SpawningPool" };
         //SpawningPool spawningPool = go.GetOrAddComponent<SpawningPool>();

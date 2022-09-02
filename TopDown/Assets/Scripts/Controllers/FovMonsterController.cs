@@ -8,9 +8,9 @@ public class FovMonsterController : BaseController
     #region Variable
 
     public float MoveSpeed { get; protected set; } = 5f;
-    private float _attackRange = 3f;
+    public float AttackRange { get; private set; } = 1.5f;
     public Transform Target { get {return _fov.NearestTarget; } }
-
+    public bool isPatrol = false;
     private FieldOfView _fov;
     public bool IsAvailableAttack
     {
@@ -21,7 +21,7 @@ public class FovMonsterController : BaseController
                 return false;
             }
             float distance = Vector3.Distance(transform.position, Target.position);
-            return (distance <= _attackRange);
+            return (distance <= AttackRange);
         }
     }
     #endregion
@@ -36,7 +36,7 @@ public class FovMonsterController : BaseController
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         _fov = transform.gameObject.GetOrAddComponent<FieldOfView>();
-        agent.stoppingDistance = _attackRange;
+        agent.stoppingDistance = AttackRange;
         agent.updatePosition = false; //이동은 컨트롤러가 시행
         agent.updateRotation = true; // 회전은 네비가 하도록
     }

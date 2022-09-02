@@ -32,6 +32,9 @@ public class Managers : MonoBehaviour
 
     UI_Manager m_ui = new UI_Manager();
     public  static  UI_Manager UI { get { return Instance.m_ui; } }
+
+    WayPointManager m_way = new WayPointManager();
+    public static WayPointManager Way { get { return Instance.m_way; } }
     #endregion
 
     void Start()
@@ -58,6 +61,7 @@ public class Managers : MonoBehaviour
             s_Instance = go.GetComponent<Managers>();
             s_Instance.m_sound.Init();
             s_Instance.m_pool.Init();
+            s_Instance.m_way.Init();
         }
 
     }
@@ -68,7 +72,7 @@ public class Managers : MonoBehaviour
         Input.Clear();
         Scene.Clear();
         UI.Clear();
-
+        Way.Clear();
         Pool.Clear(); //다른 컴퍼넌트에서 pool된 애들을 사용할 수 있으니 마지막으로 clear
     }
 }
