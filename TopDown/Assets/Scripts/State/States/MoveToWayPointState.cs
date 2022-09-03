@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MoveToWayPointState : State<BearController>
+public class MoveToWayPointState : State<EnemyController>
 {
     private Animator _animator;
     private CharacterController _controller;

@@ -10,8 +10,7 @@ public class MonsterController : BaseController
     private int _targetMask = 1 << (int)Define.Layer.Player;
     public Transform Target { get; private set; }
     public float viewRadius = 5f;
-    public float attackRange = 1.5f;
-    public bool isPatrol = false;
+    public float attackRange = 2f;
 
     public bool IsAvailableAttack
     {

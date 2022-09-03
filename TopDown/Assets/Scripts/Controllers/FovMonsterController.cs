@@ -9,8 +9,7 @@ public class FovMonsterController : BaseController
 
     public float MoveSpeed { get; protected set; } = 5f;
     public float AttackRange { get; private set; } = 1.5f;
-    public Transform Target { get {return _fov.NearestTarget; } }
-    public bool isPatrol = false;
+    public Transform Target { get { return _fov.NearestTarget; } }
     private FieldOfView _fov;
     public bool IsAvailableAttack
     {

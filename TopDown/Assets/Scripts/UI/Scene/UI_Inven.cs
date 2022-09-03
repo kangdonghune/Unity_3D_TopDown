@@ -29,9 +29,4 @@ public class UI_Inven : UI_Scene
             inven_Item.SetInfo($"집행검 {i} 호");
         }
     }
-
-    void Update()
-    {
-        
-    }
 }

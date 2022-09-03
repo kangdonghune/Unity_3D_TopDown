@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BearController : FovMonsterController
+public class EnemyController : MonsterController
 {
-    private StateMachine<BearController> _stateMachine;
-    public StateMachine<BearController> StateMachine { get { return _stateMachine; } }
+    private StateMachine<EnemyController> _stateMachine;
+    public StateMachine<EnemyController> StateMachine { get { return _stateMachine; } }
 
     protected override void Init()
     {
         base.Init();
         WorldObjectType = Define.WorldObject.Monster;
-        _stateMachine = new StateMachine<BearController>(this, new MoveToWayPointState());
-        _stateMachine.AddState(new IdleState());
+        _stateMachine = new StateMachine<EnemyController>(this, new MoveToWayPointState());
         _stateMachine.AddState(new MoveState());
         _stateMachine.AddState(new AttackState());
+        _stateMachine.AddState(new IdleState());
     }
 
     void Update()

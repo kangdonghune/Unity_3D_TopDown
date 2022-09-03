@@ -18,9 +18,9 @@ public class GameScene : BaseScene
         //Managers.UI.ShowSceneUI<UI_Inven>();
 
         gameObject.GetOrAddComponent<CursorController>();
-        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Arisa");
-        Managers.Game.Spawn(Define.WorldObject.Monster, "Bear");
-        Camera.main.gameObject.GetOrAddComponent<CameraController>().SetTarget(player);
+        //GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Arisa");
+        //Managers.Game.Spawn(Define.WorldObject.Monster, "Bear");
+        //Camera.main.gameObject.GetOrAddComponent<CameraController>().SetTarget(player);
 
         //GameObject go = new GameObject { name = "SpawningPool" };
         //SpawningPool spawningPool = go.GetOrAddComponent<SpawningPool>();
@@ -29,6 +29,6 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
-        throw new System.NotImplementedException();
+
     }
 }

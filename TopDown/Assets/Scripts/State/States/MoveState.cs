@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MoveState : State<BearController>
+public class MoveState : State<EnemyController>
 {
     private Animator _animator;
     private NavMeshAgent _agent;
@@ -39,7 +39,7 @@ public class MoveState : State<BearController>
                 return;
             }
         }
-        stateMachine.ChangeState<IdleState>();
+        stateMachine.ChangeState<AttackState>();
 
     }
     public override void Exit()

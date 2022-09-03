@@ -39,9 +39,6 @@ public class PlayerController : BaseController
         PlayerMove();
     }
 
-    private void LateUpdate()
-    {
-    }
 
     private void OnMouseEvent(Define.MouseEvent evt)
     {

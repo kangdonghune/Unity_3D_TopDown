@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class IdleState : State<BearController>
+public class IdleState : State<EnemyController>
 {
     private Animator _animator;
     private CharacterController _controller;
@@ -23,7 +23,6 @@ public class IdleState : State<BearController>
         if (context.GetComponent<WayPoint>())
         {
             _wayPoint = context.GetComponent<WayPoint>();
-            context.isPatrol = true;
         }
 
     }
@@ -34,7 +33,7 @@ public class IdleState : State<BearController>
         _animator.SetFloat(hasMoveSpeed, 0f);
         _controller.Move(Vector3.zero);
 
-        if (context.isPatrol)
+        if (_wayPoint)
         {
             _wayPoint.idleTime = Random.Range(_wayPoint.MinIdleTime, _wayPoint.MaxIdleTime);
         }
@@ -55,7 +54,7 @@ public class IdleState : State<BearController>
             }
         }
 
-        else if (context.isPatrol && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
+        else if (_wayPoint && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
         {
             stateMachine.ChangeState<MoveToWayPointState>();
         }
