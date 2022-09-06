@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : BaseController
+public class PlayerController : BaseController, IAttackable, IDamageable
 {
     #region Variable
     public LayerMask groundLayerMask;
     public float groundCheckDistance = 0.3f;
 
+    public Transform projectileTransform;
+    public Transform hitTransform;
     private CharacterController _characterController;
     private NavMeshAgent _navAgent;
     private Camera _camera;
@@ -91,4 +93,41 @@ public class PlayerController : BaseController
             _animator.SetBool(moveHash, false);
         }
     }
+
+    #region interface
+    public AttackBehavior CurrentAttackBehavior { get; private set; }
+
+    public void OnExecuteAttack(int attackIndex)
+    {
+        if (CurrentAttackBehavior != null && Target != null)
+        {
+            CurrentAttackBehavior.ExecuteAttack(Target.gameObject, projectileTransform);
+        }
+    }
+
+    public bool IsAlive => true;
+
+    public void TakeDamage(int damage, GameObject hitEffectPrefabs)
+    {
+        if (!IsAlive)
+            return;
+
+        if (hitEffectPrefabs)
+        {
+            //TODO-추후 프리펩에 히트이펙트 추가 시 해당 코드로 수정
+            //Managers.Resource.Instantiate(hitEffectPrefabs-prefabname, hitTransform);
+            Instantiate(hitEffectPrefabs, hitTransform);
+        }
+
+        if (IsAlive)
+        {
+            Debug.LogWarning("플레이어가 피격을 당했네요~~");
+           // _animator.SetTrigger(hashAttackTrigger);
+        }
+        else
+        {
+          //  StateMachine.ChangeState<DeadState>();
+        }
+    }
+    #endregion
 }

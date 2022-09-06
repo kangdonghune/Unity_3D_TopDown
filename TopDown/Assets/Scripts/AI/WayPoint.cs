@@ -9,9 +9,6 @@ public class WayPoint : MonoBehaviour
     public Transform targetWayPoint = null;
     private int wayPointIndex = 0;
 
-
-    public bool isPatrol = true;
-
     public float MinIdleTime { get; private set; } = 0.0f;
     public float MaxIdleTime { get; private set; } = 2.0f;
     public float idleTime = 0.0f;

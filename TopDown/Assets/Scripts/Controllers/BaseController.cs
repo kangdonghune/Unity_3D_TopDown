@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class BaseController : MonoBehaviour
 {
     public Define.WorldObject WorldObjectType { get; protected set; } = Define.WorldObject.Unknown;
-
+    public virtual Transform Target { get; protected set; }
     public void Start()
     {
         Init();

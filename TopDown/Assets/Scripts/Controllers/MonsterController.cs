@@ -3,41 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterController : BaseController
+public class MonsterController : EnemyController, IPatrolable
 {
     #region Variable
-    public float MoveSpeed { get; protected set; } = 5f;
-    private int _targetMask = 1 << (int)Define.Layer.Player;
-    public Transform Target { get; private set; }
-    public float viewRadius = 5f;
-    public float attackRange = 2f;
 
-    public bool IsAvailableAttack
+    #endregion
+
+
+    protected override void Init()
     {
-        get
-        {
-            if (Target == null)
-            {
-                return false;
-            }
-            float distance = Vector3.Distance(transform.position, Target.position);
-            return (distance <= attackRange);
-        }
+        base.Init();
+        SettingWayPoint();
+        _stateMachine = new StateMachine<EnemyController>(this, new IdleState());
+        _stateMachine.AddState(new MoveToWayPointState());
+        _stateMachine.AddState(new MoveState());
+        _stateMachine.AddState(new AttackState());
+        _stateMachine.AddState(new DeadState());
+    }
+
+    private void Update()
+    {
+        CheckAttackBehavior();
+        _stateMachine.Update(Time.deltaTime);
+    }
+
+    #region interface
+    public bool isPatrol { get; set; } = true;
+
+    public void SettingWayPoint()
+    {
+        transform.gameObject.GetOrAddComponent<WayPoint>();//만약 waypoint컴퍼넌트 없으면 추가
     }
     #endregion
 
-    internal Transform SearchEnemy()
-    {
-        Target = null;
-
-        Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, _targetMask);
-        if (targetInViewRadius.Length > 0)
-        {
-            Target = targetInViewRadius[0].transform;
-        }
-        return Target;
-    }
-
+    #region GizMos
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -45,12 +44,5 @@ public class MonsterController : BaseController
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
-    protected override void Init()
-    {
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        agent.stoppingDistance = attackRange;
-        agent.updatePosition = false; //이동은 컨트롤러가 시행
-        agent.updateRotation = true; // 회전은 네비가 하도록
-    }
+    #endregion
 }

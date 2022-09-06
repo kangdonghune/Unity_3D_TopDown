@@ -40,9 +40,9 @@ public class AttackStataMachineBehavior : StateMachineBehaviour
     //    
     //}
 
-    // OnStateMachineExit is called when exiting a state machine via its Exit Node
-    //override public void OnStateMachineExit(Animator animator, int stateMachinePathHash)
-    //{
-    //    
-    //}
+    //OnStateMachineExit is called when exiting a state machine via its Exit Node
+    override public void OnStateMachineExit(Animator animator, int stateMachinePathHash)
+    {
+        animator.GetComponent<EnemyController>()?.StateMachine.ChangeState<IdleState>();
+    }
 }

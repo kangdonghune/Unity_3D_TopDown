@@ -3,29 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FovMonsterController : BaseController
+public class FovMonsterController : EnemyController
 {
     #region Variable
-
-    public float MoveSpeed { get; protected set; } = 5f;
-    public float AttackRange { get; private set; } = 1.5f;
-    public Transform Target { get { return _fov.NearestTarget; } }
+    public override Transform Target { get { return _fov.NearestTarget; } }
     private FieldOfView _fov;
-    public bool IsAvailableAttack
-    {
-        get
-        {
-            if (Target == null)
-            {
-                return false;
-            }
-            float distance = Vector3.Distance(transform.position, Target.position);
-            return (distance <= AttackRange);
-        }
-    }
     #endregion
 
-    internal Transform SearchEnemy()
+    internal override Transform SearchEnemy()
     {
         return Target;
     }
@@ -33,10 +18,18 @@ public class FovMonsterController : BaseController
 
     protected override void Init()
     {
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        base.Init();
         _fov = transform.gameObject.GetOrAddComponent<FieldOfView>();
-        agent.stoppingDistance = AttackRange;
-        agent.updatePosition = false; //이동은 컨트롤러가 시행
-        agent.updateRotation = true; // 회전은 네비가 하도록
+        _stateMachine = new StateMachine<EnemyController>(this, new MoveToWayPointState());
+        _stateMachine.AddState(new IdleState());
+        _stateMachine.AddState(new MoveState());
+        _stateMachine.AddState(new AttackState());
+        _stateMachine.AddState(new DeadState());
+    }
+
+    private void Update()
+    {
+        CheckAttackBehavior();
+        _stateMachine.Update(Time.deltaTime);
     }
 }
