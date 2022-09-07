@@ -15,10 +15,10 @@ public abstract class AttackBehavior : MonoBehaviour
     public int priority; //동시에 여러 공격이 가능할 때 공격 순서의 우선도.
     public int damage = 10;
     public float range = 2f;
-    public bool isAvailable = false;
+    public bool isAvailable => calcCoolTime >= coolTime;
 
 
-    protected float coolTime;
+    protected float coolTime = 1f;
     protected float calcCoolTime = 0f;
 
     public GameObject effectPrefab;
@@ -37,10 +37,9 @@ public abstract class AttackBehavior : MonoBehaviour
         if(calcCoolTime < coolTime)
         {
             calcCoolTime += Time.deltaTime;
-            return;
+
         }
-        calcCoolTime = 0f;
-        isAvailable = true;
+
     }
 
     //타겟이 없는 범위 공격을 고려 default null, startPoint는 투사체 등의 생성 위치

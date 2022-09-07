@@ -16,7 +16,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
     public int maxHP = 100;
     public int hp;
-
+    public virtual Transform Target { get; protected set; }
     protected StateMachine<EnemyController> _stateMachine;
     public StateMachine<EnemyController> StateMachine { get { return _stateMachine; } }
     protected Animator ani;

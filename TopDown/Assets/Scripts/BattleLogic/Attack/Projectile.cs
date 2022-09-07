@@ -23,13 +23,13 @@ public class Projectile : MonoBehaviour
     public GameObject target;
     #endregion
 
-    private void Start()
+    protected virtual void Start()
     {
         if(target != null)
         {
             Vector3 dest = target.transform.position;
             dest.y += 1.5f;
-            transform.LookAt(dest);
+            transform.LookAt(dest);            
         }
 
         if(owner)
@@ -43,6 +43,8 @@ public class Projectile : MonoBehaviour
                 Physics.IgnoreCollision(projectileCollider, collider);
             }
         }
+
+        rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
 
         if (muzzlePrefabs)
         {
@@ -72,7 +74,7 @@ public class Projectile : MonoBehaviour
         }
     }
     //ridgebody를 사용할 땐 픽스드 업데이트로
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if(speed != 0)
         {
@@ -127,6 +129,40 @@ public class Projectile : MonoBehaviour
             }
         }
 
+        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+        if(damageable != null)
+        {
+            damageable.TakeDamage(attackBehavior?.damage ?? 0, null);
+        }
 
+        StartCoroutine(DestroyParticle(0.0f));
+
+    }
+
+    public IEnumerator DestroyParticle(float waitTime)
+    {
+        if(transform.childCount > 0 &&  waitTime != 0)
+        {
+            List<Transform> childs = new List<Transform>();
+
+            foreach (Transform t in  transform.GetChild(0).transform)
+            {
+                childs.Add(t);
+            }
+            while(transform.GetChild(0).localScale.x >0)
+            {
+                yield return new WaitForSeconds(0.01f);
+
+                transform.GetChild(0).localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+                for (int i = 0; i < childs.Count; i ++)
+                {
+                    childs[i].localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+                }
+            }
+
+        }
+
+        yield return new WaitForSeconds(waitTime);
+        Destroy(gameObject);
     }
 }

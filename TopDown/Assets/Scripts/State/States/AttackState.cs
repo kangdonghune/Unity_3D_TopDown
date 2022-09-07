@@ -20,6 +20,8 @@ public class AttackState : State<EnemyController>
 
     public override void Enter()
     {
+        context.transform.LookAt(context.Target.position);
+
         if (_attackable == null)
         {
             Debug.LogError($"{context.gameObject.name} Attack, but does'n have IAttackable!!");
@@ -30,6 +32,7 @@ public class AttackState : State<EnemyController>
         if (_attackable.CurrentAttackBehavior == null)
         {
             stateMachine.ChangeState<IdleState>();
+            return;
         }
         //트리거를 키기 전에 컨트롤러 이벤트핸들러에 함수 추가
         _attackStateController.enterAttackStateHandler += OnEnterAttackState;
@@ -42,6 +45,7 @@ public class AttackState : State<EnemyController>
     
     public override void Update(float deltaTime)
     {
+
     }
     public override void Exit()
     {
