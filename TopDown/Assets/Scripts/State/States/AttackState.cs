@@ -21,7 +21,10 @@ public class AttackState : State<EnemyController>
 
     public override void Enter()
     {
-        _lookDir = (context.Target.position - context.transform.position).normalized;
+        if (context.Target != null)
+            _lookDir = (context.Target.position - context.transform.position).normalized;
+        else
+            _lookDir = context.transform.forward;
         if (_attackable == null)
         {
             Debug.LogError($"{context.gameObject.name} Attack, but does'n have IAttackable!!");
@@ -38,7 +41,7 @@ public class AttackState : State<EnemyController>
         _attackStateController.enterAttackStateHandler += OnEnterAttackState;
         _attackStateController.exitAttackStateHandler += OnExitAttackState;
 
-        _animator.SetInteger(hashAttackIndex, _attackable.CurrentAttackBehavior.animationIndex);
+        _animator.SetInteger(hashAttackIndex, _attackable.CurrentAttackBehavior.AnimationIndex);
         //실제 애니메이터에서 state로 넘어가는 건 트리거를 켜주는 순간
         _animator.SetTrigger(hashAttackTrigger);
     }

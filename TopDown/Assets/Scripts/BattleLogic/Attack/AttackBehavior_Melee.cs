@@ -12,17 +12,17 @@ public class AttackBehavior_Melee : AttackBehavior
 
         foreach (Collider collider in colliders)
         {
-            collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, effectPrefab);
+            collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab);
         }
         calcCoolTime = 0f;
     }
 
     protected override void Init()
     {
-        animationIndex = (int)Define.MonsterAttackPattern.Attack1;
-        priority = (int)Define.AttackPrioty.Fifth;
-        damage = 5;
-        range = 2f;
+        AnimationIndex = (int)Define.MonsterAttackPattern.Attack1;
+        Priority = (int)Define.AttackPrioty.Fifth;
+        Damage = 5;
+        Range = 2f;
         coolTime = 1f;
         calcCoolTime = 0f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;

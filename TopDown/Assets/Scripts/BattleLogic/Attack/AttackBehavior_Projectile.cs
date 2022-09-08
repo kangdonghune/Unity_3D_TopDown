@@ -10,18 +10,12 @@ public class AttackBehavior_Projectile : AttackBehavior
         if (target == null)
             return;
 
-        Vector3 projectilePosion = startPoint?.position ?? transform.position;
+        Vector3 projectilePosition = startPoint?.position ?? transform.position;
         if(effectPrefab)
         {
-            GameObject projectileGo = GameObject.Instantiate<GameObject>(effectPrefab, projectilePosion, Quaternion.identity);
+            GameObject projectileGo = GameObject.Instantiate(effectPrefab, projectilePosition, Quaternion.identity);
             projectileGo.transform.forward = transform.forward;
-            Vector3 dest = target.transform.position;
-            dest.y += 1.5f;
-            transform.LookAt(dest);
-            projectileGo.transform.LookAt(dest);
-
-          
-
+     
             Projectile projectile = projectileGo.GetComponent<Projectile>();
             if(projectile)
             {
@@ -36,10 +30,10 @@ public class AttackBehavior_Projectile : AttackBehavior
 
     protected override void Init()
     {
-        animationIndex = (int)Define.MonsterAttackPattern.Projectile;
-        priority = (int)Define.AttackPrioty.Firts;
-        damage = 10;
-        range = 5f;
+        AnimationIndex = (int)Define.MonsterAttackPattern.Projectile;
+        Priority = (int)Define.AttackPrioty.Firts;
+        Damage = 10;
+        Range = 5f;
         coolTime = 3f;
         calcCoolTime = 0f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;

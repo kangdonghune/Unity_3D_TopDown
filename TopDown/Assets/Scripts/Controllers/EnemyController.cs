@@ -10,7 +10,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
     public float MoveSpeed { get; protected set; } = 5f;
     public float viewRadius = 5f;
-    public float attackRange => CurrentAttackBehavior?.range ?? 2f;
+    public float attackRange => CurrentAttackBehavior?.Range ?? 2f;
 
 
     public int maxHP = 100;
@@ -44,7 +44,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     internal virtual Transform SearchEnemy()
     {
         Target = null;
-
+        //가장 가까운 플레이어를 타겟으로
         Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
         if (targetInViewRadius.Length > 0)
         {
@@ -87,7 +87,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         {
             if(behavior.isAvailable)
             {
-                if (CurrentAttackBehavior == null || CurrentAttackBehavior.priority < behavior.priority)
+                if (CurrentAttackBehavior == null || CurrentAttackBehavior.Priority < behavior.Priority)
                     CurrentAttackBehavior = behavior;
             }
         }

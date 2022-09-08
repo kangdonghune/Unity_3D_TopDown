@@ -30,8 +30,9 @@ public class MoveState : State<EnemyController>
         Transform enemy = context.SearchEnemy();
         if (enemy)
         {
+            _agent.stoppingDistance = context.attackRange;
             _agent.SetDestination(context.Target.position);
-            if (_agent.remainingDistance > _agent.stoppingDistance)
+            if (_agent.remainingDistance + 0.1f > _agent.stoppingDistance)
             {
                 _controller.Move(_agent.velocity * Time.deltaTime);
                 //context.transform.position = _agent.nextPosition;
@@ -39,7 +40,8 @@ public class MoveState : State<EnemyController>
                 return;
             }
         }
-        stateMachine.ChangeState<IdleState>();
+        _controller.Move(_agent.velocity * Time.deltaTime);
+        stateMachine.ChangeState<AttackState>();
 
     }
     public override void Exit()

@@ -7,6 +7,7 @@ public class ResourceManager
  
     public T Load<T> (string path) where T : Object
     {
+        //pool Dictionary에 있다면 거기서 가져오고
         if(typeof(T) == typeof(GameObject))
         {
             string name = path;
@@ -20,6 +21,7 @@ public class ResourceManager
         }
         if (Resources.Load<T>(path) == null)
             Debug.LogError($"Failed to load prefab: {path}");
+        //없으면 그냥 로드
         return Resources.Load<T>(path);
     }
 
@@ -27,19 +29,38 @@ public class ResourceManager
     { 
         GameObject original = Load<GameObject>($"Prefab/{path}");
 
+        //로드 실패 시
         if(original == null)
             return null;
 
+        //해당 오브젝트가 pooling 대상이라면 pool딕셔너리에 추가하거나 거기서 가져온다
         if (original.GetComponent<Poolable>() != null)
             return Managers.Pool.Pop(original, parent, count).gameObject;
          
-
+        //pooling 대상이 아니라면 그냥 샹송
         GameObject go = Object.Instantiate(original, parent);
         go.name = original.name;
 
         return go;
 
     }
+
+    public GameObject Instantiate(GameObject go, Vector3 position, Quaternion rotation,Transform parent = null, int count = 5)
+    {
+        //로드 실패 시
+        if (go == null)
+            return null;
+
+        //해당 오브젝트가 pooling 대상이라면 pool딕셔너리에 추가하거나 거기서 가져온다
+        if (go.GetComponent<Poolable>() != null)
+            return Managers.Pool.Pop(go, position, rotation,parent, count).gameObject;
+
+        //pooling 대상이 아니라면 그냥 생성
+        GameObject gameObj = Object.Instantiate(go, position, rotation);
+        return gameObj;
+
+    }
+
 
     public void Destroy(GameObject go, float time = 0.0f)
     {

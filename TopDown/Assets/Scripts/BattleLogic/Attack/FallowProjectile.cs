@@ -10,7 +10,7 @@ public class FallowProjectile : Projectile
     {
         base.Start();
 
-        StartCoroutine(DestroyParticle(destroyDelay));
+        StartCoroutine(CoDestroyProjectile(destroyDelay));
 
     }
 

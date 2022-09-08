@@ -45,7 +45,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     private void OnMouseEvent(Define.MouseEvent evt)
     {
-        switch(evt)
+        switch (evt)
         {
             case Define.MouseEvent.LClick:
                 OnMousePicking();
@@ -113,22 +113,44 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (!IsAlive)
             return;
 
-        if (hitEffectPrefabs)
-        {
-            //TODO-추후 프리펩에 히트이펙트 추가 시 해당 코드로 수정
-            //Managers.Resource.Instantiate(hitEffectPrefabs-prefabname, hitTransform);
-            Instantiate(hitEffectPrefabs, hitTransform);
-        }
+        //if (hitEffectPrefabs)
+        //{
+        //    GameObject hitVFX = Managers.Resource.Instantiate(hitEffectPrefabs, hitTransform.position, Quaternion.identity);
+
+        //    ParticleSystem particleSystem = hitVFX.GetComponent<ParticleSystem>();
+        //    if (particleSystem)
+        //    {
+        //        //파티클 주기가 끝났을 때 자동으로 삭제가 안되는 경우 코드로 삭제
+        //        StartCoroutine(CoDestroyParticle(hitVFX, particleSystem.main.duration));
+        //    }
+        //    else
+        //    {
+        //        ParticleSystem childParticleSystem = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+        //        if (childParticleSystem)
+        //        {
+        //            StartCoroutine(CoDestroyParticle(hitVFX, childParticleSystem.main.duration));
+        //        }
+        //    }
+
+        //}
 
         if (IsAlive)
         {
             Debug.LogWarning("플레이어가 피격을 당했네요~~");
-           // _animator.SetTrigger(hashAttackTrigger);
+            // _animator.SetTrigger(hashAttackTrigger);
         }
         else
         {
-          //  StateMachine.ChangeState<DeadState>();
+            //  StateMachine.ChangeState<DeadState>();
         }
+    }
+    #endregion
+
+    #region Corutine
+    public IEnumerator CoDestroyParticle(GameObject go, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        Managers.Resource.Destroy(go);
     }
     #endregion
 }

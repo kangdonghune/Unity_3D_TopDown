@@ -54,13 +54,16 @@ public class PoolManager
             }
 
             poolable.gameObject.SetActive(true);//활성화
+            poolable.IsUsing = true;
 
             //DontDestroyOnLoad 탈출용
             if (parent == null)
+            { 
                 poolable.transform.parent = Managers.Scene.CurrentScene.transform;
+                return poolable;
+            }
+ 
             poolable.transform.parent = parent;
-            poolable.IsUsing = true;
-
             return poolable;
         }
     }
@@ -104,6 +107,16 @@ public class PoolManager
         if (_pool.ContainsKey(original.name) == false)
             CreatePool(original, count);
         return _pool[original.name].Pop(parent);
+    }
+
+    public Poolable Pop(GameObject original, Vector3 position, Quaternion rotation, Transform parent = null, int count = 5)
+    {
+        if (_pool.ContainsKey(original.name) == false)
+            CreatePool(original, count);
+        Poolable poolable = _pool[original.name].Pop(parent);
+        poolable.transform.position = position;
+        poolable.transform.rotation = rotation;
+        return poolable;
     }
 
     public GameObject GetOriginal(string name)

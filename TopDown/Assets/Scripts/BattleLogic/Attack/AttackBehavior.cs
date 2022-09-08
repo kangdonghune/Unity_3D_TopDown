@@ -11,10 +11,10 @@ public abstract class AttackBehavior : MonoBehaviour
     public string developmentDescription = "특정 하나의 공격 동작을 다루는 컴퍼넌트. 공격의 쿨타임,데미지, 애니메이션 인덱스 등";
 #endif 
 
-    public int animationIndex;
-    public int priority; //동시에 여러 공격이 가능할 때 공격 순서의 우선도.
-    public int damage = 10;
-    public float range = 2f;
+    public int AnimationIndex { get; protected set; }
+    public int Priority { get; protected set; } //동시에 여러 공격이 가능할 때 공격 순서의 우선도.
+    public int Damage { get; protected set; } = 10;
+    public float Range { get; protected set; } = 2f;
     public bool isAvailable => calcCoolTime >= coolTime;
 
 
