@@ -29,7 +29,8 @@ public class Projectile : MonoBehaviour
         {
             Vector3 dest = target.transform.position;
             dest.y += 1.5f;
-            transform.LookAt(dest);            
+            transform.LookAt(dest);
+            
         }
 
         if(owner)

@@ -9,7 +9,6 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     #region Variable
 
     public float MoveSpeed { get; protected set; } = 5f;
-    protected int _targetMask = 1 << (int)Define.Layer.Player;
     public float viewRadius = 5f;
     public float attackRange => CurrentAttackBehavior?.range ?? 2f;
 
@@ -21,7 +20,6 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     public StateMachine<EnemyController> StateMachine { get { return _stateMachine; } }
     protected Animator ani;
     protected NavMeshAgent agent;
-    public List<AttackBehavior> _attackBehaviors = new List<AttackBehavior>();
     public Transform projectileTransform;
     public Transform hitTransform;
     protected int hashAttackTrigger = Animator.StringToHash("AttackTrigger");
@@ -39,7 +37,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
                 return false;
             }
             float distance = Vector3.Distance(transform.position, Target.position);
-            return (distance <= attackRange);
+            return (distance < attackRange);
         }
     }
 
@@ -47,7 +45,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     {
         Target = null;
 
-        Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, _targetMask);
+        Collider[] targetInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
         if (targetInViewRadius.Length > 0)
         {
             Target = targetInViewRadius[0].transform;
@@ -59,6 +57,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     protected override void Init()
     {
         WorldObjectType = Define.WorldObject.Monster;
+        targetMask = 1 << (int)Define.Layer.Player;
         ani = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = attackRange;
@@ -69,11 +68,11 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
     protected void InitAttackBehavior()
     {
-        foreach (AttackBehavior behavior in _attackBehaviors)
+        foreach (AttackBehavior behavior in attackBehaviors)
         {
             if (CurrentAttackBehavior == null)
                 CurrentAttackBehavior = behavior;
-            behavior.targetMask = _targetMask;
+            behavior.targetMask = targetMask;
         }
         
     }
@@ -84,7 +83,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
             CurrentAttackBehavior = null;
 
         //어택 behavior를 순회하며 isAvailable이 참인 것 중 우선도가 가장 높은 것은 현재 실행할 behavior로 지정 
-        foreach (AttackBehavior behavior in _attackBehaviors)
+        foreach (AttackBehavior behavior in attackBehaviors)
         {
             if(behavior.isAvailable)
             {

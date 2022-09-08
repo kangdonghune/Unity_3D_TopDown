@@ -9,6 +9,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     public LayerMask groundLayerMask;
     public float groundCheckDistance = 0.3f;
 
+    public virtual Transform Target { get; protected set; }
     public Transform projectileTransform;
     public Transform hitTransform;
     private CharacterController _characterController;
@@ -73,7 +74,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
         {
-            Debug.Log("We hit " + hit.collider.name + " " + hit.point);
+            //Debug.Log("We hit " + hit.collider.name + " " + hit.point);
             _navAgent.SetDestination(hit.point);
         }
     }

@@ -18,7 +18,7 @@ public abstract class AttackBehavior : MonoBehaviour
     public bool isAvailable => calcCoolTime >= coolTime;
 
 
-    protected float coolTime = 1f;
+    protected float coolTime = 0f;
     protected float calcCoolTime = 0f;
 
     public GameObject effectPrefab;
@@ -26,10 +26,13 @@ public abstract class AttackBehavior : MonoBehaviour
 
 
 
-#endregion
+    #endregion
+
+    protected abstract void Init();
+
     void Start()
     {
-        calcCoolTime = coolTime;
+        Init();
     }
 
     void Update()

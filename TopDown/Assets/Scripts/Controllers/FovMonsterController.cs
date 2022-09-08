@@ -20,8 +20,7 @@ public class FovMonsterController : EnemyController
     {
         base.Init();
         _fov = transform.gameObject.GetOrAddComponent<FieldOfView>();
-        _stateMachine = new StateMachine<EnemyController>(this, new MoveToWayPointState());
-        _stateMachine.AddState(new IdleState());
+        _stateMachine = new StateMachine<EnemyController>(this, new IdleState());
         _stateMachine.AddState(new MoveState());
         _stateMachine.AddState(new AttackState());
         _stateMachine.AddState(new DeadState());

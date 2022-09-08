@@ -7,6 +7,7 @@ public class AttackState : State<EnemyController>
     private Animator _animator;
     private AttackStateController _attackStateController;
     private IAttackable _attackable;
+    private Vector3 _lookDir;
 
     private int hashAttackTrigger = Animator.StringToHash("AttackTrigger");
     protected int hashAttackIndex = Animator.StringToHash("AttackIndex");
@@ -20,8 +21,7 @@ public class AttackState : State<EnemyController>
 
     public override void Enter()
     {
-        context.transform.LookAt(context.Target.position);
-
+        _lookDir = (context.Target.position - context.transform.position).normalized;
         if (_attackable == null)
         {
             Debug.LogError($"{context.gameObject.name} Attack, but does'n have IAttackable!!");
@@ -45,7 +45,7 @@ public class AttackState : State<EnemyController>
     
     public override void Update(float deltaTime)
     {
-
+        context.transform.rotation = Quaternion.Slerp(context.transform.rotation, Quaternion.LookRotation(_lookDir), 0.2f);
     }
     public override void Exit()
     {

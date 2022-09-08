@@ -12,6 +12,7 @@ public class Define
     public enum UIEvent { Click, Drag,}
     public enum CameraMode { TopView, QuarterView, None,End}    
     public enum MouseEvent { LPress, LPointerDown, LPointerUp, LClick, RPress, RPointerDown, RPointerUp, RClick }
-
+    public enum MonsterAttackPattern { Attack1 = 0, Attack2 =1 , Projectile = 2 }
+    public enum AttackPrioty { Firts = 5, Second = 4, Third = 3, Forth = 2, Fifth = 1, }
 
 }

@@ -33,13 +33,13 @@ public class MoveState : State<EnemyController>
             _agent.SetDestination(context.Target.position);
             if (_agent.remainingDistance > _agent.stoppingDistance)
             {
-                _controller.Move(_agent.velocity * Time.deltaTime * context.MoveSpeed);
-                context.transform.position = _agent.nextPosition;
+                _controller.Move(_agent.velocity * Time.deltaTime);
+                //context.transform.position = _agent.nextPosition;
                 _animator.SetFloat(hashMoveSpeed, _agent.velocity.magnitude / _agent.speed, .1f, Time.deltaTime);
                 return;
             }
         }
-        stateMachine.ChangeState<AttackState>();
+        stateMachine.ChangeState<IdleState>();
 
     }
     public override void Exit()
