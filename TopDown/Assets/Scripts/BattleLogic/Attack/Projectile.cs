@@ -50,27 +50,27 @@ public class Projectile : MonoBehaviour
 
         _rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
 
-        //if (muzzlePrefabs)
-        //{
-        //    GameObject muzzleVFX = Managers.Resource.Instantiate(muzzlePrefabs, gameObject.transform.position, Quaternion.identity);
-        //    muzzleVFX.transform.forward = gameObject.transform.forward;
-        //    ParticleSystem particleSystem = muzzleVFX.GetComponent<ParticleSystem>();
-        //    if (particleSystem)
-        //    {
-        //        //파티클 주기가 끝났을 때 자동으로 삭제가 안되는 경우 코드로 삭제
-        //        StartCoroutine(CoDestroyParticle(muzzleVFX, particleSystem.main.duration));
-        //    }
-        //    else
-        //    {
-        //        ParticleSystem childParticleSystem = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-        //        if (childParticleSystem)
-        //        {
-        //            StartCoroutine(CoDestroyParticle(muzzleVFX, childParticleSystem.main.duration));
-        //        }
-        //    }
-        //}
+        if (muzzlePrefabs)
+        {
+            GameObject muzzleVFX = Managers.Resource.Instantiate(muzzlePrefabs, gameObject.transform.position, Quaternion.identity);
+            muzzleVFX.transform.forward = gameObject.transform.forward;
+            ParticleSystem particleSystem = muzzleVFX.GetComponent<ParticleSystem>();
+            if (particleSystem)
+            {
+                //파티클 주기가 끝났을 때 자동으로 삭제가 안되는 경우 코드로 삭제
+                StartCoroutine(CoDestroyParticle(muzzleVFX, particleSystem.main.duration));
+            }
+            else
+            {
+                ParticleSystem childParticleSystem = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+                if (childParticleSystem)
+                {
+                    StartCoroutine(CoDestroyParticle(muzzleVFX, childParticleSystem.main.duration));
+                }
+            }
+        }
 
-        if(shotSFX != null)
+        if (shotSFX != null)
         {
             AudioSource source = gameObject.GetOrAddComponent<AudioSource>();
             source.PlayOneShot(shotSFX);

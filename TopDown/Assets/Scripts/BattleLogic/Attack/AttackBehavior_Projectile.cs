@@ -13,7 +13,7 @@ public class AttackBehavior_Projectile : AttackBehavior
         Vector3 projectilePosition = startPoint?.position ?? transform.position;
         if(effectPrefab)
         {
-            GameObject projectileGo = GameObject.Instantiate(effectPrefab, projectilePosition, Quaternion.identity);
+            GameObject projectileGo = Managers.Resource.Instantiate(effectPrefab, projectilePosition, Quaternion.identity);
             projectileGo.transform.forward = transform.forward;
      
             Projectile projectile = projectileGo.GetComponent<Projectile>();
