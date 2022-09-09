@@ -84,6 +84,7 @@ public class UI_Manager
         return unitUI;
     }
 
+
     public T CreateSceneUI<T>(string name = null, Transform parent = null, int poolCount = 1) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(name))
@@ -125,26 +126,6 @@ public class UI_Manager
         return popup;
     }
 
-    public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
-    {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
-
-        GameObject go = Managers.Resource.Instantiate($"UI/WorldSpace/{name}");
-
-        if (go == null)
-            Debug.LogError($"Make WorldSpaceUI Failed: {name}");
-
-        if (parent != null)
-            go.transform.SetParent(parent);
-
-        Canvas canvas = go.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.WorldSpace;
-        canvas.worldCamera = Camera.main;
-         
-        return go.GetOrAddComponent<T>();
-
-    }
 
     public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UI_Base
     {

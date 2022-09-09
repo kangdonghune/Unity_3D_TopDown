@@ -54,6 +54,11 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     }
 
     #endregion
+
+    protected override void AwakeInit()
+    {
+    }
+
     protected override void Init()
     {
         WorldObjectType = Define.WorldObject.Monster;

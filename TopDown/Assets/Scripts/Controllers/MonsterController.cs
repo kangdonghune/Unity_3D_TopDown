@@ -44,5 +44,7 @@ public class MonsterController : EnemyController, IPatrolable
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+
+ 
     #endregion
 }

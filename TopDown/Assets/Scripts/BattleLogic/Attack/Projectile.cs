@@ -13,8 +13,8 @@ public class Projectile : MonoBehaviour
     public AudioClip shotSFX;
     public AudioClip hitSFX;
 
-    private bool _collided;
-    private Rigidbody _rigidbody;
+    public bool collided;
+    public Rigidbody Rigidbody;
 
     [HideInInspector]
     public AttackBehavior attackBehavior;
@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        _rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
+        Rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
 
         if (muzzlePrefabs)
         {
@@ -64,8 +64,8 @@ public class Projectile : MonoBehaviour
     {
         if(speed != 0)
         {
-            _rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
-            _rigidbody.position += (transform.forward) * (speed * Time.deltaTime);
+            Rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
+            Rigidbody.position += (transform.forward) * (speed * Time.deltaTime);
             _maxDistance -= speed * Time.deltaTime;
             if (_maxDistance < 0)
                 Managers.Resource.Destroy(gameObject);
@@ -74,12 +74,12 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(_collided)
+        if(collided)
         {
             return;
         }
 
-        _collided = true;
+        collided = true;
 
         Collider projectileCollider = GetComponent<Collider>();
         projectileCollider.enabled = false;
@@ -89,7 +89,7 @@ public class Projectile : MonoBehaviour
             AudioSource source = gameObject.GetOrAddComponent<AudioSource>();
             source.PlayOneShot(hitSFX);
         }
-        _rigidbody.isKinematic = true;
+        Rigidbody.isKinematic = true;
 
         ContactPoint contact = collision.contacts[0];
         Quaternion contactRotation = Quaternion.FromToRotation(Vector3.up, contact.normal);

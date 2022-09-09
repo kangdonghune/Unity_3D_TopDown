@@ -8,6 +8,12 @@ public abstract class BaseController : MonoBehaviour
     public int targetMask;
     [SerializeField]
     public List<AttackBehavior> attackBehaviors = new List<AttackBehavior>();
+
+    public void Awake()
+    {
+        AwakeInit();
+    }
+
     public void Start()
     {
         AttackBehaviorSet();
@@ -15,6 +21,7 @@ public abstract class BaseController : MonoBehaviour
     }
 
     protected abstract void Init();
+    protected abstract void AwakeInit();
 
 
     protected virtual void AttackBehaviorSet()

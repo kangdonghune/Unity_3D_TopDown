@@ -19,6 +19,8 @@ public class AttackBehavior_Projectile : AttackBehavior
             Projectile projectile = projectileGo.GetComponent<Projectile>();
             if(projectile)
             {
+                projectile.Rigidbody.isKinematic = false;
+                projectile.collided = false;
                 projectile.owner = this.gameObject;
                 projectile.target = target;
                 projectile.attackBehavior = this;

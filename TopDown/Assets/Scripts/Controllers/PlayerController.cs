@@ -17,7 +17,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private Camera _camera;
     private Animator _animator;
 
-    private UI_HpBar _hpBar;
+    private UI_UnitDefault _unitUI;
     private int _maxHp = 100;
     private int _hp = 100;
 
@@ -26,6 +26,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
 
     #endregion
+
+    protected override void AwakeInit()
+    {
+        _unitUI = Managers.UI.CreateUnitUI<UI_UnitDefault>(null, transform);
+    }
 
     protected override void Init()
     {
@@ -39,17 +44,15 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
-
-        //UI
-        _hpBar = Managers.UI.CreateUnitUI<UI_HpBar>(null, transform);
-        _hpBar.MaximumValue = _maxHp;
+        _unitUI.MaximumValue = _maxHp;
+        _unitUI.Value = _hp;
 
     }
 
     void Update()
     {
         PlayerMove();
-        _hpBar.Value = _hp;
+        _unitUI.Value = _hp;
     }
 
 
@@ -131,6 +134,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (IsAlive)
         {
             _hp -= damage;
+            _unitUI.CreateDamageText(damage);
         }
         else
         {
