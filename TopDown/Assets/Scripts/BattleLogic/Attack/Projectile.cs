@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     public AudioClip hitSFX;
 
     public bool collided;
-    public Rigidbody Rigidbody;
+    public Rigidbody _rigidbody;
 
     [HideInInspector]
     public AttackBehavior attackBehavior;
@@ -24,18 +24,22 @@ public class Projectile : MonoBehaviour
     public GameObject target;
     #endregion
 
-    protected virtual void Start()
+    public void Init()
     {
-        if(target != null)
+        if (target != null)
         {
             Vector3 dest = target.transform.position;
             dest.y += 1.5f;
             transform.LookAt(dest);
         }
+
+        collided = false;
         _maxDistance = 200f;
-        if(owner)
+
+        Collider projectileCollider = GetComponent<Collider>();
+        projectileCollider.enabled = true;
+        if (owner)
         {
-            Collider projectileCollider = GetComponent<Collider>();
             Collider[] ownerCollider = owner.GetComponentsInChildren<Collider>();
 
             foreach (Collider collider in ownerCollider)
@@ -45,7 +49,8 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        Rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
+        _rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
+        _rigidbody.isKinematic = false;
 
         if (muzzlePrefabs)
         {
@@ -56,21 +61,29 @@ public class Projectile : MonoBehaviour
         {
             AudioSource source = gameObject.GetOrAddComponent<AudioSource>();
             source.PlayOneShot(shotSFX);
-            
+
         }
+    }
+
+    protected virtual void Start()
+    {
+        Init();
     }
     //ridgebody를 사용할 땐 픽스드 업데이트로
     protected virtual void FixedUpdate()
     {
         if(speed != 0)
         {
-            Rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
-            Rigidbody.position += (transform.forward) * (speed * Time.deltaTime);
+            _rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
+            _rigidbody.position += (transform.forward) * (speed * Time.deltaTime);
             _maxDistance -= speed * Time.deltaTime;
             if (_maxDistance < 0)
                 Managers.Resource.Destroy(gameObject);
         }
     }
+
+
+    
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -89,7 +102,7 @@ public class Projectile : MonoBehaviour
             AudioSource source = gameObject.GetOrAddComponent<AudioSource>();
             source.PlayOneShot(hitSFX);
         }
-        Rigidbody.isKinematic = true;
+        _rigidbody.isKinematic = true;
 
         ContactPoint contact = collision.contacts[0];
         Quaternion contactRotation = Quaternion.FromToRotation(Vector3.up, contact.normal);

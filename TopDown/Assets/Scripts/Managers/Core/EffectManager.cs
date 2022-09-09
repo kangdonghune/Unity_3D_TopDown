@@ -24,6 +24,7 @@ public class EffectManager
         //Effect 프리팹을 매개변수로 받아 Effct에 넘겨준다.
         GameObject VFX = Managers.Resource.Instantiate(EffectPrefab, position, rotation);
         Effect effect = EffectObj.AddComponent<Effect>();
+        VFX.transform.SetParent(EffectObj.transform);
         effect.effect = VFX;
         _effetcs.Add(effect);
 
