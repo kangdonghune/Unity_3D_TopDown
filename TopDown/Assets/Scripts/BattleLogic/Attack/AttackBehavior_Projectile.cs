@@ -34,7 +34,7 @@ public class AttackBehavior_Projectile : AttackBehavior
         Priority = (int)Define.AttackPrioty.Firts;
         Damage = 10;
         Range = 5f;
-        coolTime = 3f;
+        coolTime = 10f;
         calcCoolTime = 0f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;
 }

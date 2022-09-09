@@ -113,26 +113,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (!IsAlive)
             return;
 
-        //if (hitEffectPrefabs)
-        //{
-        //    GameObject hitVFX = Managers.Resource.Instantiate(hitEffectPrefabs, hitTransform.position, Quaternion.identity);
-
-        //    ParticleSystem particleSystem = hitVFX.GetComponent<ParticleSystem>();
-        //    if (particleSystem)
-        //    {
-        //        //파티클 주기가 끝났을 때 자동으로 삭제가 안되는 경우 코드로 삭제
-        //        StartCoroutine(CoDestroyParticle(hitVFX, particleSystem.main.duration));
-        //    }
-        //    else
-        //    {
-        //        ParticleSystem childParticleSystem = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-        //        if (childParticleSystem)
-        //        {
-        //            StartCoroutine(CoDestroyParticle(hitVFX, childParticleSystem.main.duration));
-        //        }
-        //    }
-
-        //}
+        if (hitEffectPrefabs)
+        {
+            Managers.Effect.Instantiate(hitEffectPrefabs, hitTransform.position, Quaternion.identity);
+        }
 
         if (IsAlive)
         {
@@ -147,10 +131,6 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     #endregion
 
     #region Corutine
-    public IEnumerator CoDestroyParticle(GameObject go, float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-        Managers.Resource.Destroy(go);
-    }
+
     #endregion
 }

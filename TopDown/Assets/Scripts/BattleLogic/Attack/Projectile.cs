@@ -31,11 +31,8 @@ public class Projectile : MonoBehaviour
             Vector3 dest = target.transform.position;
             dest.y += 1.5f;
             transform.LookAt(dest);
-            
         }
-        _maxDistance = 20f;
-        speed = 1;
-
+        _maxDistance = 200f;
         if(owner)
         {
             Collider projectileCollider = GetComponent<Collider>();
@@ -52,22 +49,7 @@ public class Projectile : MonoBehaviour
 
         if (muzzlePrefabs)
         {
-            GameObject muzzleVFX = Managers.Resource.Instantiate(muzzlePrefabs, gameObject.transform.position, Quaternion.identity);
-            muzzleVFX.transform.forward = gameObject.transform.forward;
-            ParticleSystem particleSystem = muzzleVFX.GetComponent<ParticleSystem>();
-            if (particleSystem)
-            {
-                //파티클 주기가 끝났을 때 자동으로 삭제가 안되는 경우 코드로 삭제
-                StartCoroutine(CoDestroyParticle(muzzleVFX, particleSystem.main.duration));
-            }
-            else
-            {
-                ParticleSystem childParticleSystem = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                if (childParticleSystem)
-                {
-                    StartCoroutine(CoDestroyParticle(muzzleVFX, childParticleSystem.main.duration));
-                }
-            }
+            Managers.Effect.Instantiate(muzzlePrefabs, gameObject.transform.position, Quaternion.identity);
         }
 
         if (shotSFX != null)
@@ -90,7 +72,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private async void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if(_collided)
         {
@@ -107,8 +89,6 @@ public class Projectile : MonoBehaviour
             AudioSource source = gameObject.GetOrAddComponent<AudioSource>();
             source.PlayOneShot(hitSFX);
         }
-
-        speed = 0;
         _rigidbody.isKinematic = true;
 
         ContactPoint contact = collision.contacts[0];
@@ -117,23 +97,7 @@ public class Projectile : MonoBehaviour
 
         if(hitPrefabs)
         {
-            GameObject hitVFX = Managers.Resource.Instantiate(hitPrefabs, contactPosition, contactRotation);
-            //GameObject hitVFX = Instantiate(hitPrefabs, contactPosition, contactRotation);
-
-            ParticleSystem particleSystem = hitVFX.GetComponent<ParticleSystem>();
-            if (particleSystem)
-            {
-                //파티클 주기가 끝났을 때 자동으로 삭제가 안되는 경우 코드로 삭제
-                StartCoroutine(CoDestroyParticle(hitVFX, particleSystem.main.duration));
-            }
-            else
-            {
-                ParticleSystem childParticleSystem = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                if (childParticleSystem)
-                {
-                    StartCoroutine(CoDestroyParticle(hitVFX, childParticleSystem.main.duration));
-                }
-            }
+            Managers.Effect.Instantiate(hitPrefabs, contactPosition, contactRotation);
         }
 
         IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
@@ -142,8 +106,7 @@ public class Projectile : MonoBehaviour
             damageable.TakeDamage(attackBehavior?.Damage ?? 0, null);
         }
 
-        StartCoroutine(CoDestroyProjectile(0.0f));
-
+        Managers.Resource.Destroy(gameObject);
     }
 
 
@@ -173,11 +136,5 @@ public class Projectile : MonoBehaviour
 
         yield return new WaitForSeconds(waitTime);
         Managers.Resource.Destroy(gameObject);
-    }
-
-    public IEnumerator CoDestroyParticle(GameObject go, float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-        Managers.Resource.Destroy(go);
     }
 }

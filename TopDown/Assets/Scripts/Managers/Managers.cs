@@ -35,6 +35,9 @@ public class Managers : MonoBehaviour
 
     WayPointManager m_way = new WayPointManager();
     public static WayPointManager Way { get { return Instance.m_way; } }
+
+    EffectManager m_effect = new EffectManager();
+    public static EffectManager Effect { get { return Instance.m_effect; } }
     #endregion
 
     void Start()
@@ -73,6 +76,7 @@ public class Managers : MonoBehaviour
         Scene.Clear();
         UI.Clear();
         Way.Clear();
+        Effect.Clear();
         Pool.Clear(); //다른 컴퍼넌트에서 pool된 애들을 사용할 수 있으니 마지막으로 clear
     }
 }
