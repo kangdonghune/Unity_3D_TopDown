@@ -7,7 +7,6 @@ public class UI_Manager
     int _order = 10; // 현재까지 최근에 사용한 오더
 
     Stack<UI_Popup> _popStack = new Stack<UI_Popup>();
-    UI_Scene _sceneUI = null;
 
     public GameObject Root
     {
@@ -52,10 +51,10 @@ public class UI_Manager
     }
 
 
-    public void SetCanvas(GameObject go, bool sort = true)
+    public void SetCanvas(GameObject go, RenderMode rendermode,bool sort = true)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.renderMode = rendermode;
         canvas.overrideSorting = true; //캔버스 안에 캔버스가 중첩될 때 그 부모가 어떤 값을 가지든 본인만의 소팅오더 값을 가지는 설정
 
 
@@ -73,19 +72,44 @@ public class UI_Manager
 
     }
 
-    public T ShowSceneUI<T>(string name = null) where T : UI_Scene
+    public T CreateUnitUI<T>(string name = null, Transform parent = null) where T : UI_Unit
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
+        //기본적으론 풀링과정에서 고유성을 보장하기 위해 디펄트값은 1개로
+        GameObject go = Managers.Resource.Instantiate($"UI/Unit/{name}", parent);
+        T unitUI = Util.GetOrAddComponent<T>(go);
+        //UI가 카메라 쪽 바라보도록 추가
+        Util.GetOrAddComponent<CameraFacing>(go);
+        return unitUI;
+    }
 
-        GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
+    public T CreateSceneUI<T>(string name = null, Transform parent = null, int poolCount = 1) where T : UI_Scene
+    {
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+        //기본적으론 풀링과정에서 고유성을 보장하기 위해 디펄트값은 1개로
+        GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}", parent, poolCount);
         T sceneUI = Util.GetOrAddComponent<T>(go);
-        _sceneUI = sceneUI;
-
-        go.transform.SetParent(SceneUIRoot.transform);
-
- 
+        if (parent == null)
+            go.transform.SetParent(SceneUIRoot.transform);
         return sceneUI;
+    }
+
+    public void ShowSceneUI<T>(T sceneUI) where T: UI_Scene
+    {
+        if (sceneUI == null || sceneUI.gameObject.activeSelf == true)
+            return;
+
+        sceneUI.gameObject.SetActive(true);
+    }
+
+    public void CloseSceneUI<T>(T sceneUI) where T : UI_Scene
+    {
+        if (sceneUI == null)
+            return;
+
+        sceneUI.gameObject.SetActive(false);       
     }
 
     public T ShowPopupUI<T>(string name =null) where T : UI_Popup
@@ -171,7 +195,6 @@ public class UI_Manager
     public void Clear()
     {
         CloseAllPopupUI();
-        _sceneUI = null;
     }
 
 }

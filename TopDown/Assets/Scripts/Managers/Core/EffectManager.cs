@@ -6,6 +6,16 @@ using UnityEngine;
 public class EffectManager 
 {
     private List<Effect> _effetcs = new List<Effect>();
+    private GameObject EffectObj;
+
+    public void Init()
+    {
+        EffectObj = GameObject.Find("@Effect");
+        if (EffectObj == null)
+        {
+            EffectObj = new GameObject { name = "@Effect" };
+        }
+    }
 
     public void Instantiate(GameObject EffectPrefab, Vector3 position, Quaternion rotation)
     {
@@ -13,7 +23,7 @@ public class EffectManager
             return;
         //Effect 프리팹을 매개변수로 받아 Effct에 넘겨준다.
         GameObject VFX = Managers.Resource.Instantiate(EffectPrefab, position, rotation);
-        Effect effect = Managers.Scene.CurrentScene.gameObject.AddComponent<Effect>();
+        Effect effect = EffectObj.AddComponent<Effect>();
         effect.effect = VFX;
         _effetcs.Add(effect);
 
@@ -41,11 +51,17 @@ public class EffectManager
             effect.DestroyEffcet();
         }
         _effetcs.Clear();
+        Object.Destroy(EffectObj);
     }
 
     private void DestroyCount(Effect effect,float waitTime)
     {
         //Effect의 삭제 코루틴 실행
         effect.DestroyCount(waitTime);
+    }
+
+    public void RemoveListItem(Effect effect)
+    {
+        _effetcs.Remove(effect);
     }
 }

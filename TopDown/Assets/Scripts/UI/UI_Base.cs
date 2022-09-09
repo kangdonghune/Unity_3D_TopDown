@@ -74,7 +74,7 @@ public abstract class UI_Base : MonoBehaviour
         return Get<Image>(idx);
     }
 
-    public  static  void    BindUIEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
+    public  static  void  BindUIEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
     {
         if (go == null)
         {

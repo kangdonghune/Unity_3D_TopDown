@@ -21,6 +21,7 @@ public class Effect : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         Managers.Resource.Destroy(effect);
+        Managers.Effect.RemoveListItem(this);
         Destroy(this);
     }
 }

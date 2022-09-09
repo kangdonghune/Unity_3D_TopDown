@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneManagerEX
 {
     public BaseScene CurrentScene { get { return GameObject.FindObjectOfType<BaseScene>(); } }
-
+ 
     public void LoadScene(Define.Scene scenetype)
     {
         Managers.Clear();

@@ -15,7 +15,7 @@ public class GameScene : BaseScene
     {
         base.Init();
         SceneType = Define.Scene.Game;
-        //Managers.UI.ShowSceneUI<UI_Inven>();
+        //Managers.UI.CreateSceneUI<UI_Inven>();
 
         gameObject.GetOrAddComponent<CursorController>();
         //GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Arisa");

@@ -17,6 +17,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private Camera _camera;
     private Animator _animator;
 
+    private UI_HpBar _hpBar;
+    private int _maxHp = 100;
+    private int _hp = 100;
+
     readonly int moveHash = Animator.StringToHash("Move");
 
 
@@ -35,11 +39,17 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
+
+        //UI
+        _hpBar = Managers.UI.CreateUnitUI<UI_HpBar>(null, transform);
+        _hpBar.MaximumValue = _maxHp;
+
     }
 
     void Update()
     {
         PlayerMove();
+        _hpBar.Value = _hp;
     }
 
 
@@ -120,8 +130,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
         if (IsAlive)
         {
-            Debug.LogWarning("플레이어가 피격을 당했네요~~");
-            // _animator.SetTrigger(hashAttackTrigger);
+            _hp -= damage;
         }
         else
         {

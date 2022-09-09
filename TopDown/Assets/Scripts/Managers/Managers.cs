@@ -62,6 +62,7 @@ public class Managers : MonoBehaviour
             }
             DontDestroyOnLoad(go);
             s_Instance = go.GetComponent<Managers>();
+            s_Instance.m_effect.Init();
             s_Instance.m_sound.Init();
             s_Instance.m_pool.Init();
             s_Instance.m_way.Init();
