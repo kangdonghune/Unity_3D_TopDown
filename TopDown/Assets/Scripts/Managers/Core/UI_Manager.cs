@@ -84,6 +84,15 @@ public class UI_Manager
         return unitUI;
     }
 
+    public T CreateWorldUI<T>(string name, Transform parent = null) where T : UI_World
+    {
+        //기본적으론 풀링과정에서 고유성을 보장하기 위해 디펄트값은 1개로
+        GameObject go = Managers.Resource.Instantiate($"UI/WorldSpace/{name}", parent);
+        T unitUI = Util.GetOrAddComponent<T>(go);
+        //UI가 카메라 쪽 바라보도록 추가
+        return unitUI;
+    }
+
 
     public T CreateSceneUI<T>(string name = null, Transform parent = null, int poolCount = 1) where T : UI_Scene
     {
