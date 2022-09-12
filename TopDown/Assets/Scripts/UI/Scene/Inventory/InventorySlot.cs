@@ -37,7 +37,7 @@ public class InventorySlot
         this.item = item; //아이템 종류(ex: 갑옷 등)
         this.amount = amount;//아이템 stackable이 true인 경우 2 이상도 가능
 
-        OnPreUpdate?.Invoke(this);
+        OnPostUpdate?.Invoke(this);
     }
 
     public bool CanPlaceInSlot(ItemObject itemObject)

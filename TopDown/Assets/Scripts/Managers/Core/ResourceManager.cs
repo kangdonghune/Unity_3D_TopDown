@@ -56,7 +56,8 @@ public class ResourceManager
             return Managers.Pool.Pop(go, position, rotation,parent, count).gameObject;
 
         //pooling 대상이 아니라면 그냥 생성
-        GameObject gameObj = Object.Instantiate(go, position, rotation);
+        GameObject gameObj = Object.Instantiate(go, position, rotation, parent);
+        gameObj.name = go.name;
         return gameObj;
 
     }

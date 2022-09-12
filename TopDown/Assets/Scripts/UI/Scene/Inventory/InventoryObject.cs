@@ -10,7 +10,7 @@ public enum InterfaceType
     Box,
 }
 
-[CreateAssetMenu(fileName = "New Inventory", menuName ="Inventory Sysyem/Inventory")]
+[CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventort/New Inventory")]
 public class InventoryObject : ScriptableObject
 {
     public ItemObjectDatabase database;
@@ -43,7 +43,7 @@ public class InventoryObject : ScriptableObject
         InventorySlot slot = FindItemInInventory(item);
         if(slot == null || !database.itemObjects[item.id].stackable) //해당 아이템이 있는 슬롯이 없거나 해당 아이템이 중첩되지 못할 경우
         {
-            GetEmptySlot().AddItme(item, amount);
+            GetEmptySlot().AddItem(item, amount);
         }
         else
         {
