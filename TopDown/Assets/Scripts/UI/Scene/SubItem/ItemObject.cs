@@ -4,12 +4,13 @@ using UnityEngine;
 
 public enum ItemType: int
 {
-    Helmet = 0,
-    Chest = 1,
-    Pants = 2,
-    Boots = 3,
-    Gloves = 4,
-    Weapon = 5,
+    Weapon = 0,
+    Helmet = 1,
+    Chest = 2,
+    Gloves = 3,
+    Pants = 4,
+    Boots = 5,
+    Accessories = 6,
     Food,
     Default,
 

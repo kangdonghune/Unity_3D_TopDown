@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DynamicInventoryUI : InventoryUI
+public class StaticInventoryUI : InventoryUI
 {
-    [SerializeField]
-    protected ItemObjectDatabase database;
+    public GameObject[] staticSlots = null;
 
-    [SerializeField]
-    protected GameObject slotPrefab;
+    protected int numberOfColumn = 3;
 
     [SerializeField]
     protected Vector2 start;
@@ -21,16 +18,12 @@ public class DynamicInventoryUI : InventoryUI
     [SerializeField]
     protected Vector2 space;
 
-    [Min(1), SerializeField]
-    protected int numberOfColumn = 5;
-
     public override void CreateSlotUIs()
     {
         slotUIs = new Dictionary<GameObject, InventorySlot>();
-
-        for (int i = 0; i < inventoryObject.slots.Length; i ++)
+        for (int i = 0; i < inventoryObject.slots.Length; i++)
         {
-            GameObject go = Managers.Resource.Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, transform);
+            GameObject go = staticSlots[i];
             go.GetComponent<RectTransform>().anchoredPosition = CalculatePosition(i);
             go.GetComponent<RectTransform>().sizeDelta = size;
 
@@ -42,12 +35,6 @@ public class DynamicInventoryUI : InventoryUI
 
             inventoryObject.slots[i].slotUI = go;
             slotUIs.Add(go, inventoryObject.slots[i]);
-
-            go.name += ": " + i;
-            go.FindChild<TextMeshProUGUI>().text = i.ToString();
-           
-
-        slotUIs[go].AddItem(database.itemObjects[0].data,1);
         }
     }
 
@@ -55,8 +42,7 @@ public class DynamicInventoryUI : InventoryUI
     {
         float x = start.x + ((space.x + size.x) * (i % numberOfColumn));
         float y = start.y + (-(space.y + size.y) * (i / numberOfColumn));
-        return new Vector3(x,y,0f);
+        return new Vector3(x, y, 0f);
     }
-
 
 }

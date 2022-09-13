@@ -29,7 +29,7 @@ public abstract class InventoryUI : MonoBehaviour
         {
             //전부 new로 만들어질 때 디펄트 값으로 되어 있으니 인벤토리UI가 처음 만들어 질 때 부모를 연결
             inventoryObject.slots[i].parent = inventoryObject;
-            //inventoryObject.slots[i].OnPostUpdate += OnPostUpdate;
+            inventoryObject.slots[i].OnPostUpdate += OnPostUpdate;
         }
 
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
@@ -61,7 +61,7 @@ public abstract class InventoryUI : MonoBehaviour
     {
         slot.slotUI.transform.GetChild(0).GetComponent<Image>().sprite = slot.item.id < 0 ? null : slot.ItemObject.icon;
         slot.slotUI.transform.GetChild(0).GetComponent<Image>().color = slot.item.id < 0 ? new Color(1, 1, 1, 0) : new Color(1, 1, 1, 1);
-        slot.slotUI.FindChild<TextMeshProUGUI>().text = slot.item.id < 0 ? string.Empty : (slot.amount == 1 ? string.Empty : slot.amount.ToString("n0"));
+        //slot.slotUI.FindChild<TextMeshProUGUI>().text = slot.item.id < 0 ? string.Empty : (slot.amount == 1 ? string.Empty : slot.amount.ToString("n0"));
     }
 
     public void OnEnterInterface(GameObject go)
@@ -113,7 +113,7 @@ public abstract class InventoryUI : MonoBehaviour
 
     private GameObject CreateDragImage(GameObject go)
     {
-        if(slotUIs[go].item.id < 0)
+        if(slotUIs[go]?.item.id < 0)
         {
             return null;
         }

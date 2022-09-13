@@ -9,11 +9,13 @@ public class ItemObjectDatabase : ScriptableObject
 
     public void OnValidate()
     {
-        if (itemObjects.Length == 0)
-            return;
-        for(int i = 0; i < itemObjects.Length; i++)
+        for (int i = 0; i < itemObjects.Length; ++i)
         {
-            itemObjects[i].data.id = i; 
+            if (itemObjects[i] == null)
+            {
+                continue;
+            }
+            itemObjects[i].data.id = i;
         }
     }
 }
