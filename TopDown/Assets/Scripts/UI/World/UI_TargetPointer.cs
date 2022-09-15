@@ -8,14 +8,20 @@ public class UI_TargetPointer : UI_World
     public float surfaceOffset = 0.2f; //지면에서 특정 높이 만큼 위로
     public Transform target = null;
 
+    private bool _isTarget = false;
     private Coroutine coroutine = null;
  
     void Update()
     {
-        if(target)
+        if(_isTarget == true)
         {
-            transform.position = target.position + Vector3.up * surfaceOffset;
-            //추후 몬스터 숫자가 늘어날 시 몬스터 분류(대,중,소형)에 따라 타겟 이미지 크기 수정
+            if (target)
+            {
+                transform.position = target.position + Vector3.up * surfaceOffset;
+                //추후 몬스터 숫자가 늘어날 시 몬스터 분류(대,중,소형)에 따라 타겟 이미지 크기 수정
+            }
+            else
+                DestroyPoint(0);
         }
     }
 
@@ -29,6 +35,7 @@ public class UI_TargetPointer : UI_World
     public void SetTarget(RaycastHit hit)
     {
         target = hit.transform;
+        _isTarget = true;
     }
 
     public void DestroyPoint(float time = -1f)

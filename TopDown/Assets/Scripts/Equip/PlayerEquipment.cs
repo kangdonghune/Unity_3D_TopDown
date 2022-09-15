@@ -120,6 +120,7 @@ public class PlayerEquipment : MonoBehaviour
             instance.itemTransforms.AddRange(itemTransforms.ToList<Transform>());
             return instance;
         }
+
         return null;
     }
 

@@ -37,7 +37,6 @@ public class StaticInventoryUI : InventoryUI
         }
     }
 
-
     public void OnDestroy()
     {
         for (int i = 0; i < staticSlots.Length; i++)

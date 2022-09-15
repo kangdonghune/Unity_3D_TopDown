@@ -4394,13 +4394,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 391518063}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1571738662}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1001 &394834115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26455,6 +26455,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7302594035185701384, guid: 0eeff048d039a4e45855666dec3b679e, type: 3}
+      propertyPath: boxSize.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302594035185701384, guid: 0eeff048d039a4e45855666dec3b679e, type: 3}
+      propertyPath: boxSize.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302594035185701384, guid: 0eeff048d039a4e45855666dec3b679e, type: 3}
+      propertyPath: boxSize.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7302594036611039296, guid: 0eeff048d039a4e45855666dec3b679e, type: 3}
       propertyPath: m_Name
       value: Bear

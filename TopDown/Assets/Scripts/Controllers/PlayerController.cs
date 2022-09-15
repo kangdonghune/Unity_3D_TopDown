@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController, IAttackable, IDamageable
 {
@@ -20,6 +22,8 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private UI_UnitDefault _unitUI;
     private int _maxHp = 100;
     private int _hp = 100;
+
+    private bool _isOnUI;
 
     readonly int moveHash = Animator.StringToHash("Move");
 
@@ -51,6 +55,8 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     void Update()
     {
+        _isOnUI = EventSystem.current.IsPointerOverGameObject();
+
         PlayerMove();
         _unitUI.Value = _hp;
     }
@@ -58,6 +64,8 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     private void OnMouseEvent(Define.MouseEvent evt)
     {
+        if (_isOnUI == true)
+            return;
         switch (evt)
         {
             case Define.MouseEvent.LClick:
@@ -106,6 +114,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             transform.position = new Vector3(transform.position.x, _navAgent.nextPosition.y, transform.position.z);
             _animator.SetBool(moveHash, false);
         }
+    }
+
+    public bool PickUpItem(GroundItem groundItem)
+    {
+        throw new NotImplementedException();
     }
 
     #region interface
