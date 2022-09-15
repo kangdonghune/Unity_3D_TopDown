@@ -12,65 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10225598f9915984fb1e8cf22262594c, type: 3}
   m_Name: PlayerEquipment
   m_EditorClassIdentifier: 
-  database: {fileID: 0}
-  type: 0
+  database: {fileID: 11400000, guid: d0c516e2a771cfc4f9450e36578eada2, type: 2}
+  type: 1
   container:
     slots:
-    - allowedItems: 
+    - allowedItems: 00000000
       item:
         id: -1
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 
+    - allowedItems: 01000000
       item:
         id: -1
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 
+    - allowedItems: 02000000
       item:
         id: -1
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 
+    - allowedItems: 03000000
       item:
         id: -1
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 
+    - allowedItems: 04000000
       item:
         id: -1
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 
-      item:
-        id: -1
-        name: 
-        buffs: []
-      amount: 0
-    - allowedItems: 
-      item:
-        id: -1
-        name: 
-        buffs: []
-      amount: 0
-    - allowedItems: 
-      item:
-        id: -1
-        name: 
-        buffs: []
-      amount: 0
-    - allowedItems: 
-      item:
-        id: -1
-        name: 
-        buffs: []
-      amount: 0
-    - allowedItems: 
+    - allowedItems: 05000000
       item:
         id: -1
         name: 

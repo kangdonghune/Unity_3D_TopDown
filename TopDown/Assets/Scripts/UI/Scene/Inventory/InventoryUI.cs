@@ -53,6 +53,7 @@ public abstract class InventoryUI : MonoBehaviour
         EventTrigger trigger = go.GetOrAddComponent<EventTrigger>();
         EventTrigger.Entry eventTrigger = new EventTrigger.Entry() { eventID = type };
         eventTrigger.callback.AddListener(action);
+        trigger.triggers.Remove(eventTrigger);//이미 있는 상태라면 제거를 해줘야 중복 추가가 안된다.
         trigger.triggers.Add(eventTrigger);
     }
     
@@ -61,7 +62,7 @@ public abstract class InventoryUI : MonoBehaviour
     {
         slot.slotUI.transform.GetChild(0).GetComponent<Image>().sprite = slot.item.id < 0 ? null : slot.ItemObject.icon;
         slot.slotUI.transform.GetChild(0).GetComponent<Image>().color = slot.item.id < 0 ? new Color(1, 1, 1, 0) : new Color(1, 1, 1, 1);
-        //slot.slotUI.FindChild<TextMeshProUGUI>().text = slot.item.id < 0 ? string.Empty : (slot.amount == 1 ? string.Empty : slot.amount.ToString("n0"));
+        slot.slotUI.FindChild<TextMeshProUGUI>().text = slot.item.id < 0 ? string.Empty : (slot.amount == 1 ? string.Empty : slot.amount.ToString("n0"));
     }
 
     public void OnEnterInterface(GameObject go)

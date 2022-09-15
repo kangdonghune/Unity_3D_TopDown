@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fc189ab58505f42af05365846e05ea, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
-  type: 5
+  type: 0
   stackable: 0
-  icon: {fileID: 0}
-  modelPrefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: 719c2201c2f5f6c4aafffaeb5abdf5f9, type: 3}
+  modelPrefab: {fileID: 2081985540835368900, guid: 78f51c355e736cb4fb8a2c24eb343793, type: 3}
   data:
     id: 0
-    name: 
+    name: Axe
     buffs: []
   boneNames: []
   description: 
