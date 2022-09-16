@@ -32,9 +32,9 @@ public class UI_TargetPointer : UI_World
         DestroyPoint(playTime);
     }
 
-    public void SetTarget(RaycastHit hit)
+    public void SetTarget(Transform target)
     {
-        target = hit.transform;
+        this.target = target;
         _isTarget = true;
     }
 

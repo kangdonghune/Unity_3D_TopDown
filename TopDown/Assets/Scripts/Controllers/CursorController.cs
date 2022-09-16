@@ -8,7 +8,9 @@ public class CursorController : MonoBehaviour
 
 	Texture2D _attackIcon;
 	Texture2D _handIcon;
+	Texture2D _LootIcon;
 
+	private GameObject Target = null;
 	private UI_TargetPointer _pointer = null;
 
 	enum CursorType
@@ -24,36 +26,37 @@ public class CursorController : MonoBehaviour
 	{
 		_attackIcon = Managers.Resource.Load<Texture2D>("Textures/Cursor/Attack");
 		_handIcon = Managers.Resource.Load<Texture2D>("Textures/Cursor/Hand");
+		_LootIcon = Managers.Resource.Load<Texture2D>("Textures/Cursor/Loot");
 		Managers.Input.MouseAction -= OnMouseEvent;
 		Managers.Input.MouseAction += OnMouseEvent;
 	}
 
 	void Update()
 	{
-		if (Input.GetMouseButton(0))
-			return;
-
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 	
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, 100.0f, _mask))
+		RaycastHit[] hits;
+
+		hits = Physics.SphereCastAll(Camera.main.transform.position, 0.5f, ray.direction, 100.0f, _mask);
+		foreach (RaycastHit hit in hits)
 		{
 			if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
 			{
-				Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 				if (_cursorType != CursorType.Attack)
 				{
 					Cursor.SetCursor(_attackIcon, new Vector2(_attackIcon.width / 5, 0), CursorMode.Auto);
 					_cursorType = CursorType.Attack;
+					Target = hit.collider.gameObject;
+					break;
 				}
 			}
 			else
 			{
-				Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.blue, 1.0f);
 				if (_cursorType != CursorType.Hand)
 				{
 					Cursor.SetCursor(_handIcon, new Vector2(_handIcon.width / 3, 0), CursorMode.Auto);
 					_cursorType = CursorType.Hand;
+					Target = null;
 				}
 			}
 		}
@@ -93,18 +96,22 @@ public class CursorController : MonoBehaviour
         }
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, 100, _mask))
-		{
-			if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
-            {
-				_pointer = Managers.UI.CreateWorldUI<UI_TargetPointer>("Targeting", transform);
-				_pointer.SetTarget(hit);
-            }
-			else
-            {
-				_pointer = Managers.UI.CreateWorldUI<UI_TargetPointer>("MovePoint",transform);
+		LayerMask mask = LayerMask.GetMask("Ground");
+		if (Target == null)
+        {
+			if (Physics.Raycast(ray, out hit, 100.0f, mask))
+			{
+				_pointer = Managers.UI.CreateWorldUI<UI_TargetPointer>("MovePoint", transform);
 				_pointer.SetPosition(hit);
 			}
 		}
+		else
+        {
+			_pointer = Managers.UI.CreateWorldUI<UI_TargetPointer>("Targeting", transform);
+			_pointer.SetTarget(Target.transform);
+
+		}
+		
+
 	}
 }

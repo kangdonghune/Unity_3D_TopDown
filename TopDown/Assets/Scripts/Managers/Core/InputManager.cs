@@ -9,6 +9,9 @@ public class InputManager
 
     public Action KeyAction = null;
     public Action<Define.MouseEvent> MouseAction = null;
+    public Action MouseInTrigger;
+    public Action MouseOutTrigger;
+
 
     bool _LBpressed = false;
     bool _RBpressed = false;
