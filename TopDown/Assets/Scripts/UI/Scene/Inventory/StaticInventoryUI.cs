@@ -37,6 +37,10 @@ public class StaticInventoryUI : InventoryUI
         }
     }
 
+    public override void OnRButtonDown(GameObject go)
+    {
+    }
+
     //시작 시 디펄트 아이템으로 시작하기에 일단은 인벤토리 초기화의 필요성이 사라짐.
     //public void OnDestroy()
     //{

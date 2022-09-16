@@ -8,9 +8,6 @@ public class EquipmentCombiner
 
     private readonly Transform transform;
 
-    private string WeaponString = "OneHandWeapon";
-    private Transform WeaponTransform;
-
 
     public EquipmentCombiner(GameObject rootGo)
     {
@@ -31,10 +28,6 @@ public class EquipmentCombiner
     {
         foreach (Transform child in root)
         {
-            if (child.name == "OneHandWeapon")
-            {
-                WeaponTransform = child;
-            }
             rootBoneDictionary.Add(child.name.GetHashCode(), child);
             TraverseHierachy(child);
         }

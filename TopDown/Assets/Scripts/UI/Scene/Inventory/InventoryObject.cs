@@ -37,38 +37,56 @@ public class InventoryObject : ScriptableObject
 
     public bool AddItem(Item item, int amount)
     {
-        if (EmptySlotCount <= 0)
+        if (item.id < 0) //빈 아이템 추가를 방지
             return false;
-
         InventorySlot slot = FindItemInInventory(item);
-        if(slot == null || !database.itemObjects[item.id].stackable) //해당 아이템이 있는 슬롯이 없거나 해당 아이템이 중첩되지 못할 경우
+        //1.아이템 중첩가능한 지 여부
+        //2.해당 아이템을 가진 슬롯이 없는지 여부
+        if(!database.itemObjects[item.id].stackable || slot == null)
         {
-            GetEmptySlot().AddItem(item, amount);
+            if (EmptySlotCount <= 0) // 빈 슬롯창이 없는 경우
+                return false;
+
+            if (!database.itemObjects[item.id].stackable) //추가하고자 하는 아이템이 중첩 불가인 경우
+                GetEmptySlot().UpdateSlot(item, 1); //실수로 중첩불가인 아이템을 중복으로 넣을 경우 1개로 수정
+            else
+                GetEmptySlot().UpdateSlot(item, amount);
         }
         else
         {
             slot.AddAmount(amount);
         }
 
-        return true; ;
+        return true;
     }
 
     public InventorySlot FindItemInInventory(Item item) => slots.FirstOrDefault(i => i.item.id == item.id);
     public InventorySlot GetEmptySlot() => slots.FirstOrDefault(i => i.item.id < 0);
     public bool IsContainItem(ItemObject itemObject) => slots.FirstOrDefault(i => i.item.id == itemObject.data.id) != null;
 
-    public void SwapItems(InventorySlot itemSlotA, InventorySlot itemSlotB)
+    public bool SwapItems(InventorySlot itemSlotA, InventorySlot itemSlotB)
     {
         if (itemSlotA == itemSlotB)
-            return;
+            return false;
 
         if (itemSlotB.CanPlaceInSlot(itemSlotA.ItemObject) && itemSlotA.CanPlaceInSlot(itemSlotB.ItemObject))
         {
             InventorySlot temp = new InventorySlot(itemSlotB.item, itemSlotB.amount);
             itemSlotB.UpdateSlot(itemSlotA.item, itemSlotA.amount);
             itemSlotA.UpdateSlot(temp.item, temp.amount);
+            return true;
         }
+
+        return false;
         
+    }
+
+    private void OnDestroy()
+    {
+        foreach(InventorySlot slot in slots)
+        {
+            slot.RemoveItem();
+        }
     }
 
 }

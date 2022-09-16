@@ -11,6 +11,7 @@ public enum ItemType: int
     Pants = 4,
     Boots = 5,
     Accessories = 6,
+    Consumable, // ItemType 값이 해당 값보다 큰 경우 소모품으로 판정
     Food,
     Default,
 

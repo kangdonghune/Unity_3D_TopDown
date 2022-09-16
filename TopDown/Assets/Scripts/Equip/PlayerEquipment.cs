@@ -33,8 +33,12 @@ public class PlayerEquipment : MonoBehaviour
         for(int i = 0; i < itemInstances.Length; i++)
         {
             if (defalutItemObjects[i] == null)
+            {
+                equipment.slots[i].RemoveItem();
                 continue;
-            equipment.slots[i].AddItem(defalutItemObjects[i].data, 1);
+            }    
+            if(equipment.slots[i].CanPlaceInSlot(defalutItemObjects[i])) //디펄트 아이템이 해당 슬롯에 장착 가능한 타입인지 체크
+                equipment.slots[i].UpdateSlot(defalutItemObjects[i].data, 1);
         }
     }
 

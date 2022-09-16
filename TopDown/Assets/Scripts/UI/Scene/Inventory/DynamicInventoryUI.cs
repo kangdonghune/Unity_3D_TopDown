@@ -10,6 +10,9 @@ public class DynamicInventoryUI : InventoryUI
     protected ItemObjectDatabase database;
 
     [SerializeField]
+    protected InventoryObject equipment;
+
+    [SerializeField]
     protected GameObject slotPrefab;
 
     [SerializeField]
@@ -40,14 +43,45 @@ public class DynamicInventoryUI : InventoryUI
             AddEvent(go, EventTriggerType.Drag, delegate { OnDrag(go); });
             AddEvent(go, EventTriggerType.EndDrag, delegate { OnEndDrag(go); });
 
+
             inventoryObject.slots[i].slotUI = go;
+            inventoryObject.slots[i].parent = inventoryObject;
             slotUIs.Add(go, inventoryObject.slots[i]);
 
             go.name += ": " + i;
             go.FindChild<TextMeshProUGUI>().text = i.ToString();
            
 
-        slotUIs[go].AddItem(database.itemObjects[0].data,1);
+            slotUIs[go].parent.AddItem(database.itemObjects[0].data,2);
+        }
+    }
+
+    public override void OnRButtonDown(GameObject go)
+    {
+        //TODO - 우클릭 시 장비면 플레이어 인벤에 있는 슬롯 중에 교환 가능한 파트와 교체 소모품이면 사용
+
+    }
+
+    private void SetEquipment()
+    {
+        if (MouseData.slotHoveredOver)
+        {
+            InventorySlot mouseHoverSlotDatas = MouseData.interfaceMouseIsOver.slotUIs[MouseData.slotHoveredOver];
+            
+            for(int i = 0; i < equipment.slots.Length; i++)
+            {
+                
+            }
+
+        }
+
+    }
+    private void UsingConsumable()
+    {
+        if (MouseData.slotHoveredOver) 
+        {
+            InventorySlot mouseHoverSlotDatas = MouseData.interfaceMouseIsOver.slotUIs[MouseData.slotHoveredOver];
+            mouseHoverSlotDatas.RemoveAmount();
         }
     }
 
@@ -55,8 +89,7 @@ public class DynamicInventoryUI : InventoryUI
     {
         float x = start.x + ((space.x + size.x) * (i % numberOfColumn));
         float y = start.y + (-(space.y + size.y) * (i / numberOfColumn));
-        return new Vector3(x,y,0f);
+        return new Vector3(x, y, 0f);
     }
-
 
 }

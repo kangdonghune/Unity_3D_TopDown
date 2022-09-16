@@ -25,10 +25,16 @@ public class InventorySlot
     public InventorySlot() => UpdateSlot(new Item(), 0);
     public InventorySlot(Item item, int amount) => UpdateSlot(item, amount);
 
-    public void AddItem(Item item, int amount) => UpdateSlot(item, amount);
     public void RemoveItem() => UpdateSlot(new Item(), 0);
+    public void RemoveAmount(int value = 1) => AddAmount(-value);
 
-    public void AddAmount(int value) => UpdateSlot(item, amount += value);
+    public void AddAmount(int value = 1)
+    {
+        if (amount + value <= 0)
+            RemoveItem();
+        else
+            UpdateSlot(item, amount += value);
+    }
 
     public void UpdateSlot(Item item, int amount)
     {

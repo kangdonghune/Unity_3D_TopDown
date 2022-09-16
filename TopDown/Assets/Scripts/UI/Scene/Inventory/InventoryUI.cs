@@ -23,6 +23,12 @@ public abstract class InventoryUI : MonoBehaviour
 
     private void Awake()
     {
+        //시작 시 인벤토리 초기화
+        for(int i = 0; i < inventoryObject.slots.Length; i++)
+        {
+            inventoryObject.slots[i].RemoveItem();
+        }
+
         CreateSlotUIs();
 
         for (int i = 0; i < inventoryObject.slots.Length; i++)
@@ -112,6 +118,8 @@ public abstract class InventoryUI : MonoBehaviour
 
     }
 
+    public abstract void OnRButtonDown(GameObject go);
+
     private GameObject CreateDragImage(GameObject go)
     {
         if(slotUIs[go]?.item.id < 0)
@@ -130,7 +138,6 @@ public abstract class InventoryUI : MonoBehaviour
 
         return dragImage;
     }
-
 }
 
 
