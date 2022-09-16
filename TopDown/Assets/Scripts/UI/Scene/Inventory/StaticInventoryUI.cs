@@ -41,14 +41,25 @@ public class StaticInventoryUI : InventoryUI
     {
     }
 
-    //시작 시 디펄트 아이템으로 시작하기에 일단은 인벤토리 초기화의 필요성이 사라짐.
-    //public void OnDestroy()
-    //{
-    //    for (int i = 0; i < staticSlots.Length; i++)
-    //    {
-    //        //스테틱 인벤토리의 별도의 인벤토리 오브젝트(Scriptable)에 리스트로 있는 슬롯이 변경된 채로 저장이 된다.
-    //        //따라서 재시작 시 빈 상태로 시작하기 위해선 종료 시 해당 리스트를 전부 비워줄 필요가 있다.
-    //        slotUIs[staticSlots[i]].RemoveItem();
-    //    }
-    //}
+
+    public override bool AddItemPossible(ItemObject itemObj, int amount)
+    {
+        //장비 인벤토리 슬롯을 순회하며 넣고자 하는 아이템의 타입의 장비칸이 비어있으면 해당 칸에 장착 이후 true 반환.
+        foreach(InventorySlot slot in  inventoryObject.slots)
+        {
+            if(slot.item.id < 0) //해당 슬롯이 비어있다면
+            {
+                foreach(ItemType type in slot.allowedItems) //해당 슬롯 장착 가능 종류를 순회하며 넣고자 하는 아이템과 비교
+                {
+                    if (itemObj.type == type)
+                    {
+                        slot.UpdateSlot(itemObj.data, amount);
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
+    }
 }

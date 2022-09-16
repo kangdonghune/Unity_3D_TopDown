@@ -6,28 +6,27 @@ public class GroundItem : MonoBehaviour, IInteractable
 {
     public ItemObject ItemObject;
 
-    public float distance = 3f;
+    public float distance = 2f;
     public float Distance => distance;
 
     private void Start()
     {
         gameObject.GetOrAddComponent<CameraFacing>();
+        gameObject.GetOrAddComponent<SpriteRenderer>().sprite = ItemObject?.icon;
     }
 
     private void OnValidate()
     {
         gameObject.GetOrAddComponent<SpriteRenderer>().sprite = ItemObject?.icon;
-
     }
 
     public bool Interact(GameObject other)
     {
         float calcDistance = Vector3.Distance(transform.position, other.transform.position);
-        if (calcDistance > distance)
+        if (calcDistance - 0.1f > distance)
             return false;
 
-        return false;
-      //  return other.GetComponent<PlayerController>().PickUpItem(this) ?? false;
+       return other.GetComponent<PlayerController>()?.PickUpItem(this) ?? false;
     }
 
     public void StopInteract(GameObject other)

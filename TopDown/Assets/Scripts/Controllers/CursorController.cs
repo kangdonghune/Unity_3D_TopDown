@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
-	int _mask = (1 << (int)Define.Layer.Ground) | (1 << (int)Define.Layer.Monster) | (1 << (int)Define.Layer.Wall);
+	int _mask = (1 << (int)Define.Layer.Ground) | (1 << (int)Define.Layer.Monster) | (1 << (int)Define.Layer.Wall) | (1 << (int)Define.Layer.Item);
 
 	Texture2D _attackIcon;
 	Texture2D _handIcon;
@@ -18,6 +18,7 @@ public class CursorController : MonoBehaviour
 		None,
 		Attack,
 		Hand,
+		Loot,
 	}
 
 	CursorType _cursorType = CursorType.None;
@@ -37,28 +38,33 @@ public class CursorController : MonoBehaviour
 	
 		RaycastHit[] hits;
 
+		bool isStop = false;
 		hits = Physics.SphereCastAll(Camera.main.transform.position, 0.5f, ray.direction, 100.0f, _mask);
 		foreach (RaycastHit hit in hits)
 		{
-			if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
-			{
-				if (_cursorType != CursorType.Attack)
-				{
+			switch(hit.collider.gameObject.layer)
+            {
+				case (int)Define.Layer.Item:
+					Cursor.SetCursor(_LootIcon, new Vector2(_attackIcon.width / 5, 0), CursorMode.Auto);
+					_cursorType = CursorType.Loot;
+					Target = hit.collider.gameObject;
+					isStop = true;
+					break;
+				case (int)Define.Layer.Monster:
 					Cursor.SetCursor(_attackIcon, new Vector2(_attackIcon.width / 5, 0), CursorMode.Auto);
 					_cursorType = CursorType.Attack;
 					Target = hit.collider.gameObject;
+					isStop = true;
 					break;
-				}
-			}
-			else
-			{
-				if (_cursorType != CursorType.Hand)
-				{
+				case (int)Define.Layer.Ground:
 					Cursor.SetCursor(_handIcon, new Vector2(_handIcon.width / 3, 0), CursorMode.Auto);
 					_cursorType = CursorType.Hand;
 					Target = null;
-				}
+					break;
 			}
+
+			if (isStop == true)
+				break;
 		}
 	}
 

@@ -10,7 +10,9 @@ public class DynamicInventoryUI : InventoryUI
     protected ItemObjectDatabase database;
 
     [SerializeField]
-    protected InventoryObject equipment;
+    public StaticInventoryUI equipment;
+
+
 
     [SerializeField]
     protected GameObject slotPrefab;
@@ -62,17 +64,21 @@ public class DynamicInventoryUI : InventoryUI
 
     }
 
+    public override bool AddItemPossible(ItemObject itemObj, int amount)
+    {
+        return inventoryObject.AddItem(itemObj.data, amount);
+    }
+
     private void SetEquipment()
     {
         if (MouseData.slotHoveredOver)
         {
             InventorySlot mouseHoverSlotDatas = MouseData.interfaceMouseIsOver.slotUIs[MouseData.slotHoveredOver];
-            
-            for(int i = 0; i < equipment.slots.Length; i++)
+            for(int i = 0; i < equipment.inventoryObject.slots.Length; i++)
             {
-                
+                if (inventoryObject.SwapItems(mouseHoverSlotDatas, equipment.inventoryObject.slots[i]))
+                    break;
             }
-
         }
 
     }

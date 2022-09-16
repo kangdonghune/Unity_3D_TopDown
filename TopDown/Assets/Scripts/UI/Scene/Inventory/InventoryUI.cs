@@ -10,25 +10,22 @@ public static class MouseData
 {
     public static InventoryUI interfaceMouseIsOver; //현재 마우스가 위치한 인벤토리 UI
     public static GameObject slotHoveredOver; //현재 마우스가 위치한 슬롯
+    public static GameObject preSlotHoveredOver; //마지막으로 마우스가 위치한 슬롯
     public static GameObject  tempItemBeginDragged; //현재 마우스가 드래그 중인 임시 이미지
+    
 }
 
 [RequireComponent(typeof(EventTrigger))]
 public abstract class InventoryUI : MonoBehaviour
 {
     public InventoryObject inventoryObject;
+    public GameObject owner;
     private InventoryObject preInventoryObject;
 
     public Dictionary<GameObject, InventorySlot> slotUIs = new Dictionary<GameObject, InventorySlot>();
 
     private void Awake()
     {
-        //시작 시 인벤토리 초기화
-        for(int i = 0; i < inventoryObject.slots.Length; i++)
-        {
-            inventoryObject.slots[i].RemoveItem();
-        }
-
         CreateSlotUIs();
 
         for (int i = 0; i < inventoryObject.slots.Length; i++)
@@ -84,6 +81,7 @@ public abstract class InventoryUI : MonoBehaviour
     public void OnEnterSlot(GameObject go)
     {
         MouseData.slotHoveredOver = go;
+        MouseData.preSlotHoveredOver = go;
     }
 
     public void OnExitSlot(GameObject go)
@@ -108,7 +106,13 @@ public abstract class InventoryUI : MonoBehaviour
         Destroy(MouseData.tempItemBeginDragged);
         if(MouseData.interfaceMouseIsOver == null) // 인벤토리 밖으로 드래그 했다면 인벤토리에서 아이템 제거
         {
-            slotUIs[go].RemoveItem();
+            if (slotUIs[go].ItemObject == null)
+                return;
+            GameObject groundItme = Managers.Resource.Instantiate("UI/Inventory/GroundItem");//바닥 아이템 생성
+            groundItme.transform.position = owner.transform.position;
+            groundItme.GetComponent<GroundItem>().ItemObject = slotUIs[go].ItemObject;//아이템복사
+            groundItme.GetComponent<GroundItem>().ItemObject.itemAmount = slotUIs[go].amount; //아이템 개수 저장
+            slotUIs[go].RemoveItem();//아이템 제거
         }
         else if(MouseData.slotHoveredOver) //드래그 종료 지점에 슬롯이 존재한다면 해당 슬롯의 아이템과 드래그하고 있던 것을 교체
         {
@@ -137,6 +141,17 @@ public abstract class InventoryUI : MonoBehaviour
         dragImage.name = "Drag Image";
 
         return dragImage;
+    }
+
+    public abstract bool AddItemPossible(ItemObject item, int amount);
+
+    private void OnApplicationQuit()
+    {
+        //종료 시 인벤토리 초기화
+        for (int i = 0; i < inventoryObject.slots.Length; i++)
+        {
+            inventoryObject.slots[i].RemoveItem();
+        }
     }
 }
 

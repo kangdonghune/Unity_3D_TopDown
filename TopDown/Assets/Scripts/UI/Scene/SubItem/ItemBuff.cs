@@ -5,10 +5,12 @@ using UnityEngine;
 
 public enum CharacterAttribute
 {
-    Agility,
-    Intellect,
-    Stamina,
-    Strength,
+    HP,
+    Mana,
+    Attack,
+    AttackSpeed,
+    Defence,
+    MoveSpeed,
 }
 
 [Serializable]
@@ -16,30 +18,16 @@ public class ItemBuff
 {
     #region Variable
     public CharacterAttribute stat;
-    public int value;
+    public float value;
 
-    [SerializeField]
-    private int min;
-    [SerializeField]
-    private int max;
 
-    public int Min => min;
-    public int Max => max;
 
-    public ItemBuff(int min, int max)
+    public ItemBuff(float value)
     {
-        this.min = min;
-        this.max = max;
-
-        InitValue();
+        this.value = value;
     }
 
-    private void InitValue()
-    {
-        value = UnityEngine.Random.Range(min, max);
-    }
-
-    public void AddValue(ref int refValue)
+    public void AddValue(ref float refValue)
     {
         refValue += value;
     }

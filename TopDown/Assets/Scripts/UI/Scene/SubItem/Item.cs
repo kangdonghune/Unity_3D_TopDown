@@ -25,7 +25,7 @@ public class Item
         buffs = new ItemBuff[itemObject.data.buffs.Length];
         for (int i = 0; i < buffs.Length; i++)
         {
-            buffs[i] = new ItemBuff(itemObject.data.buffs[i].Min, itemObject.data.buffs[i].Max) { 
+            buffs[i] = new ItemBuff(itemObject.data.buffs[i].value) { 
                         stat = itemObject.data.buffs[i].stat};
         }
     }

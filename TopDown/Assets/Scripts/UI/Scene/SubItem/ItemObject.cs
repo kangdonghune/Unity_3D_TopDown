@@ -27,6 +27,7 @@ public class ItemObject : ScriptableObject
     public GameObject modelPrefab; //캐릭터에게 부착될 오브젝트의 프리팹
 
     public Item data = new Item();
+    public int itemAmount;
 
     public List<string> boneNames = new List<string>(); //
 
