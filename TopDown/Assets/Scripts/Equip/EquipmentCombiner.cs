@@ -69,17 +69,16 @@ public class EquipmentCombiner
         {
             if(renderer.transform.parent != null)
             {
-                if(renderer.transform.parent.name != WeaponString)
-                {
-                    //착용하고자 하는 무기의 이름이 현재 플레이어 소지 무기의 이름과 다르다면 딕셔너리에서 기존 무기 제거
-                    rootBoneDictionary.Remove(WeaponString.GetHashCode());
-                    WeaponString = renderer.transform.parent.name;
-                    rootBoneDictionary.Add(WeaponString.GetHashCode(), WeaponTransform);
-                }
                 Transform parent = rootBoneDictionary[renderer.transform.parent.name.GetHashCode()];
                 GameObject itemGo = GameObject.Instantiate(renderer.gameObject, parent);
                 itemTransforms.Add(itemGo.transform);
-            }    
+            }
+            else
+            {
+                Transform parent = rootBoneDictionary[renderer.transform.name.GetHashCode()];
+                GameObject itemGo = GameObject.Instantiate(renderer.gameObject, parent);
+                itemTransforms.Add(itemGo.transform);
+            }
 
         }
 

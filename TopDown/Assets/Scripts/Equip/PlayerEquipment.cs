@@ -30,9 +30,11 @@ public class PlayerEquipment : MonoBehaviour
 
     private void Start()
     {
-        foreach (InventorySlot slot in equipment.slots)
+        for(int i = 0; i < itemInstances.Length; i++)
         {
-            OnEquipItem(slot);
+            if (defalutItemObjects[i] == null)
+                continue;
+            equipment.slots[i].AddItem(defalutItemObjects[i].data, 1);
         }
     }
 

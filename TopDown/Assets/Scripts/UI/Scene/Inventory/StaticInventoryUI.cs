@@ -37,13 +37,14 @@ public class StaticInventoryUI : InventoryUI
         }
     }
 
-    public void OnDestroy()
-    {
-        for (int i = 0; i < staticSlots.Length; i++)
-        {
-            //스테틱 인벤토리의 별도의 인벤토리 오브젝트(Scriptable)에 리스트로 있는 슬롯이 변경된 채로 저장이 된다.
-            //따라서 재시작 시 빈 상태로 시작하기 위해선 종료 시 해당 리스트를 전부 비워줄 필요가 있다.
-            slotUIs[staticSlots[i]].RemoveItem();
-        }
-    }
+    //시작 시 디펄트 아이템으로 시작하기에 일단은 인벤토리 초기화의 필요성이 사라짐.
+    //public void OnDestroy()
+    //{
+    //    for (int i = 0; i < staticSlots.Length; i++)
+    //    {
+    //        //스테틱 인벤토리의 별도의 인벤토리 오브젝트(Scriptable)에 리스트로 있는 슬롯이 변경된 채로 저장이 된다.
+    //        //따라서 재시작 시 빈 상태로 시작하기 위해선 종료 시 해당 리스트를 전부 비워줄 필요가 있다.
+    //        slotUIs[staticSlots[i]].RemoveItem();
+    //    }
+    //}
 }
