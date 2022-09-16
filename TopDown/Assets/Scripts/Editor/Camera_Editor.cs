@@ -23,9 +23,6 @@ public class Camera_Editor : Editor
             return;
         }
 
-        //변경 값 불러오기(비어있을 시 자동 저장.
-        //targetCamera.CameraValueLoad(targetCamera.mode);
-
         Transform cameraTarget = targetCamera.Target.transform;
         Vector3 targetPosition = cameraTarget.transform.position;
         targetPosition.y += targetCamera.lookAtHeight;
@@ -63,10 +60,7 @@ public class Camera_Editor : Editor
         Handles.Label(targetPosition + (Vector3.up * targetCamera.height), "Height", labelsStyle);
 
 
-        //변경 값 저장
-        targetCamera.CameraValueSave(targetCamera.mode);
-
-        targetCamera.CameraSetting(targetCamera.mode);
+        targetCamera.HandleQuarterViewViewCamera();
 
 
     }
