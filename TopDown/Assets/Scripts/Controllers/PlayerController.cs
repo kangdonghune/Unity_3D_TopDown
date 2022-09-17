@@ -10,7 +10,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     #region Variable
     public LayerMask groundLayerMask;
 
-    private int _mask = (1 << (int)Define.Layer.Ground) | (1 << (int)Define.Layer.Monster) | (1 << (int)Define.Layer.Item);
+    private int _mask = (1 << (int)Define.Layer.Ground) |
+                        (1 << (int)Define.Layer.Monster) |
+                        (1 << (int)Define.Layer.Item) |
+                        (1 << (int)Define.Layer.ItemBox);
+
     public float groundCheckDistance = 0.3f;
 
     public virtual Transform Target { get; protected set; }
@@ -21,7 +25,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private Camera _camera;
     private Animator _animator;
 
-    [SerializeField]
+    [HideInInspector]
     public GameObject Inventory;
 
     private DynamicInventoryUI _dynamicInven;
@@ -43,6 +47,23 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     protected override void AwakeInit()
     {
         _unitUI = Managers.UI.CreateUnitUI<UI_UnitDefault>(null, transform);
+        Inventory = Managers.Resource.Instantiate("UI/Inventory/Inventory");//蜡历 牢亥配府 积己
+        if (Inventory != null)
+        {
+            _dynamicInven = Inventory.FindChild<DynamicInventoryUI>();
+            _dynamicInven.Owner = gameObject;
+            _equipInven = Inventory.FindChild<StaticInventoryUI>();
+            _equipInven.Owner = gameObject;
+            _dynamicInven.inventoryObject.OnUseItem -= OnUseItem;
+            _equipInven.inventoryObject.OnUseItem -= OnUseItem;
+            _dynamicInven.inventoryObject.OnUseItem += OnUseItem;
+            _equipInven.inventoryObject.OnUseItem += OnUseItem;
+        }
+        PlayerEquipment equip = GetComponent<PlayerEquipment>();
+        if (equip != null)
+        {
+            equip.equipment = _equipInven.inventoryObject;
+        }
     }
 
     protected override void Init()
@@ -59,16 +80,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         _unitUI.MaximumValue = _maxHp;
         _unitUI.Value = _hp;
 
-        if(Inventory != null)
-        {
-            _dynamicInven = Inventory.FindChild<DynamicInventoryUI>();
-            _equipInven = Inventory.FindChild<StaticInventoryUI>();
-            _dynamicInven.inventoryObject.OnUseItem -= OnUseItem;
-            _equipInven.inventoryObject.OnUseItem -= OnUseItem;
-            _dynamicInven.inventoryObject.OnUseItem += OnUseItem;
-            _equipInven.inventoryObject.OnUseItem += OnUseItem;
-
-        }
+   
 
     }
 
@@ -121,13 +133,14 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         {
             switch (hit.transform.gameObject.layer)
             {
+                case (int)Define.Layer.ItemBox:
                 case (int)Define.Layer.Item:
                     IInteractable interactable = hit.collider.GetComponent<IInteractable>();
                     if(interactable != null)
                     {
                         SetTarget(hit.collider.transform, interactable.Distance);
                     }
-                    _navAgent.SetDestination(hit.point);
+                    _navAgent.SetDestination(hit.collider.transform.position);
                     isStop = true;
                     break;
                 case (int)Define.Layer.Monster:
@@ -165,8 +178,21 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     private void RemoveTarget()
     {
+        CallStopInteract();
         Target = null;
         _navAgent.stoppingDistance = 0.01f;
+    }
+
+    private void CallStopInteract()
+    {
+        if (Target != null)
+        {
+            if (Target.GetComponent<IInteractable>() != null)
+            {
+                IInteractable interactable = Target.GetComponent<IInteractable>();
+                interactable.StopInteract(this.gameObject);
+            }
+        }
     }
 
     private void PlayerMove()
@@ -185,8 +211,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                 if (Target.GetComponent<IInteractable>() != null)
                 {
                     IInteractable interactable = Target.GetComponent<IInteractable>();
-                    if (interactable.Interact(this.gameObject))
-                        RemoveTarget();
+                    interactable.Interact(this.gameObject);
                 }
             }
             transform.position = _navAgent.nextPosition;
@@ -219,7 +244,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
         return false;
     }
-
+    public bool ConnectBox(ItemBox box)
+    {
+        return box.itemBoxInvenUI.ConnectInven(Inventory);
+    }
     private void OnUseItem(ItemObject itemObject)
     {
         foreach (ItemBuff buff in itemObject.data.buffs)

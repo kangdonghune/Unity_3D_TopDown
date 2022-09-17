@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
-	int _mask = (1 << (int)Define.Layer.Ground) | (1 << (int)Define.Layer.Monster) | (1 << (int)Define.Layer.Wall) | (1 << (int)Define.Layer.Item);
+	int _mask = (1 << (int)Define.Layer.Ground) |
+				(1 << (int)Define.Layer.Monster) |
+				(1 << (int)Define.Layer.Wall) |
+				(1 << (int)Define.Layer.Item) |
+				(1 << (int)Define.Layer.ItemBox);
 
 	Texture2D _attackIcon;
 	Texture2D _handIcon;
@@ -44,12 +48,14 @@ public class CursorController : MonoBehaviour
 		{
 			switch(hit.collider.gameObject.layer)
             {
+				case (int)Define.Layer.ItemBox:
 				case (int)Define.Layer.Item:
 					Cursor.SetCursor(_LootIcon, new Vector2(_attackIcon.width / 5, 0), CursorMode.Auto);
 					_cursorType = CursorType.Loot;
 					Target = hit.collider.gameObject;
 					isStop = true;
 					break;
+
 				case (int)Define.Layer.Monster:
 					Cursor.SetCursor(_attackIcon, new Vector2(_attackIcon.width / 5, 0), CursorMode.Auto);
 					_cursorType = CursorType.Attack;

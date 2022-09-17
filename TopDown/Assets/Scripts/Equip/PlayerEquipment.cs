@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
+    [HideInInspector]
     public InventoryObject equipment;
 
     private EquipmentCombiner combiner;
@@ -14,7 +15,8 @@ public class PlayerEquipment : MonoBehaviour
 
     public ItemObject[] defalutItemObjects = new ItemObject[6];
 
-    private void Awake()
+
+    private void Start()
     {
         combiner = new EquipmentCombiner(gameObject);
 
@@ -25,12 +27,8 @@ public class PlayerEquipment : MonoBehaviour
             equipment.slots[i].OnPreUpdate += OnRemoveItem;
             equipment.slots[i].OnPostUpdate += OnEquipItem;
         }
-    }
 
-
-    private void Start()
-    {
-        for(int i = 0; i < itemInstances.Length; i++)
+        for (int i = 0; i < itemInstances.Length; i++)
         {
             if (defalutItemObjects[i] == null)
             {

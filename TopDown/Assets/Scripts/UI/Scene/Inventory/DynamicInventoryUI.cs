@@ -9,7 +9,7 @@ public class DynamicInventoryUI : InventoryUI
     [SerializeField]
     protected ItemObjectDatabase database;
 
-    [SerializeField]
+    [HideInInspector]
     public StaticInventoryUI equipment;
 
 
@@ -28,6 +28,22 @@ public class DynamicInventoryUI : InventoryUI
 
     [Min(1), SerializeField]
     protected int numberOfColumn = 5;
+
+
+    protected override void Awake()
+    {
+        //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
+        InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/PlayerInventory");
+        inventoryObject = Object.Instantiate(original);
+        base.Awake();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        //인스턴스화 된 인벤토리를 가져와야 해서 인스펙터를 통한 연결을 방지해야한다.
+        equipment = gameObject.transform.parent.gameObject.GetComponent<StaticInventoryUI>();
+    }
 
     public override void CreateSlotUIs()
     {

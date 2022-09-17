@@ -9,8 +9,7 @@ public class StaticInventoryUI : InventoryUI
 
     protected int numberOfColumn = 3;
 
-    [SerializeField]
-    public DynamicInventoryUI inventory;
+    private DynamicInventoryUI _inventory;
 
     [SerializeField]
     protected Vector2 start;
@@ -21,6 +20,20 @@ public class StaticInventoryUI : InventoryUI
     [SerializeField]
     protected Vector2 space;
 
+    protected override void Awake()
+    {
+        //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
+        InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/PlayerEquipment");
+        inventoryObject = Object.Instantiate(original);
+        base.Awake();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        //인스턴스화 된 인벤토리를 가져와야 해서 인스펙터를 통한 연결을 방지해야한다.
+        _inventory = gameObject.transform.parent.gameObject.GetComponent<DynamicInventoryUI>();
+    }
     public override void CreateSlotUIs()
     {
         slotUIs = new Dictionary<GameObject, InventorySlot>();
@@ -48,9 +61,9 @@ public class StaticInventoryUI : InventoryUI
 
     public override void OnRButtonClick(InventorySlot slot)
     {
-        if (inventory == null)
+        if (_inventory == null)
             return;
-        InventorySlot emptySlot = inventory.inventoryObject.GetEmptySlot();
+        InventorySlot emptySlot = _inventory.inventoryObject.GetEmptySlot();
         if (emptySlot != null)
         {
             emptySlot.parent.AddItem(slot.item, slot.amount); //빈 슬롯에 아이템 추가

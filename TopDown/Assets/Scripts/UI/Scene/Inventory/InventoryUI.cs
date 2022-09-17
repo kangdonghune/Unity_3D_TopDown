@@ -18,13 +18,14 @@ public static class MouseData
 [RequireComponent(typeof(EventTrigger))]
 public abstract class InventoryUI : MonoBehaviour
 {
+    [HideInInspector]
     public InventoryObject inventoryObject;
-    public GameObject owner;
+    public GameObject Owner { get; set; } = null;
     private InventoryObject preInventoryObject;
 
     public Dictionary<GameObject, InventorySlot> slotUIs = new Dictionary<GameObject, InventorySlot>();
-
-    private void Awake()
+    #region UnityFunc
+    protected virtual void Awake()
     {
         CreateSlotUIs();
 
@@ -47,10 +48,11 @@ public abstract class InventoryUI : MonoBehaviour
             inventoryObject.slots[i].UpdateSlot(inventoryObject.slots[i].item, inventoryObject.slots[i].amount);
         }
     }
-
+    #endregion
 
     public abstract void CreateSlotUIs();
 
+    #region Event
     protected void AddEvent(GameObject go, EventTriggerType type, UnityAction<BaseEventData> action)
     {
         EventTrigger trigger = go.GetOrAddComponent<EventTrigger>();
@@ -63,6 +65,8 @@ public abstract class InventoryUI : MonoBehaviour
     //아이템에 대한 아이콘과 개수를 표시
     public void OnPostUpdate(InventorySlot slot)
     {
+        if (slot == null)
+            return;
         slot.slotUI.transform.GetChild(0).GetComponent<Image>().sprite = slot.item.id < 0 ? null : slot.ItemObject.icon;
         slot.slotUI.transform.GetChild(0).GetComponent<Image>().color = slot.item.id < 0 ? new Color(1, 1, 1, 0) : new Color(1, 1, 1, 1);
         slot.slotUI.FindChild<TextMeshProUGUI>().text = slot.item.id < 0 ? string.Empty : (slot.amount == 1 ? string.Empty : slot.amount.ToString("n0"));
@@ -109,7 +113,7 @@ public abstract class InventoryUI : MonoBehaviour
             if (slotUIs[go].ItemObject == null)
                 return;
             GameObject groundItme = Managers.Resource.Instantiate("UI/Inventory/GroundItem");//바닥 아이템 생성
-            groundItme.transform.position = owner.transform.position;
+            groundItme.transform.position = Owner.transform.position;
             groundItme.GetComponent<GroundItem>().ItemObject = slotUIs[go].ItemObject;//아이템복사
             groundItme.GetComponent<GroundItem>().ItemObject.itemAmount = slotUIs[go].amount; //아이템 개수 저장
             slotUIs[go].RemoveItem();//아이템 제거
@@ -171,16 +175,10 @@ public abstract class InventoryUI : MonoBehaviour
         return dragImage;
     }
 
-    public abstract bool AddItemPossible(ItemObject item, int amount);
+    #endregion
 
-    private void OnApplicationQuit()
-    {
-        //종료 시 인벤토리 초기화
-        for (int i = 0; i < inventoryObject.slots.Length; i++)
-        {
-            inventoryObject.slots[i].RemoveItem();
-        }
-    }
+    public virtual bool AddItemPossible(ItemObject item, int amount) { return false; }
+    
 }
 
 

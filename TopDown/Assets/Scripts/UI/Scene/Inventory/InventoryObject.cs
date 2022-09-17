@@ -84,12 +84,4 @@ public class InventoryObject : ScriptableObject
         
     }
 
-    private void OnDestroy()
-    {
-        foreach(InventorySlot slot in slots)
-        {
-            slot.RemoveItem();
-        }
-    }
-
 }
