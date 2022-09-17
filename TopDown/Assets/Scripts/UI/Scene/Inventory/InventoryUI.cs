@@ -122,7 +122,35 @@ public abstract class InventoryUI : MonoBehaviour
 
     }
 
-    public abstract void OnRButtonDown(GameObject go);
+
+    public void OnClick(GameObject go, PointerEventData data)
+    {
+        InventorySlot slot = slotUIs[go];
+        if(slot == null)
+        {
+            return;
+        }
+        //인벤토리에 장비 착용 등은 우클릭만 이용할 예정. 추후 필요시 활성화
+        //if(data.button == PointerEventData.InputButton.Left)
+        //{
+        //    OnLButtonClick(slot);
+        //}
+        if (data.button == PointerEventData.InputButton.Right)
+        {
+            OnRButtonClick(slot);
+        }
+
+    }
+
+    public virtual void OnLButtonClick(InventorySlot slot)
+    {
+
+    }
+
+    public virtual void OnRButtonClick(InventorySlot slot)
+    {
+
+    }
 
     private GameObject CreateDragImage(GameObject go)
     {

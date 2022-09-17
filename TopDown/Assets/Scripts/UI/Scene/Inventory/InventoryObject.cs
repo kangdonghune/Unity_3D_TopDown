@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ public class InventoryObject : ScriptableObject
     private Inventory container = new Inventory();
 
     public InventorySlot[] slots => container.slots;
+
+    public Action<ItemObject> OnUseItem;
 
     public int EmptySlotCount
     {

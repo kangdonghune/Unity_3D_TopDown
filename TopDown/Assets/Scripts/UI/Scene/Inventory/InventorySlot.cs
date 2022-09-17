@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class InventorySlot
 {
-    public ItemType[] allowedItems = new ItemType[0];
+    public Define.ItemType[] allowedItems = new Define.ItemType[0];
 
     [NonSerialized]
     public InventoryObject parent;
@@ -53,7 +53,7 @@ public class InventorySlot
         if (allowedItems.Length <= 0 || itemObject == null || itemObject.data.id < 0)
             return true; //새로운 아이템을 착용할 수 있다.
 
-        foreach (ItemType type in allowedItems)
+        foreach (Define.ItemType type in allowedItems)
         {
             if (itemObject.type == type) //슬롯 타입이 맞다면
                 return true;

@@ -5638,6 +5638,10 @@ PrefabInstance:
       propertyPath: owner
       value: 
       objectReference: {fileID: 1688870410}
+    - target: {fileID: 602630601709711139, guid: e4d2f225272010b4ba3f18e3948cb4df, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 535484086}
     - target: {fileID: 602630601967409656, guid: e4d2f225272010b4ba3f18e3948cb4df, type: 3}
       propertyPath: m_Name
       value: PlayerInventory
@@ -5728,6 +5732,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4d2f225272010b4ba3f18e3948cb4df, type: 3}
+--- !u!114 &535484086 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 602630600100924002, guid: e4d2f225272010b4ba3f18e3948cb4df, type: 3}
+  m_PrefabInstance: {fileID: 535484085}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec96c316a348d045b772ac198f40d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &535951491
 GameObject:
   m_ObjectHideFlags: 0

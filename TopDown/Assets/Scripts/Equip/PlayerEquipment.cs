@@ -56,14 +56,14 @@ public class PlayerEquipment : MonoBehaviour
 
         switch(slot.allowedItems[0])
         {
-            case ItemType.Weapon:
+            case Define.ItemType.Weapon:
                 itemInstances[index] = EquipMeshItem(itemObject);
                 break;
-            case ItemType.Helmet:
-            case ItemType.Chest:
-            case ItemType.Gloves:
-            case ItemType.Pants:
-            case ItemType.Boots:
+            case Define.ItemType.Helmet:
+            case Define.ItemType.Chest:
+            case Define.ItemType.Gloves:
+            case Define.ItemType.Pants:
+            case Define.ItemType.Boots:
                 itemInstances[index] = EquipSkinnedItem(itemObject);
                 break;
             default:
@@ -73,21 +73,21 @@ public class PlayerEquipment : MonoBehaviour
     }
 
 
-    private void EquipDefalutItem(ItemType type)
+    private void EquipDefalutItem(Define.ItemType type)
     {
         int index = (int)type;
 
         ItemObject itemObject = defalutItemObjects[index];
         switch(type)
         {
-            case ItemType.Weapon:
+            case Define.ItemType.Weapon:
                 itemInstances[index] = EquipMeshItem(itemObject);
                 break;
-            case ItemType.Helmet:
-            case ItemType.Chest:
-            case ItemType.Gloves:
-            case ItemType.Pants:
-            case ItemType.Boots:
+            case Define.ItemType.Helmet:
+            case Define.ItemType.Chest:
+            case Define.ItemType.Gloves:
+            case Define.ItemType.Pants:
+            case Define.ItemType.Boots:
                 itemInstances[index] = EquipSkinnedItem(itemObject);
                 break;
             default:
@@ -154,7 +154,7 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
-    private void RemoveItemBy(ItemType type)
+    private void RemoveItemBy(Define.ItemType type)
     {
         int index = (int)type;
         if(itemInstances[index] != null)

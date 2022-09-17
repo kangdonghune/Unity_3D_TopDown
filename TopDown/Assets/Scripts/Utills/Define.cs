@@ -14,5 +14,6 @@ public class Define
     public enum MouseEvent { LPress, LPointerDown, LPointerUp, LClick, RPress, RPointerDown, RPointerUp, RClick }
     public enum MonsterAttackPattern { Attack1 = 0, Attack2 =1 , Projectile = 2 }
     public enum AttackPrioty { Firts = 5, Second = 4, Third = 3, Forth = 2, Fifth = 1, }
-    public enum EquipType { };
+    public enum ItemType { Weapon = 0, Helmet = 1, Chest = 2, Gloves = 3, Pants = 4, Boots = 5, Accessories = 6, Consumable, Food, Default }
+
 }

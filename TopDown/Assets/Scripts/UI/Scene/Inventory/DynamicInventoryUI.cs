@@ -33,7 +33,7 @@ public class DynamicInventoryUI : InventoryUI
     {
         slotUIs = new Dictionary<GameObject, InventorySlot>();
 
-        for (int i = 0; i < inventoryObject.slots.Length; i ++)
+        for (int i = 0; i < inventoryObject.slots.Length; i++)
         {
             GameObject go = Managers.Resource.Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, transform);
             go.GetComponent<RectTransform>().anchoredPosition = CalculatePosition(i);
@@ -44,6 +44,7 @@ public class DynamicInventoryUI : InventoryUI
             AddEvent(go, EventTriggerType.BeginDrag, delegate { OnStartDrag(go); });
             AddEvent(go, EventTriggerType.Drag, delegate { OnDrag(go); });
             AddEvent(go, EventTriggerType.EndDrag, delegate { OnEndDrag(go); });
+            AddEvent(go, EventTriggerType.PointerClick, (data) => { OnClick(go, (PointerEventData)data); });
 
 
             inventoryObject.slots[i].slotUI = go;
@@ -52,16 +53,26 @@ public class DynamicInventoryUI : InventoryUI
 
             go.name += ": " + i;
             go.FindChild<TextMeshProUGUI>().text = i.ToString();
-           
 
-            slotUIs[go].parent.AddItem(database.itemObjects[0].data,2);
+
+            slotUIs[go].parent.AddItem(database.itemObjects[2].data, 10);
         }
     }
 
-    public override void OnRButtonDown(GameObject go)
-    {
-        //TODO - 우클릭 시 장비면 플레이어 인벤에 있는 슬롯 중에 교환 가능한 파트와 교체 소모품이면 사용
+    //public override void OnLButtonClick(InventorySlot slot)
+    //{
 
+    //}
+
+    public override void OnRButtonClick(InventorySlot slot)
+    {
+        if (slot.ItemObject == null) // database에 없는 아이템. 미생성 또는 오류 아이템일 경우 생략
+            return;
+
+        if (slot.ItemObject.type < Define.ItemType.Consumable)
+            SetEquipment(slot);
+        else
+            UsingConsumable(slot);
     }
 
     public override bool AddItemPossible(ItemObject itemObj, int amount)
@@ -69,26 +80,20 @@ public class DynamicInventoryUI : InventoryUI
         return inventoryObject.AddItem(itemObj.data, amount);
     }
 
-    private void SetEquipment()
+    private void SetEquipment(InventorySlot slot)
     {
-        if (MouseData.slotHoveredOver)
+        for(int i = 0; i < equipment.inventoryObject.slots.Length; i++)
         {
-            InventorySlot mouseHoverSlotDatas = MouseData.interfaceMouseIsOver.slotUIs[MouseData.slotHoveredOver];
-            for(int i = 0; i < equipment.inventoryObject.slots.Length; i++)
-            {
-                if (inventoryObject.SwapItems(mouseHoverSlotDatas, equipment.inventoryObject.slots[i]))
-                    break;
-            }
+            //장비칸을 순회하며 교체 가능 시 교체 이후 for문 탈출
+            if (inventoryObject.SwapItems(slot, equipment.inventoryObject.slots[i]))
+                break;
         }
 
     }
-    private void UsingConsumable()
+    private void UsingConsumable(InventorySlot slot)
     {
-        if (MouseData.slotHoveredOver) 
-        {
-            InventorySlot mouseHoverSlotDatas = MouseData.interfaceMouseIsOver.slotUIs[MouseData.slotHoveredOver];
-            mouseHoverSlotDatas.RemoveAmount();
-        }
+        slot.parent.OnUseItem(slot.ItemObject);
+        slot.RemoveAmount(1);
     }
 
     public Vector3 CalculatePosition(int i)

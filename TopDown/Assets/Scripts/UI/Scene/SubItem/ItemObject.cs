@@ -2,25 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType: int
-{
-    Weapon = 0,
-    Helmet = 1,
-    Chest = 2,
-    Gloves = 3,
-    Pants = 4,
-    Boots = 5,
-    Accessories = 6,
-    Consumable, // ItemType 값이 해당 값보다 큰 경우 소모품으로 판정
-    Food,
-    Default,
-
-}
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory System/Items/New Item")]
 public class ItemObject : ScriptableObject
 {
-    public ItemType type;
+    public Define.ItemType type;
     public bool stackable; //겹쳐서 소유할 수 있는지 여부
 
     public Sprite icon;

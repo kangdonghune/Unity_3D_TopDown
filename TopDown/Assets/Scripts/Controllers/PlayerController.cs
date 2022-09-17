@@ -39,6 +39,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     #endregion
 
+    #region UnityRotationFunc
     protected override void AwakeInit()
     {
         _unitUI = Managers.UI.CreateUnitUI<UI_UnitDefault>(null, transform);
@@ -62,6 +63,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         {
             _dynamicInven = Inventory.FindChild<DynamicInventoryUI>();
             _equipInven = Inventory.FindChild<StaticInventoryUI>();
+            _dynamicInven.inventoryObject.OnUseItem -= OnUseItem;
+            _equipInven.inventoryObject.OnUseItem -= OnUseItem;
+            _dynamicInven.inventoryObject.OnUseItem += OnUseItem;
+            _equipInven.inventoryObject.OnUseItem += OnUseItem;
+
         }
 
     }
@@ -74,7 +80,9 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         _unitUI.Value = _hp;
     }
 
+    #endregion
 
+    #region MouseFunc
     private void OnMouseEvent(Define.MouseEvent evt)
     {
         if (_isOnUI == true)
@@ -143,6 +151,9 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     }
 
+    #endregion
+
+    #region MoveFunc
     private void SetTarget(Transform target, float distance)
     {
         Target = target;
@@ -151,7 +162,6 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         _navAgent.updateRotation = true;
         _navAgent.SetDestination(target.transform.position);
     }
-
 
     private void RemoveTarget()
     {
@@ -185,6 +195,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }     
     }
 
+    #endregion
+
+    #region Inventory & Item
+
     public bool PickUpItem(GroundItem groundItem)
     {
         if (groundItem != null)
@@ -206,6 +220,32 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         return false;
     }
 
+    private void OnUseItem(ItemObject itemObject)
+    {
+        foreach (ItemBuff buff in itemObject.data.buffs)
+        {
+            switch(buff.stat)
+            {
+                case CharacterAttribute.HP:
+                    _hp += (int)buff.value;
+                    break;
+                case CharacterAttribute.Mana:
+                    break;
+                case CharacterAttribute.Attack:
+                    break;
+                case CharacterAttribute.AttackSpeed:
+                    break;
+                case CharacterAttribute.Defence:
+                    break;
+                case CharacterAttribute.MoveSpeed:
+                    break;
+                default:
+                    Debug.LogWarning($"정의되지 않는 버프 스텟이 존재합니다.{buff.stat}");
+                    break;
+            }
+        }
+    }
+    #endregion
     #region interface
     public AttackBehavior CurrentAttackBehavior { get; private set; }
 

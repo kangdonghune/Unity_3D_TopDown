@@ -10,6 +10,9 @@ public class StaticInventoryUI : InventoryUI
     protected int numberOfColumn = 3;
 
     [SerializeField]
+    public DynamicInventoryUI inventory;
+
+    [SerializeField]
     protected Vector2 start;
 
     [SerializeField]
@@ -31,16 +34,30 @@ public class StaticInventoryUI : InventoryUI
             AddEvent(go, EventTriggerType.BeginDrag, delegate { OnStartDrag(go); });
             AddEvent(go, EventTriggerType.Drag, delegate { OnDrag(go); });
             AddEvent(go, EventTriggerType.EndDrag, delegate { OnEndDrag(go); });
+            AddEvent(go, EventTriggerType.PointerClick, (data) => { OnClick(go, (PointerEventData)data); });
 
             inventoryObject.slots[i].slotUI = go;
             slotUIs.Add(go, inventoryObject.slots[i]);
         }
     }
 
-    public override void OnRButtonDown(GameObject go)
-    {
-    }
+    //public override void OnLButtonClick(InventorySlot slot)
+    //{
 
+    //}
+
+    public override void OnRButtonClick(InventorySlot slot)
+    {
+        if (inventory == null)
+            return;
+        InventorySlot emptySlot = inventory.inventoryObject.GetEmptySlot();
+        if (emptySlot != null)
+        {
+            emptySlot.parent.AddItem(slot.item, slot.amount); //빈 슬롯에 아이템 추가
+            slot.RemoveItem();// 아이템 제거
+        }
+
+    }
 
     public override bool AddItemPossible(ItemObject itemObj, int amount)
     {
@@ -49,7 +66,7 @@ public class StaticInventoryUI : InventoryUI
         {
             if(slot.item.id < 0) //해당 슬롯이 비어있다면
             {
-                foreach(ItemType type in slot.allowedItems) //해당 슬롯 장착 가능 종류를 순회하며 넣고자 하는 아이템과 비교
+                foreach(Define.ItemType type in slot.allowedItems) //해당 슬롯 장착 가능 종류를 순회하며 넣고자 하는 아이템과 비교
                 {
                     if (itemObj.type == type)
                     {
