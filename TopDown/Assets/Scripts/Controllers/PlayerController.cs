@@ -25,21 +25,26 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private Camera _camera;
     private Animator _animator;
 
+    protected StateMachine<PlayerController> _stateMachine;
+    public StateMachine<PlayerController> StateMachine { get { return _stateMachine; } }
+
+
+    //UI
     [HideInInspector]
     public GameObject Inventory;
 
     private DynamicInventoryUI _dynamicInven;
     private StaticInventoryUI _equipInven;
+    public UI_UnitDefault _unitUI;
+    public bool _isOnUI;
 
-    private UI_UnitDefault _unitUI;
+    //Stat
     private int _maxHp = 100;
-    private int _hp = 100;
+    public int _hp = 100;
+    [HideInInspector]
+    public bool isMove = false;
 
-    private bool _isOnUI;
-
-    readonly int moveHash = Animator.StringToHash("Move");
-
-
+    public float speed = 0.1f;
 
     #endregion
 
@@ -58,40 +63,27 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             _equipInven.inventoryObject.OnUseItem -= OnUseItem;
             _dynamicInven.inventoryObject.OnUseItem += OnUseItem;
             _equipInven.inventoryObject.OnUseItem += OnUseItem;
-        }
-        PlayerEquipment equip = GetComponent<PlayerEquipment>();
+        } //인벤토리 별 이벤트 추가
+        PlayerEquipment equip = GetComponent<PlayerEquipment>(); //아이템 장착 시 해당 아이템의 prefab생성하여 착용하기 위한 컴퍼넌트
         if (equip != null)
         {
             equip.equipment = _equipInven.inventoryObject;
-        }
+        } 
     }
-
     protected override void Init()
     {
         WorldObjectType = Define.WorldObject.Player;
         _characterController = GetComponent<CharacterController>();
         _navAgent = GetComponent<NavMeshAgent>();
         _navAgent.updatePosition = false; //이동은 컨트롤러가 시행
-        _navAgent.updateRotation = true; // 회전은 네비가 하도록
+        _navAgent.updateRotation = true; // 회전은 컨트롤러가 시행
         _camera = Camera.main;
         _animator = GetComponent<Animator>();
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
         _unitUI.MaximumValue = _maxHp;
         _unitUI.Value = _hp;
-
-   
-
     }
-
-    void Update()
-    {
-        _isOnUI = EventSystem.current.IsPointerOverGameObject();
-
-        PlayerMove();
-        _unitUI.Value = _hp;
-    }
-
     #endregion
 
     #region MouseFunc
@@ -124,9 +116,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     private void OnMousePicking()
     {
+        if (_isOnUI == true)
+            return;
+
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit[] hits;
-
         bool isStop = false;
         hits = Physics.SphereCastAll(Camera.main.transform.position, 0.5f, ray.direction, 100.0f, _mask);
         foreach (RaycastHit hit in hits)
@@ -141,11 +135,13 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                         SetTarget(hit.collider.transform, interactable.Distance);
                     }
                     _navAgent.SetDestination(hit.collider.transform.position);
+                    isMove = true;
                     isStop = true;
                     break;
                 case (int)Define.Layer.Monster:
                     //ToDo 추후 스테이트패턴으로 변경
-                    _navAgent.SetDestination(hit.point);
+                    _navAgent.SetDestination(hit.collider.transform.position);
+                    isMove = true;
                     isStop = true;
                     break;
                 case (int)Define.Layer.Ground:
@@ -154,6 +150,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                     {
                         _navAgent.SetDestination(Hit.point);
                         RemoveTarget();
+                        isMove = true;
                     }
                     break;
             }
@@ -195,30 +192,6 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
     }
 
-    private void PlayerMove()
-    {
-
-        if (_navAgent.remainingDistance > _navAgent.stoppingDistance)
-        {
-            _characterController.Move(_navAgent.velocity * Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, _navAgent.nextPosition.y, transform.position.z);
-            _animator.SetBool(moveHash, true);
-        }
-        else
-        {
-            if (Target != null)
-            {
-                if (Target.GetComponent<IInteractable>() != null)
-                {
-                    IInteractable interactable = Target.GetComponent<IInteractable>();
-                    interactable.Interact(this.gameObject);
-                }
-            }
-            transform.position = _navAgent.nextPosition;
-            _navAgent.velocity = Vector3.zero;
-            _animator.SetBool(moveHash, false);
-        }     
-    }
 
     #endregion
 
@@ -274,7 +247,25 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
     }
     #endregion
-    #region interface
+
+    #region Attack & Damage  
+
+    public void CheckAttackBehavior()
+    {
+        if (CurrentAttackBehavior == null || !CurrentAttackBehavior.isAvailable)
+            CurrentAttackBehavior = null;
+
+        //어택 behavior를 순회하며 isAvailable이 참인 것 중 우선도가 가장 높은 것은 현재 실행할 behavior로 지정 
+        foreach (AttackBehavior behavior in attackBehaviors)
+        {
+            if (behavior.isAvailable)
+            {
+                if (CurrentAttackBehavior == null || CurrentAttackBehavior.Priority < behavior.Priority)
+                    CurrentAttackBehavior = behavior;
+            }
+        }
+    }
+
     public AttackBehavior CurrentAttackBehavior { get; private set; }
 
     public void OnExecuteAttack(int attackIndex)

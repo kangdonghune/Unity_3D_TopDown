@@ -82,7 +82,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         
     }
 
-    protected void CheckAttackBehavior()
+    public void CheckAttackBehavior()
     {
         if (CurrentAttackBehavior == null || !CurrentAttackBehavior.isAvailable)
             CurrentAttackBehavior = null;

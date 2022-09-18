@@ -23,7 +23,6 @@ public class MonsterController : EnemyController, IPatrolable
 
     private void Update()
     {
-        CheckAttackBehavior();
         _stateMachine.Update(Time.deltaTime);
     }
 

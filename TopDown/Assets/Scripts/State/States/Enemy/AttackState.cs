@@ -31,7 +31,7 @@ public class AttackState : State<EnemyController>
             stateMachine.ChangeState<IdleState>();
             return;
         }
-
+        context.CheckAttackBehavior();
         if (_attackable.CurrentAttackBehavior == null)
         {
             stateMachine.ChangeState<IdleState>();

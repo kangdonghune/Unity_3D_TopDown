@@ -9,7 +9,6 @@ public class FallowProjectile : Projectile
     protected override void Start()
     {
         base.Start();
-
         StartCoroutine(CoDestroyProjectile(destroyDelay));
 
     }

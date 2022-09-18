@@ -20,6 +20,12 @@ public class ItemBox : MonoBehaviour, IInteractable
         if(other.gameObject.GetComponent<PlayerController>()?.ConnectBox(this) ?? false)
         {
             _itemBox.SetActive(true); //일정거리 접근 시 활성화
+            Vector3 screenPos = Camera.main.WorldToViewportPoint(gameObject.transform.position + Vector3.up * 2);
+            screenPos.x *= _itemBox.GetComponent<RectTransform>().rect.width;
+            screenPos.y *= _itemBox.GetComponent<RectTransform>().rect.height;
+            _itemBoxInven.GetComponent<RectTransform>().position = screenPos;
+
+
             return true;
         }
 
