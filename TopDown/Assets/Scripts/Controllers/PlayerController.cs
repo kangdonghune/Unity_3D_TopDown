@@ -35,24 +35,25 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     private DynamicInventoryUI _dynamicInven;
     private StaticInventoryUI _equipInven;
-    public UI_UnitDefault _unitUI;
+    private PlayerInGameUI _playerInGameUI;
     public bool _isOnUI;
 
     //Stat
-    private int _maxHp = 100;
-    public int _hp = 100;
+    [SerializeField]
+    public StatsObject playerStat;
+
     [HideInInspector]
     public bool isMove = false;
 
-    public float speed = 0.1f;
 
     #endregion
 
     #region UnityRotationFunc
     protected override void AwakeInit()
     {
-        _unitUI = Managers.UI.CreateUnitUI<UI_UnitDefault>(null, transform);
-        Inventory = Managers.Resource.Instantiate("UI/Inventory/Inventory");//유저 인벤토리 생성
+        StatsObject origin = Resources.Load<StatsObject>("Prefab/UI/Stat/PlayerStats");
+        playerStat = Instantiate<StatsObject>(origin);
+        Inventory = Managers.Resource.Instantiate("UI/Inventory/PlayerUI");//유저 인벤토리 생성
         if (Inventory != null)
         {
             _dynamicInven = Inventory.FindChild<DynamicInventoryUI>();
@@ -63,26 +64,30 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             _equipInven.inventoryObject.OnUseItem -= OnUseItem;
             _dynamicInven.inventoryObject.OnUseItem += OnUseItem;
             _equipInven.inventoryObject.OnUseItem += OnUseItem;
-        } //인벤토리 별 이벤트 추가
+            _playerInGameUI = Inventory.FindChild<PlayerInGameUI>();
+            _playerInGameUI.playerStats = playerStat;
+            _playerInGameUI.AddEvent();
+        } //UI 별 이벤트 추가
         PlayerEquipment equip = GetComponent<PlayerEquipment>(); //아이템 장착 시 해당 아이템의 prefab생성하여 착용하기 위한 컴퍼넌트
         if (equip != null)
         {
             equip.equipment = _equipInven.inventoryObject;
-        } 
+        }
+
+
     }
     protected override void Init()
     {
         WorldObjectType = Define.WorldObject.Player;
         _characterController = GetComponent<CharacterController>();
         _navAgent = GetComponent<NavMeshAgent>();
-        _navAgent.updatePosition = false; //이동은 컨트롤러가 시행
+        _navAgent.updatePosition = true; //이동은 컨트롤러가 시행
         _navAgent.updateRotation = true; // 회전은 컨트롤러가 시행
         _camera = Camera.main;
         _animator = GetComponent<Animator>();
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
-        _unitUI.MaximumValue = _maxHp;
-        _unitUI.Value = _hp;
+       
     }
     #endregion
 
@@ -227,18 +232,18 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         {
             switch(buff.stat)
             {
-                case CharacterAttribute.HP:
-                    _hp += (int)buff.value;
+                case Define.CharacterAttribute.HP:
+                    playerStat.AddHP(buff.value);
                     break;
-                case CharacterAttribute.Mana:
+                case Define.CharacterAttribute.Mana:
                     break;
-                case CharacterAttribute.Attack:
+                case Define.CharacterAttribute.Attack:
                     break;
-                case CharacterAttribute.AttackSpeed:
+                case Define.CharacterAttribute.AttackSpeed:
                     break;
-                case CharacterAttribute.Defence:
+                case Define.CharacterAttribute.Defence:
                     break;
-                case CharacterAttribute.MoveSpeed:
+                case Define.CharacterAttribute.MoveSpeed:
                     break;
                 default:
                     Debug.LogWarning($"정의되지 않는 버프 스텟이 존재합니다.{buff.stat}");
@@ -290,8 +295,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
         if (IsAlive)
         {
-            _hp -= damage;
-            _unitUI.CreateDamageText(damage);
+            playerStat.AddHP(-damage);
         }
         else
         {

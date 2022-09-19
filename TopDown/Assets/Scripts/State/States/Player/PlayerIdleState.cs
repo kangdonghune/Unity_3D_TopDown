@@ -7,7 +7,7 @@ public class PlayerIdleState : State<PlayerController>
 {
     private Animator _animator;
     private CharacterController _controller;
-    private NavMeshAgent _agent;
+    private NavMeshAgent _navAgent;
 
     protected int hasMove = Animator.StringToHash("Move");
     protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
@@ -17,7 +17,7 @@ public class PlayerIdleState : State<PlayerController>
     {
         _animator = context.GetComponent<Animator>();
         _controller = context.GetComponent<CharacterController>();
-        _agent = context.GetComponent<NavMeshAgent>();
+        _navAgent = context.GetComponent<NavMeshAgent>();
 
 
     }

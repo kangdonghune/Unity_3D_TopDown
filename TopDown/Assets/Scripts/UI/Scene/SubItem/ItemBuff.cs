@@ -3,21 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterAttribute
-{
-    HP,
-    Mana,
-    Attack,
-    AttackSpeed,
-    Defence,
-    MoveSpeed,
-}
+
 
 [Serializable]
-public class ItemBuff
+public class ItemBuff : IModifier
 {
     #region Variable
-    public CharacterAttribute stat;
+    public Define.CharacterAttribute stat;
     public float value;
 
 

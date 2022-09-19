@@ -20,7 +20,6 @@ public class PlayerCharictorController : PlayerController
     private void Update()
     {
         _isOnUI = EventSystem.current.IsPointerOverGameObject();
-        _unitUI.Value = _hp;
         _stateMachine.Update(Time.deltaTime);
     }
 }
