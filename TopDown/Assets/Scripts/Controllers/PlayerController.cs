@@ -35,11 +35,13 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     private DynamicInventoryUI _dynamicInven;
     private StaticInventoryUI _equipInven;
+    private UI_UnitDefault _defalutUI;
     private PlayerInGameUI _playerInGameUI;
+    private PlayerStatUI _statUI;
     public bool _isOnUI;
 
     //Stat
-    [SerializeField]
+    [HideInInspector]
     public StatsObject playerStat;
 
     [HideInInspector]
@@ -53,9 +55,12 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     {
         StatsObject origin = Resources.Load<StatsObject>("Prefab/UI/Stat/PlayerStats");
         playerStat = Instantiate<StatsObject>(origin);
+        UI_UnitDefault uI_origin = Resources.Load<UI_UnitDefault>("Prefab/UI/Unit/UI_UnitDefault");
+        _defalutUI = Instantiate<UI_UnitDefault>(uI_origin, gameObject.transform);
         Inventory = Managers.Resource.Instantiate("UI/Inventory/PlayerUI");//유저 인벤토리 생성
         if (Inventory != null)
         {
+            //인벤토리
             _dynamicInven = Inventory.FindChild<DynamicInventoryUI>();
             _dynamicInven.Owner = gameObject;
             _equipInven = Inventory.FindChild<StaticInventoryUI>();
@@ -64,9 +69,15 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             _equipInven.inventoryObject.OnUseItem -= OnUseItem;
             _dynamicInven.inventoryObject.OnUseItem += OnUseItem;
             _equipInven.inventoryObject.OnUseItem += OnUseItem;
+            //게임UI
             _playerInGameUI = Inventory.FindChild<PlayerInGameUI>();
             _playerInGameUI.playerStats = playerStat;
             _playerInGameUI.AddEvent();
+            _statUI = Inventory.FindChild<PlayerStatUI>();
+            _statUI.equipment = _equipInven.inventoryObject;
+            _statUI.playerStats = playerStat;
+            _statUI.SetRendering(false);
+            _statUI.enabled = true;
         } //UI 별 이벤트 추가
         PlayerEquipment equip = GetComponent<PlayerEquipment>(); //아이템 장착 시 해당 아이템의 prefab생성하여 착용하기 위한 컴퍼넌트
         if (equip != null)
@@ -87,9 +98,17 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         _animator = GetComponent<Animator>();
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
+        Managers.Input.KeyAction -= OnKeyEvent;
+        Managers.Input.KeyAction += OnKeyEvent;
+        _defalutUI._hpSlider.gameObject.SetActive(false);
        
     }
     #endregion
+
+    protected virtual void Update()
+    {
+        _isOnUI = EventSystem.current.IsPointerOverGameObject();
+    }
 
     #region MouseFunc
     private void OnMouseEvent(Define.MouseEvent evt)
@@ -118,7 +137,6 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                 break;
         }
     }
-
     private void OnMousePicking()
     {
         if (_isOnUI == true)
@@ -165,7 +183,34 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
 
     }
+    #endregion
 
+    #region KeyBoardFunc
+    private void OnKeyEvent(Define.KeyEvent evt)
+    {
+        switch(evt)
+        {
+            case Define.KeyEvent.Down:
+                break;
+            case Define.KeyEvent.Press:
+                OpenStatUI();
+                break;
+            case Define.KeyEvent.None:
+                CloseStatUI();
+                break;
+        }
+    }
+
+    private void OpenStatUI()
+    {
+        if(Input.GetKey(KeyCode.C))
+            _statUI.SetRendering(true);
+    }
+
+    private void CloseStatUI()
+    {
+        _statUI.SetRendering(false);
+    }
     #endregion
 
     #region MoveFunc
@@ -234,6 +279,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             {
                 case Define.CharacterAttribute.HP:
                     playerStat.AddHP(buff.value);
+                    _defalutUI.CreateDamageText((int)buff.value);
                     break;
                 case Define.CharacterAttribute.Mana:
                     break;
@@ -296,6 +342,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (IsAlive)
         {
             playerStat.AddHP(-damage);
+            _defalutUI.CreateDamageText(damage);
         }
         else
         {

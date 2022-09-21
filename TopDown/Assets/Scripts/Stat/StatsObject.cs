@@ -51,8 +51,10 @@ public class StatsObject : ScriptableObject
     }
 
     public Action<StatsObject> OnChangeStats; //스텟 값이 변경되면 호출
+   
     [NonSerialized]
     private bool isInitialize = false;
+
     public void OnEnable() //스크립트에이블이 사용가능해질 때.
     {
         InitializeAttribute();
@@ -78,7 +80,7 @@ public class StatsObject : ScriptableObject
         SetBaseValue(Define.CharacterAttribute.HP, 100);
         SetBaseValue(Define.CharacterAttribute.Mana, 100);
         SetBaseValue(Define.CharacterAttribute.Attack, 100);
-        SetBaseValue(Define.CharacterAttribute.AttackSpeed, 100);
+        SetBaseValue(Define.CharacterAttribute.AttackSpeed, 1f);
         SetBaseValue(Define.CharacterAttribute.Defence, 100);
         SetBaseValue(Define.CharacterAttribute.MoveSpeed, 0.1f);
         //스텟값 초기화 및 최대값으로 현재값 수정

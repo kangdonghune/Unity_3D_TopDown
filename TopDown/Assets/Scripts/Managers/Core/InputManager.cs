@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class InputManager
 {
 
-    public Action KeyAction = null;
+    public Action<Define.KeyEvent> KeyAction = null;
     public Action<Define.MouseEvent> MouseAction = null;
     public Action MouseInTrigger;
     public Action MouseOutTrigger;
@@ -20,14 +20,19 @@ public class InputManager
 
     public void OnUpdate()
     {
-        if(EventSystem.current.IsPointerOverGameObject()) // ui 버튼이 클릭되었는 지 여부 체크rr
+        if(EventSystem.current.IsPointerOverGameObject()) // ui 버튼이 클릭되었는 지 여부 체크
         {
             return;
         }
 
-        if(Input.anyKey && KeyAction != null)
+        if(KeyAction != null)
         {
-            KeyAction.Invoke();// Invoke() 를 안해줘도 자체적으로 하지만 invoke()를 붙여주는 것으로 델리게이트라는 걸 명시
+            if (Input.anyKeyDown)
+                KeyAction.Invoke(Define.KeyEvent.Down);// Invoke() 를 안해줘도 자체적으로 하지만 invoke()를 붙여주는 것으로 델리게이트라는 걸 명시
+            if (Input.anyKey)
+                KeyAction.Invoke(Define.KeyEvent.Press);
+            if (!Input.anyKey)
+                KeyAction.Invoke(Define.KeyEvent.None);
         }
 
         if (MouseAction != null)

@@ -53,7 +53,7 @@ public class ModifiableFloat
         OnModifiedValue.Invoke(this);
     }
 
-    private void AddModifier(IModifier modifier)
+    public void AddModifier(IModifier modifier)
     {
         modifiers.Add(modifier);
 

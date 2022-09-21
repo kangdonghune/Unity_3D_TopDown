@@ -32,7 +32,7 @@ public class StaticInventoryUI : InventoryUI
     {
         base.Start();
         //인스턴스화 된 인벤토리를 가져와야 해서 인스펙터를 통한 연결을 방지해야한다.
-        _inventory = gameObject.transform.parent.gameObject.GetComponent<DynamicInventoryUI>();
+        _inventory = gameObject.transform.parent.gameObject.GetComponentInChildren<DynamicInventoryUI>();
     }
     public override void CreateSlotUIs()
     {

@@ -17,9 +17,9 @@ public class PlayerCharictorController : PlayerController
         _stateMachine.AddState(new PlayerAttackState());
     }
 
-    private void Update()
+    protected override void Update()
     {
-        _isOnUI = EventSystem.current.IsPointerOverGameObject();
+        base.Update();
         _stateMachine.Update(Time.deltaTime);
     }
 }

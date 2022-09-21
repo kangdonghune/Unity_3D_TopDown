@@ -19,7 +19,13 @@ MonoBehaviour:
   data:
     id: 1
     name: 
-    buffs: []
-  itemAmount: 0
+    buffs:
+    - stat: 2
+      value: 10
+    - stat: 3
+      value: 0.1
+    - stat: 5
+      value: 0.03
+  itemAmount: 1
   boneNames: []
   description: 
