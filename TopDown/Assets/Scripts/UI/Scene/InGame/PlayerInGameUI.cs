@@ -17,13 +17,11 @@ public class PlayerInGameUI : MonoBehaviour
 
     void Start()
     {
-
         levelText.text = playerStats.level.ToString();
         HpSlider.value = playerStats.HealthPercentage;
         ManaSlider.value = playerStats.ManaPercentage;
         HPText.text = playerStats.HP.ToString("n0");
         ManaText.text = playerStats.Mana.ToString("n0");
-
     }
 
     public void AddEvent()

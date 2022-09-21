@@ -9,7 +9,7 @@ using UnityEngine;
 public class ItemBuff : IModifier
 {
     #region Variable
-    public Define.CharacterAttribute stat;
+    public Define.UnitAttribute stat;
     public float value;
 
 

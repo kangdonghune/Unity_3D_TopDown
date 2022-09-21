@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Attribute
 {
-    public Define.CharacterAttribute type;
+    public Define.UnitAttribute type;
     public ModifiableFloat value;
 
 }

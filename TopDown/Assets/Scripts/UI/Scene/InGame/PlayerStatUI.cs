@@ -45,10 +45,10 @@ public class PlayerStatUI : MonoBehaviour
 
     private void UpdateAttributeTexts()
     {
-        attribute[0].text = "ATK:" + playerStats.GetModifiedValue(Define.CharacterAttribute.Attack).ToString("n0");
-        attribute[1].text = "DEF:" + playerStats.GetModifiedValue(Define.CharacterAttribute.Defence).ToString("n0");
-        attribute[2].text = "ATK-Speed:" + playerStats.GetModifiedValue(Define.CharacterAttribute.AttackSpeed).ToString("n2");
-        attribute[3].text = "Move-Speed:" + (playerStats.GetModifiedValue(Define.CharacterAttribute.MoveSpeed)*10f).ToString("n2");
+        attribute[0].text = "ATK:" + playerStats.GetModifiedValue(Define.UnitAttribute.Attack).ToString("n0");
+        attribute[1].text = "DEF:" + playerStats.GetModifiedValue(Define.UnitAttribute.Defence).ToString("n0");
+        attribute[2].text = "ATK-Speed:" + playerStats.GetModifiedValue(Define.UnitAttribute.AttackSpeed).ToString("n2");
+        attribute[3].text = "Move-Speed:" + (playerStats.GetModifiedValue(Define.UnitAttribute.MoveSpeed)*10f).ToString("n2");
     }
 
     private void OnRemoveItem(InventorySlot slot)
@@ -73,13 +73,13 @@ public class PlayerStatUI : MonoBehaviour
         if (slot.ItemObject == null)
             return;
 
-        foreach (ItemBuff buff in slot.item.buffs)
+        foreach (ItemBuff buff in slot.item.buffs) //장비창 슬롯의 아이템의 스텟 버프 목록
         {
-            foreach (Attribute attribute in playerStats.attributes)
+            foreach (Attribute attribute in playerStats.attributes) //플레이어의 스텟목록 순회
             {
-                if (attribute.type == buff.stat)
+                if (attribute.type == buff.stat) //플레이어 보유 스텟과 버프의 스텟이 일치한다면
                 {
-                    attribute.value.AddModifier(buff);
+                    attribute.value.AddModifier(buff); //어트리뷰트에 해당 버프를 추가. 이후 자동 갱신되면 modifier 값 수정
                 }
             }
         }

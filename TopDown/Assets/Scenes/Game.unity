@@ -26323,6 +26323,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4723560457592701709, guid: 7b0e1a74bcadeda42900776c8b8423d8, type: 3}
+      propertyPath: playerStat
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4723560457592701709, guid: 7b0e1a74bcadeda42900776c8b8423d8, type: 3}
       propertyPath: projectileTransform
       value: 
       objectReference: {fileID: 1892457826}

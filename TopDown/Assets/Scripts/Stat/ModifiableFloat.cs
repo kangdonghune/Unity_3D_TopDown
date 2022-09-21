@@ -9,7 +9,7 @@ public class ModifiableFloat
     [NonSerialized]
     private float baseValue; //개발자가 임의로 수정 가능한 값
     [SerializeField]
-    private float modifiedValue; //아이템에 의해 변동되는 값
+    private float modifiedValue; // base value + 아이템 버프 스텟에 의해 변동되는 값
 
     public float BaseValue { get => baseValue; set { baseValue = value; UpdateModifiedValue(); } }
     public float ModifiedValue { get => modifiedValue; set => modifiedValue = value; }

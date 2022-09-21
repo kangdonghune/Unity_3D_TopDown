@@ -23,7 +23,7 @@ public class StatsObject : ScriptableObject
 
             foreach (Attribute attribute in attributes)
             {
-                if (attribute.type == Define.CharacterAttribute.HP)
+                if (attribute.type == Define.UnitAttribute.HP)
                 {
                     maxHealth = attribute.value.ModifiedValue;
                 }
@@ -41,7 +41,7 @@ public class StatsObject : ScriptableObject
 
             foreach (Attribute attribute in attributes)
             {
-                if (attribute.type == Define.CharacterAttribute.Mana)
+                if (attribute.type == Define.UnitAttribute.Mana)
                 {
                     maxMana = attribute.value.ModifiedValue;
                 }
@@ -54,11 +54,6 @@ public class StatsObject : ScriptableObject
    
     [NonSerialized]
     private bool isInitialize = false;
-
-    public void OnEnable() //스크립트에이블이 사용가능해질 때.
-    {
-        InitializeAttribute();
-    }
 
     public void InitializeAttribute()
     {
@@ -76,16 +71,16 @@ public class StatsObject : ScriptableObject
         exp = 0;
 
 
-        //스텟값 초기화
-        SetBaseValue(Define.CharacterAttribute.HP, 100);
-        SetBaseValue(Define.CharacterAttribute.Mana, 100);
-        SetBaseValue(Define.CharacterAttribute.Attack, 100);
-        SetBaseValue(Define.CharacterAttribute.AttackSpeed, 1f);
-        SetBaseValue(Define.CharacterAttribute.Defence, 100);
-        SetBaseValue(Define.CharacterAttribute.MoveSpeed, 0.1f);
+        //스텟값 초기화 base값 수정 시 base + buff 가 modifire에 적용. 기본적으론 modifier 0이니 base값으로초기화
+        SetBaseValue(Define.UnitAttribute.HP, 100);
+        SetBaseValue(Define.UnitAttribute.Mana, 100);
+        SetBaseValue(Define.UnitAttribute.Attack, 100);
+        SetBaseValue(Define.UnitAttribute.AttackSpeed, 1f);
+        SetBaseValue(Define.UnitAttribute.Defence, 100);
+        SetBaseValue(Define.UnitAttribute.MoveSpeed, 0.1f);
         //스텟값 초기화 및 최대값으로 현재값 수정
-        HP = GetModifiedValue(Define.CharacterAttribute.HP);
-        Mana = GetModifiedValue(Define.CharacterAttribute.Mana);
+        HP = GetModifiedValue(Define.UnitAttribute.HP);
+        Mana = GetModifiedValue(Define.UnitAttribute.Mana);
     }
 
     private void OnModifiedValue(ModifiableFloat value)
@@ -93,7 +88,7 @@ public class StatsObject : ScriptableObject
         OnChangeStats?.Invoke(this);
     }
 
-    public void SetBaseValue(Define.CharacterAttribute type, float value)
+    public void SetBaseValue(Define.UnitAttribute type, float value)
     {
         foreach (Attribute attribute in attributes)
         {
@@ -102,7 +97,7 @@ public class StatsObject : ScriptableObject
         }
     }
 
-    public float GetBaseValue(Define.CharacterAttribute type)
+    public float GetBaseValue(Define.UnitAttribute type)
     {
         foreach (Attribute attribute in attributes)
         {
@@ -112,7 +107,7 @@ public class StatsObject : ScriptableObject
         return -1;
     }
 
-    public float GetModifiedValue(Define.CharacterAttribute type)
+    public float GetModifiedValue(Define.UnitAttribute type)
     {
         foreach (Attribute attribute in attributes)
         {

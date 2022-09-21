@@ -38,6 +38,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private UI_UnitDefault _defalutUI;
     private PlayerInGameUI _playerInGameUI;
     private PlayerStatUI _statUI;
+    [HideInInspector]
     public bool _isOnUI;
 
     //Stat
@@ -55,6 +56,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     {
         StatsObject origin = Resources.Load<StatsObject>("Prefab/UI/Stat/PlayerStats");
         playerStat = Instantiate<StatsObject>(origin);
+        playerStat.InitializeAttribute();
         UI_UnitDefault uI_origin = Resources.Load<UI_UnitDefault>("Prefab/UI/Unit/UI_UnitDefault");
         _defalutUI = Instantiate<UI_UnitDefault>(uI_origin, gameObject.transform);
         Inventory = Managers.Resource.Instantiate("UI/Inventory/PlayerUI");//유저 인벤토리 생성
@@ -277,19 +279,19 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         {
             switch(buff.stat)
             {
-                case Define.CharacterAttribute.HP:
+                case Define.UnitAttribute.HP:
                     playerStat.AddHP(buff.value);
                     _defalutUI.CreateDamageText((int)buff.value);
                     break;
-                case Define.CharacterAttribute.Mana:
+                case Define.UnitAttribute.Mana:
                     break;
-                case Define.CharacterAttribute.Attack:
+                case Define.UnitAttribute.Attack:
                     break;
-                case Define.CharacterAttribute.AttackSpeed:
+                case Define.UnitAttribute.AttackSpeed:
                     break;
-                case Define.CharacterAttribute.Defence:
+                case Define.UnitAttribute.Defence:
                     break;
-                case Define.CharacterAttribute.MoveSpeed:
+                case Define.UnitAttribute.MoveSpeed:
                     break;
                 default:
                     Debug.LogWarning($"정의되지 않는 버프 스텟이 존재합니다.{buff.stat}");
