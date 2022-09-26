@@ -71,7 +71,6 @@ public class GameManager
                 break;
 
         }
-
         Managers.Resource.Destroy(go);
     }
 

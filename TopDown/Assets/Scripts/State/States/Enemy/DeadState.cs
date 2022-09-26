@@ -22,7 +22,7 @@ public class DeadState : State<EnemyController>
     {
         if(stateMachine.ElapsedTimeInState > 3.0f)
         {
-            Managers.Game.Despawn(context.gameObject);
+            Managers.Resource.Destroy(context.gameObject);
         }
     }
     public override void Exit()

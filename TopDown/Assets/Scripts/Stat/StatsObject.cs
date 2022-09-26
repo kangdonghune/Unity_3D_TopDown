@@ -51,17 +51,21 @@ public class StatsObject : ScriptableObject
     }
 
     public Action<StatsObject> OnChangeStats; //스텟 값이 변경되면 호출
-   
-    [NonSerialized]
-    private bool isInitialize = false;
 
+    public void InitializeAttribute(StatsObject statsObject)
+    {
+        attributes = statsObject.attributes;
+
+        level = statsObject.level;
+        exp = statsObject.exp;
+
+        //스텟값 초기화 및 최대값으로 현재값 수정
+        HP = GetModifiedValue(Define.UnitAttribute.HP);
+        Mana = GetModifiedValue(Define.UnitAttribute.Mana);
+    }
+    
     public void InitializeAttribute()
     {
-        if (isInitialize)
-            return;
-
-        isInitialize = true;
-
         foreach (Attribute attribute in attributes)
         {
             attribute.value = new ModifiableFloat(OnModifiedValue); //스텟오브젝트에서 값이 변경된 경우로 초기화
@@ -74,9 +78,9 @@ public class StatsObject : ScriptableObject
         //스텟값 초기화 base값 수정 시 base + buff 가 modifire에 적용. 기본적으론 modifier 0이니 base값으로초기화
         SetBaseValue(Define.UnitAttribute.HP, 100);
         SetBaseValue(Define.UnitAttribute.Mana, 100);
-        SetBaseValue(Define.UnitAttribute.Attack, 100);
+        SetBaseValue(Define.UnitAttribute.Attack, 10);
         SetBaseValue(Define.UnitAttribute.AttackSpeed, 1f);
-        SetBaseValue(Define.UnitAttribute.Defence, 100);
+        SetBaseValue(Define.UnitAttribute.Defence, 10);
         SetBaseValue(Define.UnitAttribute.MoveSpeed, 0.1f);
         //스텟값 초기화 및 최대값으로 현재값 수정
         HP = GetModifiedValue(Define.UnitAttribute.HP);

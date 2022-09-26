@@ -4,8 +4,5 @@ using UnityEngine;
 
 public interface IPatrolable
 {
-    bool isPatrol { get; set; }
-
     void SettingWayPoint();
-
 }

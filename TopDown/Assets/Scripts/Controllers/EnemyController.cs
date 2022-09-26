@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class EnemyController : BaseController, IAttackable, IDamageable
+public abstract class EnemyController : BaseController, IAttackable, IDamageable, IPatrolable
 {
     #region Variable
 
@@ -12,9 +12,6 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     public float viewRadius = 5f;
     public float attackRange => CurrentAttackBehavior?.Range ?? 2f;
 
-
-    public int maxHP = 100;
-    public int hp;
     public virtual Transform Target { get; protected set; }
     protected StateMachine<EnemyController> _stateMachine;
     public StateMachine<EnemyController> StateMachine { get { return _stateMachine; } }
@@ -22,7 +19,12 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     protected NavMeshAgent agent;
     public Transform projectileTransform;
     public Transform hitTransform;
-    protected int hashAttackTrigger = Animator.StringToHash("AttackTrigger");
+    public MonsterDatabase database;
+    [HideInInspector]
+    public MonsterObject data;
+    private UI_UnitDefault _defalutUI;
+
+
     #endregion
 
 
@@ -57,6 +59,8 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
     protected override void AwakeInit()
     {
+        UI_UnitDefault uI_origin = Resources.Load<UI_UnitDefault>("Prefab/UI/Unit/UI_UnitDefault");
+        _defalutUI = Instantiate<UI_UnitDefault>(uI_origin, gameObject.transform);
     }
 
     protected override void Init()
@@ -66,9 +70,24 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         ani = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = attackRange;
-        agent.updatePosition = false; //이동은 컨트롤러가 시행
+        agent.updatePosition = true; //이동은 컨트롤러가 시행
         agent.updateRotation = true; // 회전은 네비가 하도록
         InitAttackBehavior();
+        foreach(MonsterObject monsterObject in database.MonsterObjects)
+        {
+            if (monsterObject.data.name == gameObject.tag)
+            {
+                data = Instantiate<MonsterObject>(monsterObject);
+                data.stats.InitializeAttribute(data.stats);
+                break;
+            }
+        }
+    }
+
+    protected virtual void Update()
+    {
+        CheckAttackBehavior();
+        _defalutUI.Value = data.stats.HP;
     }
 
     protected void InitAttackBehavior()
@@ -110,29 +129,33 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         }
     }
 
-    public bool IsAlive => hp > 0;
+    public bool IsAlive => data.stats.HP > 0;
 
+ 
     public void TakeDamage(int damage, GameObject hitEffectPrefabs)
     {
         if (!IsAlive)
             return;
-        hp -= damage;
 
-        if(hitEffectPrefabs)
+        if (hitEffectPrefabs)
         {
-            //TODO-추후 프리펩에 히트이펙트 추가 시 해당 코드로 수정
-            //Managers.Resource.Instantiate(hitEffectPrefabs-prefabname, hitTransform);
-            Instantiate(hitEffectPrefabs, hitTransform);
+            Managers.Effect.Instantiate(hitEffectPrefabs, hitTransform.position, Quaternion.identity);
         }
 
-        if(IsAlive)
+        if (IsAlive)
         {
-            ani.SetTrigger(hashAttackTrigger);
+            data.stats.AddHP(-damage);
+            _defalutUI.CreateDamageText(damage);
         }
         else
         {
-            StateMachine.ChangeState<DeadState>();
+            //  StateMachine.ChangeState<DeadState>();
         }
+    }
+
+    public void SettingWayPoint()
+    {
+        transform.gameObject.GetOrAddComponent<WayPoint>();//만약 waypoint컴퍼넌트 없으면 추가
     }
     #endregion
 

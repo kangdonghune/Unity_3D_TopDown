@@ -12,8 +12,7 @@ public class PlayerAttackState : State<PlayerController>
     private IAttackable _attackable;
     private Vector3 _lookDir;
 
-    private int hashAttackTrigger = Animator.StringToHash("AttackTrigger");
-    protected int hashAttackIndex = Animator.StringToHash("AttackIndex");
+    private int hashAttack = Animator.StringToHash("Attack");
 
     public override void Init()
     {
@@ -26,16 +25,6 @@ public class PlayerAttackState : State<PlayerController>
 
     public override void Enter()
     {
-        if (context.Target != null)
-            _lookDir = (context.Target.position - context.transform.position).normalized;
-        else
-            _lookDir = context.transform.forward;
-        if (_attackable == null)
-        {
-            Debug.LogError($"{context.gameObject.name} Attack, but does'n have IAttackable!!");
-            stateMachine.ChangeState<PlayerIdleState>();
-            return;
-        }
         context.CheckAttackBehavior();
         if (_attackable.CurrentAttackBehavior == null)
         {
@@ -45,10 +34,8 @@ public class PlayerAttackState : State<PlayerController>
         //트리거를 키기 전에 컨트롤러 이벤트핸들러에 함수 추가
         _attackStateController.enterAttackStateHandler += OnEnterAttackState;
         _attackStateController.exitAttackStateHandler += OnExitAttackState;
-
-        _animator.SetInteger(hashAttackIndex, _attackable.CurrentAttackBehavior.AnimationIndex);
         //실제 애니메이터에서 state로 넘어가는 건 트리거를 켜주는 순간
-        _animator.SetTrigger(hashAttackTrigger);
+        _animator.SetBool(hashAttack, true);
     }
 
     public override void Update(float deltaTime)

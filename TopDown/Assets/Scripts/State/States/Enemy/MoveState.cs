@@ -32,15 +32,15 @@ public class MoveState : State<EnemyController>
         {
             _agent.stoppingDistance = context.attackRange;
             _agent.SetDestination(context.Target.position);
-            if (_agent.remainingDistance + 0.1f > _agent.stoppingDistance)
+            if (_agent.remainingDistance> _agent.stoppingDistance)
             {
-                _controller.Move(_agent.velocity * Time.deltaTime);
-                //context.transform.position = _agent.nextPosition;
+                _controller.Move(_agent.desiredVelocity * context.data.stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * deltaTime);
+                context.transform.position = new Vector3(context.transform.position.x, _agent.nextPosition.y, context.transform.position.z);
+                _agent.velocity = _controller.velocity;
                 _animator.SetFloat(hashMoveSpeed, _agent.velocity.magnitude / _agent.speed, .1f, Time.deltaTime);
                 return;
             }
         }
-        _controller.Move(_agent.velocity * Time.deltaTime);
         stateMachine.ChangeState<AttackState>();
 
     }

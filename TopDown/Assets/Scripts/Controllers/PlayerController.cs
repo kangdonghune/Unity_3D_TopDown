@@ -17,7 +17,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     public float groundCheckDistance = 0.3f;
 
-    public virtual Transform Target { get; protected set; }
+    public virtual Transform Target { get; set; }
     public Transform projectileTransform;
     public Transform hitTransform;
     private CharacterController _characterController;
@@ -48,6 +48,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     [HideInInspector]
     public bool isMove = false;
 
+    private int hashAttack = Animator.StringToHash("Attack");
 
     #endregion
 
@@ -110,6 +111,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     protected virtual void Update()
     {
         _isOnUI = EventSystem.current.IsPointerOverGameObject();
+        CheckAttackBehavior();
     }
 
     #region MouseFunc
@@ -165,7 +167,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                     break;
                 case (int)Define.Layer.Monster:
                     //ToDo 추후 스테이트패턴으로 변경
-                    _navAgent.SetDestination(hit.collider.transform.position);
+                    SetTarget(hit.collider.transform, CurrentAttackBehavior.Range);
                     isMove = true;
                     isStop = true;
                     break;
@@ -326,6 +328,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (CurrentAttackBehavior != null && Target != null)
         {
             CurrentAttackBehavior.ExecuteAttack(Target.gameObject, projectileTransform);
+            _animator.SetBool(hashAttack, false);
         }
     }
 

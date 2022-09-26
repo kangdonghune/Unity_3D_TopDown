@@ -59,7 +59,9 @@ public class PlayerMoveState : State<PlayerController>
                     stateMachine.ChangeState<PlayerIdleState>();
                 }
                 else
-                     stateMachine.ChangeState<PlayerAttackState>();
+                {
+                    stateMachine.ChangeState<PlayerAttackState>();
+                }
             }
             stateMachine.ChangeState<PlayerIdleState>();
         }

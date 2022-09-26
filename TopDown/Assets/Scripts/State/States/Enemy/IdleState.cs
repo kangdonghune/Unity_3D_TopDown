@@ -9,7 +9,6 @@ public class IdleState : State<EnemyController>
     private CharacterController _controller;
     private NavMeshAgent _agent;
     private WayPoint _wayPoint;
-    private bool isPatrol;
 
     protected int hasMove = Animator.StringToHash("Move");
     protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
@@ -20,12 +19,8 @@ public class IdleState : State<EnemyController>
         _animator = context.GetComponent<Animator>();
         _controller = context.GetComponent<CharacterController>();
         _agent = context.GetComponent<NavMeshAgent>();
-
-        if (_wayPoint = context.GetComponent<WayPoint>())
-        {
-            isPatrol = true;
-        }
-
+        if(context.data.isPatrol)
+            _wayPoint = context.gameObject.GetOrAddComponent<WayPoint>();
     }
 
     public override void Enter()
@@ -34,7 +29,7 @@ public class IdleState : State<EnemyController>
         _animator.SetFloat(hasMoveSpeed, 0f);
         _controller.Move(Vector3.zero);
 
-        if (_wayPoint)
+        if (context.data.isPatrol)
         {
             _wayPoint.idleTime = Random.Range(_wayPoint.MinIdleTime, _wayPoint.MaxIdleTime);
         }
@@ -55,7 +50,7 @@ public class IdleState : State<EnemyController>
             }
         }
 
-        else if (isPatrol && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
+        else if (context.data.isPatrol && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
         {
             stateMachine.ChangeState<MoveToWayPointState>();
         }

@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour
 
     void Init()
     {
-        Target = GameObject.Find("Arisa");
+        Target = GameObject.Find("Arissa");
         if (Target == null)
             Debug.LogWarning("CameraController Searching Player Failed!");
     }
