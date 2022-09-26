@@ -10,18 +10,27 @@ public class AttackBehavior_Projectile : AttackBehavior
         if (target == null)
             return;
 
+        StatsObject attackStat = gameObject.GetComponent<BaseController>().Stats;
+        StatsObject targetStat = target.GetComponent<BaseController>().Stats;
+        int calcDamage = (int)(attackStat.GetModifiedValue(Define.UnitAttribute.Attack) - targetStat.GetModifiedValue(Define.UnitAttribute.Defence));
+        calcDamage = calcDamage > 0 ? calcDamage : 0;
+        int Damage = BaseDamage + calcDamage;
+
         Vector3 projectilePosition = startPoint?.position ?? transform.position;
         if(effectPrefab)
         {
             GameObject projectileGo = Managers.Resource.Instantiate(effectPrefab, projectilePosition, Quaternion.identity);
             projectileGo.transform.forward = transform.forward;
-     
+
+       
+
             Projectile projectile = projectileGo.GetComponent<Projectile>();
             if(projectile)
             {
                 projectile.owner = this.gameObject;
                 projectile.target = target;
                 projectile.attackBehavior = this;
+                projectile.projectileDamage = Damage;
                 if (projectile.collided)
                     projectile.Init();
             }
@@ -34,7 +43,7 @@ public class AttackBehavior_Projectile : AttackBehavior
     {
         AnimationIndex = (int)Define.MonsterAttackPattern.Projectile;
         Priority = (int)Define.AttackPrioty.Firts;
-        Damage = 10;
+        BaseDamage = 10;
         Range = 5f;
         coolTime = 10f;
         calcCoolTime = 0f;

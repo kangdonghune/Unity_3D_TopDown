@@ -9,6 +9,10 @@ public abstract class BaseController : MonoBehaviour
     [SerializeField]
     public List<AttackBehavior> attackBehaviors = new List<AttackBehavior>();
 
+    //Stat
+    [HideInInspector]
+    public StatsObject Stats { get; protected set; }
+
     public void Awake()
     {
         AwakeInit();

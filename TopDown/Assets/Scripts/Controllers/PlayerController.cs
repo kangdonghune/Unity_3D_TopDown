@@ -41,14 +41,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     [HideInInspector]
     public bool _isOnUI;
 
-    //Stat
-    [HideInInspector]
-    public StatsObject playerStat;
-
+ 
     [HideInInspector]
     public bool isMove = false;
 
-    private int hashAttack = Animator.StringToHash("Attack");
 
     #endregion
 
@@ -56,8 +52,8 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     protected override void AwakeInit()
     {
         StatsObject origin = Resources.Load<StatsObject>("Prefab/UI/Stat/PlayerStats");
-        playerStat = Instantiate<StatsObject>(origin);
-        playerStat.InitializeAttribute();
+        Stats = Instantiate<StatsObject>(origin);
+        Stats.InitializeAttribute();
         UI_UnitDefault uI_origin = Resources.Load<UI_UnitDefault>("Prefab/UI/Unit/UI_UnitDefault");
         _defalutUI = Instantiate<UI_UnitDefault>(uI_origin, gameObject.transform);
         Inventory = Managers.Resource.Instantiate("UI/Inventory/PlayerUI");//유저 인벤토리 생성
@@ -74,11 +70,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             _equipInven.inventoryObject.OnUseItem += OnUseItem;
             //게임UI
             _playerInGameUI = Inventory.FindChild<PlayerInGameUI>();
-            _playerInGameUI.playerStats = playerStat;
+            _playerInGameUI.playerStats = Stats;
             _playerInGameUI.AddEvent();
             _statUI = Inventory.FindChild<PlayerStatUI>();
             _statUI.equipment = _equipInven.inventoryObject;
-            _statUI.playerStats = playerStat;
+            _statUI.playerStats = Stats;
             _statUI.SetRendering(false);
             _statUI.enabled = true;
         } //UI 별 이벤트 추가
@@ -175,8 +171,8 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                     RaycastHit Hit;
                     if (Physics.Raycast(ray, out Hit, 100, groundLayerMask))
                     {
-                        _navAgent.SetDestination(Hit.point);
                         RemoveTarget();
+                        _navAgent.SetDestination(Hit.point);
                         isMove = true;
                     }
                     break;
@@ -227,7 +223,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         _navAgent.SetDestination(target.transform.position);
     }
 
-    private void RemoveTarget()
+    public void RemoveTarget()
     {
         CallStopInteract();
         Target = null;
@@ -282,7 +278,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             switch(buff.stat)
             {
                 case Define.UnitAttribute.HP:
-                    playerStat.AddHP(buff.value);
+                    Stats.AddHP(buff.value);
                     _defalutUI.CreateDamageText((int)buff.value);
                     break;
                 case Define.UnitAttribute.Mana:
@@ -328,13 +324,12 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (CurrentAttackBehavior != null && Target != null)
         {
             CurrentAttackBehavior.ExecuteAttack(Target.gameObject, projectileTransform);
-            _animator.SetBool(hashAttack, false);
         }
     }
 
-    public bool IsAlive => true;
+    public bool IsAlive => Stats.HP > 0;
 
-    public void TakeDamage(int damage, GameObject hitEffectPrefabs)
+    public void TakeDamage(int damage, GameObject hitEffectPrefabs, GameObject attacker)
     {
         if (!IsAlive)
             return;
@@ -346,7 +341,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
         if (IsAlive)
         {
-            playerStat.AddHP(-damage);
+            Stats.AddHP(-damage);
             _defalutUI.CreateDamageText(damage);
         }
         else

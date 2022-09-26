@@ -13,7 +13,7 @@ public abstract class AttackBehavior : MonoBehaviour
 
     public int AnimationIndex { get; protected set; }
     public int Priority { get; protected set; } //동시에 여러 공격이 가능할 때 공격 순서의 우선도.
-    public int Damage { get; protected set; } = 10;
+    public int BaseDamage { get; protected set; } = 10;
     public float Range { get; protected set; } = 2f;
     public bool isAvailable => calcCoolTime >= coolTime;
 
@@ -46,5 +46,5 @@ public abstract class AttackBehavior : MonoBehaviour
     }
 
     //타겟이 없는 범위 공격을 고려 default null, startPoint는 투사체 등의 생성 위치
-    public abstract void ExecuteAttack(GameObject target = null, Transform startPoint = null);
+    public abstract void ExecuteAttack(GameObject target = null,Transform startPoint = null);
 }

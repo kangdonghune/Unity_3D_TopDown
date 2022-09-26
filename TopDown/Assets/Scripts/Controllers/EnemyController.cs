@@ -21,7 +21,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     public Transform hitTransform;
     public MonsterDatabase database;
     [HideInInspector]
-    public MonsterObject data;
+    public MonsterObject Data { get; set; }
     private UI_UnitDefault _defalutUI;
 
 
@@ -77,8 +77,9 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         {
             if (monsterObject.data.name == gameObject.tag)
             {
-                data = Instantiate<MonsterObject>(monsterObject);
-                data.stats.InitializeAttribute(data.stats);
+                Data = Instantiate<MonsterObject>(monsterObject);
+                Data.stats.InitializeAttribute(Data.stats);
+                Stats = Data.stats;
                 break;
             }
         }
@@ -87,7 +88,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     protected virtual void Update()
     {
         CheckAttackBehavior();
-        _defalutUI.Value = data.stats.HP;
+        _defalutUI.Value = Data.stats.HP;
     }
 
     protected void InitAttackBehavior()
@@ -129,10 +130,10 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         }
     }
 
-    public bool IsAlive => data.stats.HP > 0;
+    public bool IsAlive => Data.stats.HP > 0;
 
  
-    public void TakeDamage(int damage, GameObject hitEffectPrefabs)
+    public void TakeDamage(int damage, GameObject hitEffectPrefabs, GameObject attacker)
     {
         if (!IsAlive)
             return;
@@ -144,11 +145,12 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
         if (IsAlive)
         {
-            data.stats.AddHP(-damage);
+            Data.stats.AddHP(-damage);
             _defalutUI.CreateDamageText(damage);
         }
         else
         {
+            attacker.GetComponent<StatsObject>().exp += Data.stats.exp;
             //  StateMachine.ChangeState<DeadState>();
         }
     }

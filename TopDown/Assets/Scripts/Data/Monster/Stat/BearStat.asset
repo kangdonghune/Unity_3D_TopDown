@@ -24,7 +24,7 @@ MonoBehaviour:
       modifiedValue: 1
   - type: 4
     value:
-      modifiedValue: 10
+      modifiedValue: 5
   - type: 5
     value:
       modifiedValue: 0.1

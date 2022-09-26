@@ -22,12 +22,12 @@ public class PlayerMoveState : State<PlayerController>
     public override void Enter()
     {
         _animator.SetBool(hashMove, true);
-        _animator.SetFloat(hashMoveSpeed, context.playerStat.GetModifiedValue(Define.UnitAttribute.MoveSpeed));
+        _animator.SetFloat(hashMoveSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed));
     }
 
     public override void Update(float deltaTime)
     {
-        _animator.SetFloat(hashMoveSpeed, context.playerStat.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * 10);
+        _animator.SetFloat(hashMoveSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * 10);
 
         if (context.Target != null)
         {
@@ -40,7 +40,7 @@ public class PlayerMoveState : State<PlayerController>
             //네비 속도는 캐릭터컨트롤러의 속도로 마무리
             //주의: 네비 속도보다 캐릭터 속도가 빠를 때 어긋나는 문제 발생
             //네비 속도를 1000으로 두고 캐릭터 속도를 1을 디펄트값으로 해서 가속을 조정
-            _characterController.Move(_navAgent.desiredVelocity * context.playerStat.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * deltaTime);
+            _characterController.Move(_navAgent.desiredVelocity * context.Stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * deltaTime);
             context.transform.position = new Vector3(context.transform.position.x, _navAgent.nextPosition.y, context.transform.position.z);
             _navAgent.velocity = _characterController.velocity;
         }
@@ -57,10 +57,12 @@ public class PlayerMoveState : State<PlayerController>
                     IInteractable interactable = context.Target.GetComponent<IInteractable>();
                     interactable.Interact(context.gameObject);
                     stateMachine.ChangeState<PlayerIdleState>();
+                    return;
                 }
                 else
                 {
                     stateMachine.ChangeState<PlayerAttackState>();
+                    return;
                 }
             }
             stateMachine.ChangeState<PlayerIdleState>();

@@ -6,5 +6,5 @@ public interface IDamageable
 {
     bool IsAlive { get; }
 
-    void TakeDamage(int damage, GameObject hitEffectPrefabs);
+    void TakeDamage(int damage, GameObject hitEffectPrefabs, GameObject Attacker);
 }

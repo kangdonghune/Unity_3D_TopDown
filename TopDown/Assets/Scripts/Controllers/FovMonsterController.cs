@@ -24,7 +24,7 @@ public class FovMonsterController : EnemyController
         _stateMachine.AddState(new MoveState());
         _stateMachine.AddState(new AttackState());
         _stateMachine.AddState(new DeadState());
-        if (data.isPatrol)
+        if (Data.isPatrol)
         {
             SettingWayPoint();
             _stateMachine.AddState(new MoveToWayPointState());

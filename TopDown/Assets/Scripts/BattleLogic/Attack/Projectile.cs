@@ -22,6 +22,8 @@ public class Projectile : MonoBehaviour
     public GameObject owner;
     [HideInInspector]
     public GameObject target;
+    public int projectileDamage;
+
     #endregion
 
     public void Init()
@@ -116,7 +118,7 @@ public class Projectile : MonoBehaviour
         IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
         if(damageable != null)
         {
-            damageable.TakeDamage(attackBehavior?.Damage ?? 0, null);
+            damageable.TakeDamage(projectileDamage, null, owner);
         }
 
         Managers.Resource.Destroy(gameObject);

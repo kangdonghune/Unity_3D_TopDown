@@ -12895,7 +12895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7110445549526086888, guid: 4613ae02f70ff5742ac5efa820486ebe, type: 3}
       propertyPath: height
-      value: 10
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7110445549526086888, guid: 4613ae02f70ff5742ac5efa820486ebe, type: 3}
       propertyPath: target
@@ -12903,7 +12903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7110445549526086888, guid: 4613ae02f70ff5742ac5efa820486ebe, type: 3}
       propertyPath: distance
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7110445549526086888, guid: 4613ae02f70ff5742ac5efa820486ebe, type: 3}
       propertyPath: smoothSpeed

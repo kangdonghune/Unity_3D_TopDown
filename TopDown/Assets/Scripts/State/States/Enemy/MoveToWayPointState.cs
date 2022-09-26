@@ -62,7 +62,7 @@ public class MoveToWayPointState : State<EnemyController>
             }
             else
             {
-                _controller.Move(_agent.desiredVelocity * context.data.stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * deltaTime);
+                _controller.Move(_agent.desiredVelocity * context.Data.stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * deltaTime);
                 context.transform.position = new Vector3(context.transform.position.x, _agent.nextPosition.y, context.transform.position.z);
                 _agent.velocity = _controller.velocity;
                 _animator.SetFloat(hashMoveSpeed, _agent.velocity.magnitude / _agent.speed, .1f, Time.deltaTime);

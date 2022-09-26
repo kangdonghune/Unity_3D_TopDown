@@ -71,7 +71,7 @@ public class DynamicInventoryUI : InventoryUI
             go.FindChild<TextMeshProUGUI>().text = i.ToString();
 
 
-            slotUIs[go].parent.AddItem(database.itemObjects[2].data, 10);
+            slotUIs[go].parent.AddItem(database.itemObjects[0].data, 10);
         }
     }
 

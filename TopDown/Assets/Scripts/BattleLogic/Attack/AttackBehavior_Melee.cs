@@ -7,7 +7,14 @@ public class AttackBehavior_Melee : AttackBehavior
     public override void ExecuteAttack(GameObject target = null, Transform startPoint = null)
     {
         if(target != null)
-            target.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab);
+        {
+            StatsObject attackStat = gameObject.GetComponent<BaseController>().Stats;
+            StatsObject targetStat = target.GetComponent<BaseController>().Stats;
+            int calcDamage = (int)(attackStat.GetModifiedValue(Define.UnitAttribute.Attack) - targetStat.GetModifiedValue(Define.UnitAttribute.Defence));
+            calcDamage = calcDamage > 0 ? calcDamage : 0;
+            int Damage = BaseDamage + calcDamage;
+            target.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab, gameObject);
+        }
         
         calcCoolTime = 0f;
     }
@@ -16,7 +23,7 @@ public class AttackBehavior_Melee : AttackBehavior
     {
         AnimationIndex = (int)Define.MonsterAttackPattern.Attack1;
         Priority = (int)Define.AttackPrioty.Fifth;
-        Damage = 5;
+        BaseDamage = 10;
         Range = 2f;
         coolTime = 0f;
         calcCoolTime = 0f;

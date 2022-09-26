@@ -19,7 +19,7 @@ public class IdleState : State<EnemyController>
         _animator = context.GetComponent<Animator>();
         _controller = context.GetComponent<CharacterController>();
         _agent = context.GetComponent<NavMeshAgent>();
-        if(context.data.isPatrol)
+        if(context.Data.isPatrol)
             _wayPoint = context.gameObject.GetOrAddComponent<WayPoint>();
     }
 
@@ -29,7 +29,7 @@ public class IdleState : State<EnemyController>
         _animator.SetFloat(hasMoveSpeed, 0f);
         _controller.Move(Vector3.zero);
 
-        if (context.data.isPatrol)
+        if (context.Data.isPatrol)
         {
             _wayPoint.idleTime = Random.Range(_wayPoint.MinIdleTime, _wayPoint.MaxIdleTime);
         }
@@ -50,7 +50,7 @@ public class IdleState : State<EnemyController>
             }
         }
 
-        else if (context.data.isPatrol && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
+        else if (context.Data.isPatrol && stateMachine.ElapsedTimeInState > _wayPoint.idleTime)
         {
             stateMachine.ChangeState<MoveToWayPointState>();
         }
