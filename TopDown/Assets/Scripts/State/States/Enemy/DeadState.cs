@@ -16,16 +16,17 @@ public class DeadState : State<EnemyController>
     public override void Enter()
     {
         _animator.SetBool(isAliveHash, false);
+        context.ReserveDestroy(10f); //삭제 예약
+        context.gameObject.AddComponent<ItemBox>();//시체 루팅용 아이템박스 생성
+        context.enabled = false; //컨트롤러 비활성화 스폰 시 활성화
     }
 
     public override void Update(float deltaTime)
     {
-        if(stateMachine.ElapsedTimeInState > 3.0f)
-        {
-            Managers.Resource.Destroy(context.gameObject);
-        }
     }
     public override void Exit()
     {
     }
+
+  
 }

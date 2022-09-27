@@ -143,16 +143,17 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
             Managers.Effect.Instantiate(hitEffectPrefabs, hitTransform.position, Quaternion.identity);
         }
 
-        if (IsAlive)
+        Data.stats.AddHP(-damage);
+        _defalutUI.CreateDamageText(damage);
+        _defalutUI.Value = Data.stats.HP;
+
+        if (IsAlive == false)
         {
-            Data.stats.AddHP(-damage);
-            _defalutUI.CreateDamageText(damage);
+            attacker.GetComponent<BaseController>().Stats.exp += Data.stats.exp;
+            StateMachine.ChangeState<DeadState>();
         }
-        else
-        {
-            attacker.GetComponent<StatsObject>().exp += Data.stats.exp;
-            //  StateMachine.ChangeState<DeadState>();
-        }
+
+
     }
 
     public void SettingWayPoint()

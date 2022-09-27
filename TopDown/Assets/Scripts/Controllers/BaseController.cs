@@ -39,4 +39,15 @@ public abstract class BaseController : MonoBehaviour
         }
            
     }
+
+    public void ReserveDestroy(float time)
+    {
+        StartCoroutine(CoDestroy(time));
+    }
+
+    public IEnumerator CoDestroy(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Managers.Resource.Destroy(gameObject);
+    }
 }

@@ -40,7 +40,8 @@ public class ItemBox : MonoBehaviour, IInteractable
 
     void Start()
     {
-        gameObject.GetComponent<MeshRenderer>().enabled = true;
+        if(gameObject.GetComponent<MeshRenderer>() != null)
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
         gameObject.layer = (int)Define.Layer.ItemBox;
         _itemBox = Managers.Resource.Instantiate("UI/Inventory/ItemBox");
         _itemBoxInven = _itemBox.transform.GetChild(0).gameObject;
