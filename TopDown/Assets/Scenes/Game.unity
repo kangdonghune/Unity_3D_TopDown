@@ -25025,7 +25025,7 @@ GameObject:
   - component: {fileID: 2076473449}
   m_Layer: 4
   m_Name: Palet_v1_set (1)
-  m_TagString: Untagged
+  m_TagString: Palet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -27097,6 +27097,10 @@ PrefabInstance:
     - target: {fileID: 5745569366099717531, guid: 4a69f3acd1694f54a90a71d83bff30c5, type: 3}
       propertyPath: m_Name
       value: Palet_v1_set (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745569366099717531, guid: 4a69f3acd1694f54a90a71d83bff30c5, type: 3}
+      propertyPath: m_TagString
+      value: Palet
       objectReference: {fileID: 0}
     - target: {fileID: 5759654255776910565, guid: 4a69f3acd1694f54a90a71d83bff30c5, type: 3}
       propertyPath: m_Enabled

@@ -43,7 +43,7 @@ public class ItemBox : MonoBehaviour, IInteractable
         if(gameObject.GetComponent<MeshRenderer>() != null)
             gameObject.GetComponent<MeshRenderer>().enabled = true;
         gameObject.layer = (int)Define.Layer.ItemBox;
-        _itemBox = Managers.Resource.Instantiate("UI/Inventory/ItemBox");
+        _itemBox = Managers.Resource.Instantiate("UI/Inventory/ItemBox",gameObject.transform);
         _itemBoxInven = _itemBox.transform.GetChild(0).gameObject;
         itemBoxInvenUI = _itemBoxInven.GetComponent<ItemBoxInventoryUI>();
         _itemBox.SetActive(false); //시작 시 해당 아이템박스 인벤토리 비활성화.

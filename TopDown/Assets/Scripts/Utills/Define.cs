@@ -18,4 +18,5 @@ public class Define
     public enum ItemType { Weapon = 0, Helmet = 1, Chest = 2, Gloves = 3, Pants = 4, Boots = 5, Accessories = 6, Consumable, Food, Default }
     public enum UnitAttribute { HP, Mana, Attack, AttackSpeed, Defence, MoveSpeed, }
     public enum MonsterInterface {FOV,Patrol,}
+    public enum Tag { Bear, Palet,ItemBox}
 }

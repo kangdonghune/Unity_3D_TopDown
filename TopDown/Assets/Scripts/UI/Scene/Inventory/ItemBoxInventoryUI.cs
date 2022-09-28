@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,12 +7,11 @@ using UnityEngine.EventSystems;
 
 public class ItemBoxInventoryUI : InventoryUI
 {
-    [SerializeField]
-    protected ItemObjectDatabase database;
-
     public GameObject ConnectUserInven = null;
     private StaticInventoryUI equipment;
     private DynamicInventoryUI inven;
+    public ItemBoxDatabase database;
+    private ItemBoxContents Contents;
 
 
 
@@ -34,7 +34,7 @@ public class ItemBoxInventoryUI : InventoryUI
     {
         //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
         InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/ItemBoxInventory");
-        inventoryObject = Object.Instantiate(original);
+        inventoryObject = Instantiate(original);
         base.Awake();
     }
 
@@ -58,8 +58,23 @@ public class ItemBoxInventoryUI : InventoryUI
             inventoryObject.slots[i].parent = inventoryObject;
             slotUIs.Add(go, inventoryObject.slots[i]);
             go.name += ": " + i;
+        }
 
-            slotUIs[go].parent.AddItem(database.itemObjects[1].data, 10);
+        foreach (ItemBoxContents contents in database.Contents)
+        {
+            string tag = transform.parent.parent.tag;
+            if (tag == Enum.GetName(typeof(Define.Tag), contents.tag))
+            {
+                Contents = contents;
+                break;
+            }
+        }
+
+        for (int i = 0; i < Contents.items.Length; i++)
+        {
+            if (Contents.items[i].item == null)
+                continue;
+            inventoryObject.AddItem(Contents.items[i].item.data, Contents.items[i].count);
         }
     }
 

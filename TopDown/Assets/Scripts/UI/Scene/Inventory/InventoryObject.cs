@@ -50,10 +50,15 @@ public class InventoryObject : ScriptableObject
             if (EmptySlotCount <= 0) // 빈 슬롯창이 없는 경우
                 return false;
 
-            if (!database.itemObjects[item.id].stackable) //추가하고자 하는 아이템이 중첩 불가인 경우
-                GetEmptySlot().UpdateSlot(item, 1); //실수로 중첩불가인 아이템을 중복으로 넣을 경우 1개로 수정
+            //추가하고자 하는 아이템이 중첩 불가인 경우, //실수로 중첩불가인 아이템을 중복으로 넣을 경우 1개로 수정
+            if (!database.itemObjects[item.id].stackable)
+            {
+                GetEmptySlot()?.UpdateSlot(item, 1);
+                if(amount -1 > 0)
+                    AddItem(item, amount - 1); //재귀하며 남은 자리에 amount를 추가
+            }
             else
-                GetEmptySlot().UpdateSlot(item, amount);
+                GetEmptySlot()?.UpdateSlot(item, amount);
         }
         else
         {
