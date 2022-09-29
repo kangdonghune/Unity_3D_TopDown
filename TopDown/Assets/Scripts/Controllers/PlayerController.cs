@@ -45,6 +45,8 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     [HideInInspector]
     public bool isMove = false;
 
+    public Collider attackCollider; 
+
 
     #endregion
 
@@ -191,6 +193,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         switch(evt)
         {
             case Define.KeyEvent.Down:
+                OnSkillReady();
                 break;
             case Define.KeyEvent.Press:
                 OpenStatUI();
@@ -201,12 +204,45 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
     }
 
+    private void OnSkillReady()
+    {
+        //이미 예약된 스킬이 있다면 스킵
+        foreach (AttackBehavior behavior in SkillBehaviors)
+        {
+            if (behavior.Ready)
+                return;
+        }
+                
+        //예약된 스킬이 없다면 예약
+
+        KeyCode key = KeyCode.None;
+        if (Input.GetKeyDown(KeyCode.Q))
+            key = KeyCode.Q;
+        if (Input.GetKeyDown(KeyCode.W))
+            key = KeyCode.W;
+        if (Input.GetKeyDown(KeyCode.E))
+            key = KeyCode.E;
+        if (Input.GetKeyDown(KeyCode.R))
+            key = KeyCode.R;
+
+        foreach (AttackBehavior behavior in SkillBehaviors)
+        {
+            if (behavior.Key == key && behavior.isAvailable)
+            {
+                behavior.Ready = true;
+                if (behavior.type == Define.AttackType.Skill_Target && Target != null) //스킬이 타겟팅이면 재타겟팅
+                    SetTarget(Target, behavior.Range);    
+                break;
+            }
+        }
+    
+    }
+
     private void OpenStatUI()
     {
         if(Input.GetKey(KeyCode.C))
             _statUI.SetRendering(true);
     }
-
     private void CloseStatUI()
     {
         _statUI.SetRendering(false);
@@ -303,16 +339,16 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     public void CheckAttackBehavior()
     {
-        if (CurrentAttackBehavior == null || !CurrentAttackBehavior.isAvailable)
+        if (CurrentAttackBehavior == null || !CurrentAttackBehavior.isAvailable || !CurrentAttackBehavior.Ready)
             CurrentAttackBehavior = null;
 
         //어택 behavior를 순회하며 isAvailable이 참인 것 중 우선도가 가장 높은 것은 현재 실행할 behavior로 지정 
         foreach (AttackBehavior behavior in attackBehaviors)
         {
-            if (behavior.isAvailable)
+            if (behavior.isAvailable && behavior.Ready)
             {
                 if (CurrentAttackBehavior == null || CurrentAttackBehavior.Priority < behavior.Priority)
-                    CurrentAttackBehavior = behavior;
+                        CurrentAttackBehavior = behavior;
             }
         }
     }
@@ -348,6 +384,16 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         {
             //  StateMachine.ChangeState<DeadState>();
         }
+    }
+
+    public void OnAttackStart()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnAttackEnd()
+    {
+        throw new NotImplementedException();
     }
     #endregion
 

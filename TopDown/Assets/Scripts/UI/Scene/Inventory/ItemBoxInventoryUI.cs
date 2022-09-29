@@ -104,8 +104,9 @@ public class ItemBoxInventoryUI : InventoryUI
             }
               
         }
-        inven.inventoryObject.AddItem(ItemBoxslot.item, ItemBoxslot.amount);
-        ItemBoxslot.RemoveItem();
+        if(inven.inventoryObject.AddItem(ItemBoxslot.item, ItemBoxslot.amount))
+            ItemBoxslot.RemoveItem();
+
     }
 
     public bool ConnectInven(GameObject invenGo)

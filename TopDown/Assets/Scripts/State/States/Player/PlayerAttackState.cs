@@ -31,7 +31,10 @@ public class PlayerAttackState : State<PlayerController>
             stateMachine.ChangeState<PlayerIdleState>();
             return;
         }
-        context.transform.rotation = Quaternion.LookRotation((context.Target.position - context.transform.position).normalized);
+        if(context.CurrentAttackBehavior.type != Define.AttackType.Skill_NoneTarget)
+        {
+            context.transform.rotation = Quaternion.LookRotation((context.Target.position - context.transform.position).normalized);
+        }
         //트리거를 키기 전에 컨트롤러 이벤트핸들러에 함수 추가
         _attackStateController.enterAttackStateHandler += OnEnterAttackState;
         _attackStateController.exitAttackStateHandler += OnExitAttackState;
@@ -47,7 +50,7 @@ public class PlayerAttackState : State<PlayerController>
             _animator.SetBool(hashAttack, false);
             stateMachine.ChangeState<PlayerMoveState>();
         }
-        if(context.Target.GetComponent<IDamageable>()?.IsAlive == false)
+        if(context.Target != null && context.Target.GetComponent<IDamageable>()?.IsAlive == false)
         {
             stateMachine.ChangeState<PlayerIdleState>();
         }

@@ -16,10 +16,11 @@ public abstract class AttackBehavior : MonoBehaviour
     public int BaseDamage { get; protected set; } = 10;
     public float Range { get; protected set; } = 2f;
     public bool isAvailable => calcCoolTime >= coolTime;
-
-
+    public bool Ready { get; set; } = true;
+    public Define.AttackType type { get; protected set; } = Define.AttackType.Default;
     protected float coolTime = 0f;
     protected float calcCoolTime = 0f;
+    public KeyCode Key { get; protected set; } = KeyCode.None;
 
     public GameObject effectPrefab;
     public int targetMask;

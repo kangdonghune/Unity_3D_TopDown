@@ -130,6 +130,14 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         }
     }
 
+    public void OnAttackStart()
+    {
+    }
+
+    public void OnAttackEnd()
+    {
+    }
+
     public bool IsAlive => Data.stats.HP > 0;
 
  
@@ -160,6 +168,8 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     {
         transform.gameObject.GetOrAddComponent<WayPoint>();//만약 waypoint컴퍼넌트 없으면 추가
     }
+
+ 
     #endregion
 
 

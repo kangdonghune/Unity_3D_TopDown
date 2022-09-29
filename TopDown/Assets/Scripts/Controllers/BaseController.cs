@@ -9,6 +9,9 @@ public abstract class BaseController : MonoBehaviour
     [SerializeField]
     public List<AttackBehavior> attackBehaviors = new List<AttackBehavior>();
 
+    [SerializeField]
+    public List<AttackBehavior> SkillBehaviors = new List<AttackBehavior>();
+
     //Stat
     [HideInInspector]
     public StatsObject Stats { get; protected set; }
@@ -35,7 +38,11 @@ public abstract class BaseController : MonoBehaviour
             return;
         foreach (AttackBehavior behavior in behaviors)
         {
-            attackBehaviors.Add(behavior);
+            attackBehaviors.Add(behavior); //기본적으로 스킬이든 평타든 어텍비헤비어에 넣고
+            if (behavior.type == Define.AttackType.Skill_Target || behavior.type == Define.AttackType.Skill_NoneTarget)
+            {
+                SkillBehaviors.Add(behavior); //스킬만 별도로 스킬 비헤비어에 추가로 모은다.
+            }
         }
            
     }

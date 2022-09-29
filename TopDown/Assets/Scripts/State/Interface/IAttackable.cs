@@ -7,4 +7,6 @@ public interface IAttackable
     AttackBehavior CurrentAttackBehavior { get; }
 
     void OnExecuteAttack(int attackIndex);
+    void OnAttackStart();
+    void OnAttackEnd();
 }

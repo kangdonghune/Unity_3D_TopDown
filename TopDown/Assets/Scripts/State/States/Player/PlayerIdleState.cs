@@ -30,11 +30,8 @@ public class PlayerIdleState : State<PlayerController>
 
     public override void Update(float deltaTime)
     {
-        //if(context.Target != null)
-        //{
-        //    if (_navAgent.remainingDistance < _navAgent.stoppingDistance)
-        //        stateMachine.ChangeState<PlayerAttackState>();
-        //}
+        if(context.CurrentAttackBehavior.type == Define.AttackType.Skill_NoneTarget && context.CurrentAttackBehavior.Ready)
+            stateMachine.ChangeState<PlayerAttackState>();
         if (context.isMove == true)
             stateMachine.ChangeState<PlayerMoveState>();
     }
