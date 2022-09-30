@@ -41,7 +41,9 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     [HideInInspector]
     public bool _isOnUI;
 
- 
+    public AttackBehavior currentAttackBehavior;
+
+
     [HideInInspector]
     public bool isMove = false;
 
@@ -110,6 +112,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     {
         _isOnUI = EventSystem.current.IsPointerOverGameObject();
         CheckAttackBehavior();
+        currentAttackBehavior = CurrentAttackBehavior;
     }
 
     #region MouseFunc
@@ -355,11 +358,41 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     public AttackBehavior CurrentAttackBehavior { get; private set; }
 
-    public void OnExecuteAttack(int attackIndex)
+    public void OnAttackStart()
     {
+        if (CurrentAttackBehavior != null)
+        {
+            CurrentAttackBehavior.AttackStart();
+        }
+    }
+
+    public void OnAttackUpdate()
+    {
+        if (CurrentAttackBehavior != null)
+        {
+            CurrentAttackBehavior.AttackUpdate();
+        }
+    }
+
+    public void OnAttackEnd()
+    {
+        if (CurrentAttackBehavior != null)
+        {
+            CurrentAttackBehavior.AttackEnd();
+        }
+    }
+
+    public void OnExecuteAttack(GameObject targetObj)
+    {
+        if (CurrentAttackBehavior != null && targetObj != null)
+        {
+            CurrentAttackBehavior.ExecuteAttack(targetObj);
+            return;
+        }    
+
         if (CurrentAttackBehavior != null && Target != null)
         {
-            CurrentAttackBehavior.ExecuteAttack(Target.gameObject, projectileTransform);
+            CurrentAttackBehavior.ExecuteAttack(Target.gameObject);
         }
     }
 
@@ -386,15 +419,9 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
     }
 
-    public void OnAttackStart()
-    {
-        throw new NotImplementedException();
-    }
 
-    public void OnAttackEnd()
-    {
-        throw new NotImplementedException();
-    }
+
+
     #endregion
 
     #region Corutine

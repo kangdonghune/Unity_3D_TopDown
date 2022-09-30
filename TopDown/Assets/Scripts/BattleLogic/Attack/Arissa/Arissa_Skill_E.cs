@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class Arissa_Skill_E : AttackBehavior
 {
+
+
+    public override void AttackStart()
+    {
+        //gameObject.GetComponent<PlayerController>().attackCollider.enabled = true;
+    }
+
+    public override void AttackUpdate()
+    {
+
+    }
+    public override void AttackEnd()
+    {
+        calcCoolTime = 0f;
+        Ready = false;
+        gameObject.GetComponent<PlayerController>().StateMachine.ChangeState<PlayerIdleState>();
+        //gameObject.GetComponent<PlayerController>().attackCollider.enabled = false;
+    }
+
     public override void ExecuteAttack(GameObject target = null, Transform startPoint = null)
     {
-        if (target != null)
-        {
-            //StatsObject attackStat = gameObject.GetComponent<BaseController>().Stats;
-            //StatsObject targetStat = target.GetComponent<BaseController>().Stats;
-            //int calcDamage = (int)(attackStat.GetModifiedValue(Define.UnitAttribute.Attack) - targetStat.GetModifiedValue(Define.UnitAttribute.Defence));
-            //calcDamage = calcDamage > 0 ? calcDamage : 0;
-            //int Damage = Value + calcDamage;
-            //target.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab, gameObject);
-        }
-
-        calcCoolTime = 0f;
+        
     }
 
     protected override void Init()
@@ -28,8 +37,8 @@ public class Arissa_Skill_E : AttackBehavior
         Key = KeyCode.E;
         Value = 50;
         Range = 2f;
-        coolTime = 0f;
-        calcCoolTime = 0f;
+        coolTime = 5f;
+        calcCoolTime = 5f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;
     }
 }

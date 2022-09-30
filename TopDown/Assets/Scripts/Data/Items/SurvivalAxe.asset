@@ -24,6 +24,6 @@ MonoBehaviour:
       value: 50
     - stat: 3
       value: 0.15
-  itemAmount: 0
+  itemAmount: 1
   boneNames: []
   description: 

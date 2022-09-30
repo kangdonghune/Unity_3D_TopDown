@@ -6,7 +6,8 @@ public interface IAttackable
 {
     AttackBehavior CurrentAttackBehavior { get; }
 
-    void OnExecuteAttack(int attackIndex);
+    void OnExecuteAttack(GameObject targetObj);
     void OnAttackStart();
+    void OnAttackUpdate();
     void OnAttackEnd();
 }

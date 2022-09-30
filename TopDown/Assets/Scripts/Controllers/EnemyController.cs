@@ -122,7 +122,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
     public AttackBehavior CurrentAttackBehavior { get; private set; }
 
-    public void OnExecuteAttack(int attackIndex)
+    public void OnExecuteAttack(GameObject targetObj)
     {
         if(CurrentAttackBehavior != null && Target != null)
         {
@@ -133,7 +133,9 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     public void OnAttackStart()
     {
     }
-
+    public void OnAttackUpdate()
+    {
+    }
     public void OnAttackEnd()
     {
     }
@@ -169,7 +171,9 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         transform.gameObject.GetOrAddComponent<WayPoint>();//만약 waypoint컴퍼넌트 없으면 추가
     }
 
- 
+
+
+
     #endregion
 
 

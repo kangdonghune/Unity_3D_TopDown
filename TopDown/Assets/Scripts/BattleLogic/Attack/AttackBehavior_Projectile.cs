@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class AttackBehavior_Projectile : AttackBehavior
 {
+    public override void AttackEnd()
+    {
+    }
+
+    public override void AttackStart()
+    {
+    }
+
+    public override void AttackUpdate()
+    {
+    }
 
     public override void ExecuteAttack(GameObject target = null, Transform startPoint = null)
     {

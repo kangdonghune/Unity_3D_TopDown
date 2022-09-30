@@ -16,6 +16,7 @@ public abstract class AttackBehavior : MonoBehaviour
     public int Value { get; protected set; } = 10;
     public float Range { get; protected set; } = 2f;
     public bool isAvailable => calcCoolTime >= coolTime;
+    public float RemainCoolTime => coolTime - calcCoolTime > 0 ? coolTime - calcCoolTime : 0;
     public bool Ready { get; set; } = true;
     public Define.AttackType type { get; protected set; } = Define.AttackType.Default;
     protected float coolTime = 0f;
@@ -48,4 +49,8 @@ public abstract class AttackBehavior : MonoBehaviour
 
     //타겟이 없는 범위 공격을 고려 default null, startPoint는 투사체 등의 생성 위치
     public abstract void ExecuteAttack(GameObject target = null,Transform startPoint = null);
+
+    public abstract void AttackUpdate();
+    public abstract void AttackStart();
+    public abstract void AttackEnd();
 }

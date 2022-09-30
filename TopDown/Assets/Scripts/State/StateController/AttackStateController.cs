@@ -44,9 +44,9 @@ public class AttackStateController : MonoBehaviour
     }
 
     //애니메이터에서 해당 이름으로 이벤트 삽입하고 해당 타이밍에 이 함수 호출
-    public void OnCheckAttackCollider(int attackIndex)
+    public void OnCheckAttackCollider(GameObject target)
     {
-        GetComponent<IAttackable>().OnExecuteAttack(attackIndex);
+        GetComponent<IAttackable>().OnExecuteAttack(target);
     }
     #endregion
 

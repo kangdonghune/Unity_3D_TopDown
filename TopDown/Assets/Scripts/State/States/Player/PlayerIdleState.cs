@@ -35,6 +35,13 @@ public class PlayerIdleState : State<PlayerController>
             stateMachine.ChangeState<PlayerAttackState>();
             return;
         }
+
+        if(context.Target != null && context.isMove == false)
+        {
+            stateMachine.ChangeState<PlayerAttackState>();
+            return;
+        }
+
         if (context.isMove == true)
         {
             stateMachine.ChangeState<PlayerMoveState>();

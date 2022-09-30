@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class Arissa_Skill_Q : AttackBehavior
 {
+
+
+    public override void AttackStart()
+    {
+ 
+        //gameObject.GetComponent<PlayerController>().attackCollider.enabled = true;
+    }
+
+    public override void AttackUpdate()
+    {
+    }
+
+    public override void AttackEnd()
+    {
+        calcCoolTime = 0f;
+        Ready = false;
+        gameObject.GetComponent<PlayerController>().StateMachine.ChangeState<PlayerIdleState>();
+        //gameObject.GetComponent<PlayerController>().attackCollider.enabled = false;
+    }
+
     public override void ExecuteAttack(GameObject target = null, Transform startPoint = null)
     {
         if (target != null)
@@ -16,7 +36,7 @@ public class Arissa_Skill_Q : AttackBehavior
             target.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab, gameObject);
         }
 
-        calcCoolTime = 0f;
+   
     }
 
     protected override void Init()
@@ -28,8 +48,8 @@ public class Arissa_Skill_Q : AttackBehavior
         Key = KeyCode.Q;
         Value = 60;
         Range = 2f;
-        coolTime = 0f;
-        calcCoolTime = 0f;
+        coolTime = 3f;
+        calcCoolTime = 3f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;
     }
 }

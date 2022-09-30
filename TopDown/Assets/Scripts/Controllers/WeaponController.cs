@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
+    private PlayerController _controller;
+
     void Start()
     {
-        transform.root.GetComponent<PlayerController>().attackCollider = gameObject.GetComponentInChildren<Collider>();
+        _controller = transform.root.GetComponent<PlayerController>();
+        _controller.attackCollider = gameObject.GetComponentInChildren<Collider>();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        _controller.OnExecuteAttack(other.gameObject);
+    }
+
 }

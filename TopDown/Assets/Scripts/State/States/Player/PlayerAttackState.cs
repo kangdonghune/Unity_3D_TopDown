@@ -47,14 +47,26 @@ public class PlayerAttackState : State<PlayerController>
 
     public override void Update(float deltaTime)
     {
-        if(context.isMove)
+        _navAgent.velocity = Vector3.zero;
+        _navAgent.ResetPath();
+
+        if (context.CurrentAttackBehavior != null)
+            _animator.SetInteger(hashAttackIndex, context.CurrentAttackBehavior.AnimationIndex);
+
+        if (context.CurrentAttackBehavior.AnimationIndex > 0)
+            return;
+
+        if (context.isMove)
         {
             _animator.SetBool(hashAttack, false);
-            stateMachine.ChangeState<PlayerMoveState>();
+            stateMachine.ChangeState<PlayerIdleState>();
+            return;
         }
         if(context.Target != null && context.Target.GetComponent<IDamageable>()?.IsAlive == false)
         {
+            _animator.SetBool(hashAttack, false);
             stateMachine.ChangeState<PlayerIdleState>();
+            return;
         }
         
     }
@@ -72,7 +84,5 @@ public class PlayerAttackState : State<PlayerController>
 
     public void OnExitAttackState()
     {
-        _animator.SetBool(hashAttack, false);
-        context.CurrentAttackBehavior.Ready = false;
     }
 }
