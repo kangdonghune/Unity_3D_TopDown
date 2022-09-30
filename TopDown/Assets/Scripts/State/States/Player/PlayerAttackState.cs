@@ -14,6 +14,7 @@ public class PlayerAttackState : State<PlayerController>
 
     private int hashAttack = Animator.StringToHash("Attack");
     private int hashAttackIndex = Animator.StringToHash("AttackIndex");
+    private int hashAttackSpeed = Animator.StringToHash("AttackSpeed");
 
     public override void Init()
     {
@@ -49,6 +50,7 @@ public class PlayerAttackState : State<PlayerController>
     {
         _navAgent.velocity = Vector3.zero;
         _navAgent.ResetPath();
+        _animator.SetFloat(hashAttackSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.AttackSpeed));
 
         if (context.CurrentAttackBehavior != null)
             _animator.SetInteger(hashAttackIndex, context.CurrentAttackBehavior.AnimationIndex);

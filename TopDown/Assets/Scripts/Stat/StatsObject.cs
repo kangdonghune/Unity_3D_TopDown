@@ -124,6 +124,8 @@ public class StatsObject : ScriptableObject
     public float AddHP(float value)
     {
         HP += value;
+        if (HP > GetModifiedValue(Define.UnitAttribute.HP))
+            HP = GetModifiedValue(Define.UnitAttribute.HP);
         OnChangeStats?.Invoke(this);
 
         return HP;
@@ -132,6 +134,8 @@ public class StatsObject : ScriptableObject
     public float AddMana(float value)
     {
         Mana += value;
+        if (Mana > GetModifiedValue(Define.UnitAttribute.Mana))
+            Mana = GetModifiedValue(Define.UnitAttribute.Mana);
         OnChangeStats?.Invoke(this);
         return Mana;
     }

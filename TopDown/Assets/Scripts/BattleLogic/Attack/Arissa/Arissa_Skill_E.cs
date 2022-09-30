@@ -20,6 +20,7 @@ public class Arissa_Skill_E : AttackBehavior
         calcCoolTime = 0f;
         Ready = false;
         gameObject.GetComponent<PlayerController>().StateMachine.ChangeState<PlayerIdleState>();
+        gameObject.GetComponent<PlayerController>().AddBuff(new ItemBuff(Define.UnitAttribute.AttackSpeed, 1f), 5f);
         //gameObject.GetComponent<PlayerController>().attackCollider.enabled = false;
     }
 
@@ -37,8 +38,9 @@ public class Arissa_Skill_E : AttackBehavior
         Key = KeyCode.E;
         Value = 50;
         Range = 2f;
-        coolTime = 5f;
-        calcCoolTime = 5f;
+        Active = false;
+        coolTime = 8f;
+        calcCoolTime = 8f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;
     }
 }

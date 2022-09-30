@@ -48,6 +48,7 @@ public class Arissa_Skill_Q : AttackBehavior
         Key = KeyCode.Q;
         Value = 60;
         Range = 2f;
+        Active = true;
         coolTime = 3f;
         calcCoolTime = 3f;
         targetMask = gameObject.GetComponent<BaseController>().targetMask;

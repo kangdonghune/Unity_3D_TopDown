@@ -22,6 +22,7 @@ public abstract class AttackBehavior : MonoBehaviour
     protected float coolTime = 0f;
     protected float calcCoolTime = 0f;
     public KeyCode Key { get; protected set; } = KeyCode.None;
+    public bool Active = true;
 
     public GameObject effectPrefab;
     public int targetMask;
@@ -32,7 +33,7 @@ public abstract class AttackBehavior : MonoBehaviour
 
     protected abstract void Init();
 
-    void Start()
+    void Awake()
     {
         Init();
     }

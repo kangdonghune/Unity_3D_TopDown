@@ -36,7 +36,7 @@ public class PlayerIdleState : State<PlayerController>
             return;
         }
 
-        if(context.Target != null && context.isMove == false)
+        if (context.Target != null && context.isMove == false && context.Target.GetComponent<IInteractable>() == null)
         {
             stateMachine.ChangeState<PlayerAttackState>();
             return;

@@ -18,12 +18,12 @@ public abstract class BaseController : MonoBehaviour
 
     public void Awake()
     {
+        AttackBehaviorSet();
         AwakeInit();
     }
 
     public void Start()
     {
-        AttackBehaviorSet();
         Init();
     }
 
@@ -56,5 +56,45 @@ public abstract class BaseController : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Managers.Resource.Destroy(gameObject);
+    }
+
+    public IEnumerator CoAddBuff(ItemBuff buff, float duration)
+    {
+        foreach (Attribute attribute in Stats.attributes)
+        {
+            if (attribute.type == buff.stat)
+            {
+                attribute.value.AddModifier(buff);
+                yield return new WaitForSeconds(duration);
+                attribute.value.RemoveModifier(buff);
+            }
+        }
+    }
+
+ 
+    protected IEnumerator CoAddHp(ItemBuff buff, int amount, float duration)
+    {
+        int count = amount;
+        if (buff.stat != Define.UnitAttribute.HP)
+            yield break;
+        while (count > 0)
+        {
+            Stats.AddHP(buff.value/ amount);
+            yield return new WaitForSeconds(duration / amount);
+            count--;
+        }
+    }
+
+    protected IEnumerator CoAddMana(ItemBuff buff, int amount, float duration)
+    {
+        int count = amount;
+        if (buff.stat != Define.UnitAttribute.Mana)
+            yield break;
+        while (count > 0)
+        {
+            Stats.AddMana(buff.value / amount);
+            yield return new WaitForSeconds(duration / amount);
+            count--;
+        }
     }
 }

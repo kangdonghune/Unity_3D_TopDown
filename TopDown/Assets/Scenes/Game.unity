@@ -7678,7 +7678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 669708092}
-  m_Layer: 8
+  m_Layer: 14
   m_Name: SurvivalHammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9412,7 +9412,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 784041523}
-  m_Layer: 8
+  m_Layer: 14
   m_Name: Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27795,6 +27795,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2552519347935293123, guid: 7149f7cf7372e4341a6b04f91ee4023e, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 2552519348064570969, guid: 7149f7cf7372e4341a6b04f91ee4023e, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -27882,6 +27886,10 @@ PrefabInstance:
     - target: {fileID: 2552519348820461104, guid: 7149f7cf7372e4341a6b04f91ee4023e, type: 3}
       propertyPath: m_Name
       value: SurvivalAxe
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552519348820461104, guid: 7149f7cf7372e4341a6b04f91ee4023e, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7149f7cf7372e4341a6b04f91ee4023e, type: 3}

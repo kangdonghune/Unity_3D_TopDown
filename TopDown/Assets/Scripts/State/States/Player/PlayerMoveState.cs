@@ -28,7 +28,10 @@ public class PlayerMoveState : State<PlayerController>
     public override void Update(float deltaTime)
     {
         if (context.CurrentAttackBehavior.type == Define.AttackType.Skill_NoneTarget && context.CurrentAttackBehavior.Ready)
+        {
             stateMachine.ChangeState<PlayerAttackState>();
+            return;
+        }
 
         _animator.SetFloat(hashMoveSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * 10);
 

@@ -13,9 +13,14 @@ public class ItemBuff : IModifier
     public float value;
 
 
-
     public ItemBuff(float value)
     {
+        this.value = value;
+    }
+
+    public ItemBuff(Define.UnitAttribute stat, float value)
+    {
+        this.stat = stat;
         this.value = value;
     }
 

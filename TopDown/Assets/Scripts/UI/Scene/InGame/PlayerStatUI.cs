@@ -61,7 +61,7 @@ public class PlayerStatUI : MonoBehaviour
             foreach(Attribute attribute in playerStats.attributes)
             {
                 if(attribute.type == buff.stat)
-                {
+                { 
                     attribute.value.RemoveModifier(buff);
                 }
             }

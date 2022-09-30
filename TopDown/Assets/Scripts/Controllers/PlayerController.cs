@@ -38,10 +38,9 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private UI_UnitDefault _defalutUI;
     private PlayerInGameUI _playerInGameUI;
     private PlayerStatUI _statUI;
+    private SkillUI _skillUI;
     [HideInInspector]
     public bool _isOnUI;
-
-    public AttackBehavior currentAttackBehavior;
 
 
     [HideInInspector]
@@ -81,6 +80,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             _statUI.playerStats = Stats;
             _statUI.SetRendering(false);
             _statUI.enabled = true;
+            //스킬UI
+            _skillUI = Inventory.FindChild<SkillUI>();
+            _skillUI.skills = SkillBehaviors;
+
         } //UI 별 이벤트 추가
         PlayerEquipment equip = GetComponent<PlayerEquipment>(); //아이템 장착 시 해당 아이템의 prefab생성하여 착용하기 위한 컴퍼넌트
         if (equip != null)
@@ -104,6 +107,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         Managers.Input.KeyAction -= OnKeyEvent;
         Managers.Input.KeyAction += OnKeyEvent;
         _defalutUI._hpSlider.gameObject.SetActive(false);
+        StartCoroutine("CoRecovery");
        
     }
     #endregion
@@ -112,7 +116,6 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     {
         _isOnUI = EventSystem.current.IsPointerOverGameObject();
         CheckAttackBehavior();
-        currentAttackBehavior = CurrentAttackBehavior;
     }
 
     #region MouseFunc
@@ -317,10 +320,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             switch(buff.stat)
             {
                 case Define.UnitAttribute.HP:
-                    Stats.AddHP(buff.value);
+                    StartCoroutine(CoAddHp(buff, 5, 5f));
                     _defalutUI.CreateDamageText((int)buff.value);
                     break;
                 case Define.UnitAttribute.Mana:
+                    StartCoroutine(CoAddMana(buff, 5, 5f));
                     break;
                 case Define.UnitAttribute.Attack:
                     break;
@@ -419,12 +423,30 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
     }
 
-
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
 
 
     #endregion
 
     #region Corutine
+
+    public void AddBuff(ItemBuff buff, float duration)
+    {
+        StartCoroutine(CoAddBuff(buff, duration));
+    }
+
+    private IEnumerator CoRecovery()
+    {
+        while(true)
+        {
+            Stats.AddHP(1);
+            Stats.AddMana(1);
+            yield return new WaitForSeconds(1);
+        }
+    }
 
     #endregion
 }
