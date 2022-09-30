@@ -13,6 +13,7 @@ public class PlayerAttackState : State<PlayerController>
     private Vector3 _lookDir;
 
     private int hashAttack = Animator.StringToHash("Attack");
+    private int hashAttackIndex = Animator.StringToHash("AttackIndex");
 
     public override void Init()
     {
@@ -40,6 +41,7 @@ public class PlayerAttackState : State<PlayerController>
         _attackStateController.exitAttackStateHandler += OnExitAttackState;
         //실제 애니메이터에서 state로 넘어가는 건 트리거를 켜주는 순간
         _animator.SetBool(hashAttack, true);
+        _animator.SetInteger(hashAttackIndex, context.CurrentAttackBehavior.AnimationIndex);
         context.isMove = false;
     }
 
@@ -70,5 +72,7 @@ public class PlayerAttackState : State<PlayerController>
 
     public void OnExitAttackState()
     {
+        _animator.SetBool(hashAttack, false);
+        context.CurrentAttackBehavior.Ready = false;
     }
 }

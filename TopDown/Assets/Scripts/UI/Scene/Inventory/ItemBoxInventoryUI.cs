@@ -56,6 +56,7 @@ public class ItemBoxInventoryUI : InventoryUI
 
             inventoryObject.slots[i].slotUI = go;
             inventoryObject.slots[i].parent = inventoryObject;
+            inventoryObject.slots[i].OnPostUpdate += OnPostUpdate;
             slotUIs.Add(go, inventoryObject.slots[i]);
             go.name += ": " + i;
         }

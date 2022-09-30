@@ -50,6 +50,7 @@ public class StaticInventoryUI : InventoryUI
             AddEvent(go, EventTriggerType.PointerClick, (data) => { OnClick(go, (PointerEventData)data); });
 
             inventoryObject.slots[i].slotUI = go;
+            inventoryObject.slots[i].OnPostUpdate += OnPostUpdate;
             slotUIs.Add(go, inventoryObject.slots[i]);
         }
     }

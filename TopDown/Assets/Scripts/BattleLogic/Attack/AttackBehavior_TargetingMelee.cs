@@ -12,7 +12,7 @@ public class AttackBehavior_TargetingMelee : AttackBehavior
         StatsObject targetStat = target.GetComponent<BaseController>().Stats;
         int calcDamage = (int)(attackStat.GetModifiedValue(Define.UnitAttribute.Attack) - targetStat.GetModifiedValue(Define.UnitAttribute.Defence));
         calcDamage = calcDamage > 0 ? calcDamage : 0;
-        int Damage = BaseDamage + calcDamage;
+        int Damage = Value + calcDamage;
 
         target.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab, gameObject);
         calcCoolTime = 0f;
@@ -22,7 +22,7 @@ public class AttackBehavior_TargetingMelee : AttackBehavior
     {
         AnimationIndex = (int)Define.MonsterAttackPattern.Attack1;
         Priority = (int)Define.AttackPrioty.Fifth;
-        BaseDamage = 5;
+        Value = 5;
         Range = 2.5f;
         coolTime = 2f;
         calcCoolTime = coolTime;

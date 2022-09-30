@@ -62,7 +62,7 @@ public class PlayerEquipment : MonoBehaviour
             case Define.ItemType.Gloves:
             case Define.ItemType.Pants:
             case Define.ItemType.Boots:
-                itemInstances[index] = EquipSkinnedItem(itemObject);
+                //itemInstances[index] = EquipSkinnedItem(itemObject);
                 break;
             default:
                 break;
@@ -86,7 +86,7 @@ public class PlayerEquipment : MonoBehaviour
             case Define.ItemType.Gloves:
             case Define.ItemType.Pants:
             case Define.ItemType.Boots:
-                itemInstances[index] = EquipSkinnedItem(itemObject);
+                //itemInstances[index] = EquipSkinnedItem(itemObject);
                 break;
             default:
                 break;

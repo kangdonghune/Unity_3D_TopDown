@@ -33,7 +33,6 @@ public abstract class InventoryUI : MonoBehaviour
         {
             //전부 new로 만들어질 때 디펄트 값으로 되어 있으니 인벤토리UI가 처음 만들어 질 때 부모를 연결
             inventoryObject.slots[i].parent = inventoryObject;
-            inventoryObject.slots[i].OnPostUpdate += OnPostUpdate;
         }
 
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
@@ -82,13 +81,13 @@ public abstract class InventoryUI : MonoBehaviour
         MouseData.interfaceMouseIsOver = null;
     }
 
-    public void OnEnterSlot(GameObject go)
+    public virtual void OnEnterSlot(GameObject go)
     {
         MouseData.slotHoveredOver = go;
         MouseData.preSlotHoveredOver = go;
     }
 
-    public void OnExitSlot(GameObject go)
+    public virtual void OnExitSlot(GameObject go)
     {
         MouseData.slotHoveredOver = null;
     }

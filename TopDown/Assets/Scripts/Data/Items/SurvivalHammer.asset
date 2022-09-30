@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fc189ab58505f42af05365846e05ea, type: 3}
+  m_Name: SurvivalHammer
+  m_EditorClassIdentifier: 
+  type: 0
+  stackable: 0
+  icon: {fileID: 21300000, guid: 7092324b93851a14c858530cca4a6b26, type: 3}
+  modelPrefab: {fileID: 5945096436287734566, guid: f688cac234fc7c84b8867f7a8cd68199, type: 3}
+  data:
+    id: 4
+    name: 
+    buffs:
+    - stat: 0
+      value: 300
+    - stat: 2
+      value: 100
+  itemAmount: 0
+  boneNames: []
+  description: "\uCD5C\uC885\uBCD1\uAE30\uD574\uBA38\n"

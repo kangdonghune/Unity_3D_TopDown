@@ -17,7 +17,7 @@ public class PlayerInGameUI : MonoBehaviour
 
     void Start()
     {
-        levelText.text = playerStats.level.ToString();
+        levelText.text = "LV:" + playerStats.level.ToString();
         HpSlider.value = playerStats.HealthPercentage;
         ManaSlider.value = playerStats.ManaPercentage;
         HPText.text = playerStats.HP.ToString("n0");
@@ -37,7 +37,7 @@ public class PlayerInGameUI : MonoBehaviour
 
     private void OnChangedStats(StatsObject statsObject)
     {
-        levelText.text = statsObject.level.ToString();
+        levelText.text = "LV:" + statsObject.level.ToString();
         HpSlider.value = statsObject.HealthPercentage;
         ManaSlider.value = statsObject.ManaPercentage;
         HPText.text = statsObject.HP.ToString("n0");

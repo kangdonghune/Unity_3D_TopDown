@@ -14,7 +14,7 @@ public class AttackBehavior_Projectile : AttackBehavior
         StatsObject targetStat = target.GetComponent<BaseController>().Stats;
         int calcDamage = (int)(attackStat.GetModifiedValue(Define.UnitAttribute.Attack) - targetStat.GetModifiedValue(Define.UnitAttribute.Defence));
         calcDamage = calcDamage > 0 ? calcDamage : 0;
-        int Damage = BaseDamage + calcDamage;
+        int Damage = Value + calcDamage;
 
         Vector3 projectilePosition = startPoint?.position ?? transform.position;
         if(effectPrefab)
@@ -43,7 +43,7 @@ public class AttackBehavior_Projectile : AttackBehavior
     {
         AnimationIndex = (int)Define.MonsterAttackPattern.Projectile;
         Priority = (int)Define.AttackPrioty.Firts;
-        BaseDamage = 10;
+        Value = 10;
         Range = 5f;
         coolTime = 10f;
         calcCoolTime = 0f;

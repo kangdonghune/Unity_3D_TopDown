@@ -13,7 +13,7 @@ public abstract class AttackBehavior : MonoBehaviour
 
     public int AnimationIndex { get; protected set; }
     public int Priority { get; protected set; } //동시에 여러 공격이 가능할 때 공격 순서의 우선도.
-    public int BaseDamage { get; protected set; } = 10;
+    public int Value { get; protected set; } = 10;
     public float Range { get; protected set; } = 2f;
     public bool isAvailable => calcCoolTime >= coolTime;
     public bool Ready { get; set; } = true;

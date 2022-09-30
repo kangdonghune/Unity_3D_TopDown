@@ -12,10 +12,10 @@ public class Arissa_Skill_W : AttackBehavior
             //StatsObject targetStat = target.GetComponent<BaseController>().Stats;
             //int calcDamage = (int)(attackStat.GetModifiedValue(Define.UnitAttribute.Attack) - targetStat.GetModifiedValue(Define.UnitAttribute.Defence));
             //calcDamage = calcDamage > 0 ? calcDamage : 0;
-            //int Damage = BaseDamage + calcDamage;
+            //int Damage = Value + calcDamage;
             //target.GetComponent<IDamageable>()?.TakeDamage(Damage, effectPrefab, gameObject);
         }
-
+        Ready = false;
         calcCoolTime = 0f;
     }
 
@@ -26,7 +26,7 @@ public class Arissa_Skill_W : AttackBehavior
         Ready = false;
         type = Define.AttackType.Skill_NoneTarget;
         Key = KeyCode.W;
-        BaseDamage = 90;
+        Value = 90;
         Range = 2f;
         coolTime = 0f;
         calcCoolTime = 0f;
