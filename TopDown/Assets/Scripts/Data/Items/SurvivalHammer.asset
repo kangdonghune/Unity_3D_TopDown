@@ -17,8 +17,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 7092324b93851a14c858530cca4a6b26, type: 3}
   modelPrefab: {fileID: 5945096436287734566, guid: f688cac234fc7c84b8867f7a8cd68199, type: 3}
   data:
-    id: 4
-    name: 
+    id: 2
+    name: "\uACF5\uC0AC\uC7A5 \uC624\uD568\uB9C8"
     buffs:
     - stat: 0
       value: 300

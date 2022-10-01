@@ -18,7 +18,7 @@ MonoBehaviour:
   modelPrefab: {fileID: 2081985540835368900, guid: 78f51c355e736cb4fb8a2c24eb343793, type: 3}
   data:
     id: 0
-    name: Axe
+    name: "\uC11C\uBC14\uC774\uBC8C\uB3C4\uB07C"
     buffs:
     - stat: 2
       value: 50
@@ -26,4 +26,5 @@ MonoBehaviour:
       value: 0.15
   itemAmount: 1
   boneNames: []
-  description: 
+  description: "\uAE09\uD558\uAC8C \uB9CC\uB4E0 \uAC70 \uCE58\uACE4 \uC0DD\uAC01\uBCF4\uB2E4
+    \uD2BC\uD2BC\uD558\uB2E4."

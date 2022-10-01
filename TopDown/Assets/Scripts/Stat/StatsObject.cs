@@ -10,6 +10,7 @@ public class StatsObject : ScriptableObject
 
     public int level;
     public int exp;
+    public int MaxExp = 100;
 
     public float HP { get; private set; }
     public float Mana { get; set; }
@@ -50,7 +51,17 @@ public class StatsObject : ScriptableObject
         }
     }
 
+    public float ExpPercentage
+    {
+        get
+        {
+            return (MaxExp > 0 ? (exp / (float)MaxExp) : 0f);
+        }
+
+    }
+
     public Action<StatsObject> OnChangeStats; //스텟 값이 변경되면 호출
+    public Action OnLevelChanged;
 
     public void InitializeAttribute(StatsObject statsObject)
     {
@@ -138,5 +149,34 @@ public class StatsObject : ScriptableObject
             Mana = GetModifiedValue(Define.UnitAttribute.Mana);
         OnChangeStats?.Invoke(this);
         return Mana;
+    }
+
+    public void LevelUp()
+    {
+        level++;
+        MaxExp += 10;
+        OnLevelChanged.Invoke();
+
+        //스텟값 초기화 base값 수정 시 base + buff 가 modifire에 적용. 기본적으론 modifier 0이니 base값으로초기화
+        SetBaseValue(Define.UnitAttribute.HP, 100 + (level * 30));
+        SetBaseValue(Define.UnitAttribute.Mana, 100 + (level * 30));
+        SetBaseValue(Define.UnitAttribute.Attack, 10 + (level * 10));
+        SetBaseValue(Define.UnitAttribute.AttackSpeed, 1f + (level * 0.1f));
+        SetBaseValue(Define.UnitAttribute.Defence, 10 + (level * 10));
+        SetBaseValue(Define.UnitAttribute.MoveSpeed, 0.1f);
+        //스텟값 초기화 및 최대값으로 현재값 수정
+        HP = GetModifiedValue(Define.UnitAttribute.HP);
+        Mana = GetModifiedValue(Define.UnitAttribute.Mana);
+    }
+
+    public void AddExp(int value)
+    {
+        exp += value;
+        if(exp >= MaxExp)
+        {
+            LevelUp();
+            AddExp(-100);
+        }
+        OnChangeStats?.Invoke(this);
     }
 }

@@ -12,8 +12,6 @@ public class DynamicInventoryUI : InventoryUI
     [HideInInspector]
     public StaticInventoryUI equipment;
 
-
-
     [SerializeField]
     protected GameObject slotPrefab;
 
@@ -28,6 +26,8 @@ public class DynamicInventoryUI : InventoryUI
 
     [Min(1), SerializeField]
     protected int numberOfColumn = 5;
+
+    private GameObject ItemTextBox;
 
 
     protected override void Awake()
@@ -54,6 +54,7 @@ public class DynamicInventoryUI : InventoryUI
             GameObject go = Managers.Resource.Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, transform);
             go.GetComponent<RectTransform>().anchoredPosition = CalculatePosition(i);
             go.GetComponent<RectTransform>().sizeDelta = size;
+            go.GetOrAddComponent<EventTrigger>().triggers.Clear();
 
             AddEvent(go, EventTriggerType.PointerEnter, delegate { OnEnterSlot(go); });
             AddEvent(go, EventTriggerType.PointerExit, delegate { OnExitSlot(go); });
@@ -74,6 +75,19 @@ public class DynamicInventoryUI : InventoryUI
 
             slotUIs[go].parent.AddItem(database.itemObjects[0].data, 10);
         }
+    }
+
+    public override void OnEnterSlot(GameObject go)
+    {
+        base.OnEnterSlot(go);
+        ItemTextBox = Managers.Resource.Instantiate("UI/Inventory/ItemTextBox", null, 1);
+        ItemTextBox.GetComponentInChildren<ItemInfo>().ItemObject = slotUIs[MouseData.slotHoveredOver].ItemObject;
+    }
+
+    public override void OnExitSlot(GameObject go)
+    {
+        base.OnExitSlot(go);
+        Managers.Resource.Destroy(ItemTextBox);
     }
 
     //public override void OnLButtonClick(InventorySlot slot)

@@ -14,6 +14,7 @@ public class PlayerInGameUI : MonoBehaviour
     public TextMeshProUGUI HPText;
     public Slider ManaSlider;
     public TextMeshProUGUI ManaText;
+    public Slider ExpSlider;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class PlayerInGameUI : MonoBehaviour
         ManaSlider.value = playerStats.ManaPercentage;
         HPText.text = playerStats.HP.ToString("n0");
         ManaText.text = playerStats.Mana.ToString("n0");
+        ExpSlider.value = playerStats.ExpPercentage;
     }
 
     public void AddEvent()
@@ -42,5 +44,6 @@ public class PlayerInGameUI : MonoBehaviour
         ManaSlider.value = statsObject.ManaPercentage;
         HPText.text = statsObject.HP.ToString("n0");
         ManaText.text = statsObject.Mana.ToString("n0");
+        ExpSlider.value = playerStats.ExpPercentage;
     }
 }

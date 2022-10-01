@@ -25,7 +25,7 @@ public class ItemBox : MonoBehaviour, IInteractable
             screenPos.y *= _itemBox.GetComponent<RectTransform>().rect.height;
             _itemBoxInven.GetComponent<RectTransform>().position = screenPos;
 
-
+            other.GetComponent<BaseController>().Stats.AddExp(10);
             return true;
         }
 

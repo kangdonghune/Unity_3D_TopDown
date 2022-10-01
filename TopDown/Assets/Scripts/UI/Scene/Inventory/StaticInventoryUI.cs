@@ -20,6 +20,8 @@ public class StaticInventoryUI : InventoryUI
     [SerializeField]
     protected Vector2 space;
 
+    private GameObject ItemTextBox;
+
     protected override void Awake()
     {
         //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
@@ -41,6 +43,7 @@ public class StaticInventoryUI : InventoryUI
         {
             GameObject go =  staticSlots[i];
             go.GetComponent<RectTransform>().sizeDelta = size;
+ 
 
             AddEvent(go, EventTriggerType.PointerEnter, delegate { OnEnterSlot(go); });
             AddEvent(go, EventTriggerType.PointerExit, delegate { OnExitSlot(go); });
@@ -53,6 +56,19 @@ public class StaticInventoryUI : InventoryUI
             inventoryObject.slots[i].OnPostUpdate += OnPostUpdate;
             slotUIs.Add(go, inventoryObject.slots[i]);
         }
+    }
+
+    public override void OnEnterSlot(GameObject go)
+    {
+        base.OnEnterSlot(go);
+        ItemTextBox = Managers.Resource.Instantiate("UI/Inventory/ItemTextBox", null, 1);
+        ItemTextBox.GetComponentInChildren<ItemInfo>().ItemObject = slotUIs[MouseData.slotHoveredOver].ItemObject;
+    }
+
+    public override void OnExitSlot(GameObject go)
+    {
+        base.OnExitSlot(go);
+        Managers.Resource.Destroy(ItemTextBox);
     }
 
     //public override void OnLButtonClick(InventorySlot slot)

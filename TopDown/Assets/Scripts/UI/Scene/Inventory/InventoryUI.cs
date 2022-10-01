@@ -56,8 +56,8 @@ public abstract class InventoryUI : MonoBehaviour
     {
         EventTrigger trigger = go.GetOrAddComponent<EventTrigger>();
         EventTrigger.Entry eventTrigger = new EventTrigger.Entry() { eventID = type };
+        eventTrigger.callback.RemoveListener(action);//이미 있는 상태라면 제거를 해줘야 중복 추가가 안된다.
         eventTrigger.callback.AddListener(action);
-        trigger.triggers.Remove(eventTrigger);//이미 있는 상태라면 제거를 해줘야 중복 추가가 안된다.
         trigger.triggers.Add(eventTrigger);
     }
     

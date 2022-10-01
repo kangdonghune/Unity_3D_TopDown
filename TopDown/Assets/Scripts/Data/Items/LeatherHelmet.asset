@@ -18,10 +18,10 @@ MonoBehaviour:
   modelPrefab: {fileID: 0}
   data:
     id: 10
-    name: 
+    name: "\uAC00\uC8FD \uD5EC\uB984"
     buffs:
     - stat: 4
       value: 10
   itemAmount: 0
   boneNames: []
-  description: "\uAE30\uCD08 \uBC29\uC5B4\uAD6C\n"
+  description: "\uBA38\uB9AC\uAC00 \uAC04\uC9C0\uB7EC\uC6CC \uC9C0\uB294 \uD22C\uAD6C\n"

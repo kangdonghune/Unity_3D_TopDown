@@ -54,7 +54,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     #region UnityRotationFunc
     protected override void AwakeInit()
     {
-        StatsObject origin = Resources.Load<StatsObject>("Prefab/UI/Stat/PlayerStats");
+        StatsObject origin = Resources.Load<StatsObject>("Prefab/UI/Stat/PlayerStats"); 
         Stats = Instantiate<StatsObject>(origin);
         Stats.InitializeAttribute();
         UI_UnitDefault uI_origin = Resources.Load<UI_UnitDefault>("Prefab/UI/Unit/UI_UnitDefault");
@@ -108,15 +108,28 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         Managers.Input.KeyAction += OnKeyEvent;
         _defalutUI._hpSlider.gameObject.SetActive(false);
         StartCoroutine("CoRecovery");
-       
-    }
-    #endregion
+        Stats.OnLevelChanged -= SkillUnlock;
+        Stats.OnLevelChanged += SkillUnlock;
 
+    }
     protected virtual void Update()
     {
         _isOnUI = EventSystem.current.IsPointerOverGameObject();
         CheckAttackBehavior();
     }
+    #endregion
+
+
+    #region Skill
+
+    protected void SkillUnlock()
+    {
+        if (Stats.level > 3)
+            SkillBehaviors[2].Active = true;
+        if (Stats.level > 6)
+            SkillBehaviors[3].Active = true;
+    }
+    #endregion
 
     #region MouseFunc
     private void OnMouseEvent(Define.MouseEvent evt)
