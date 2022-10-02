@@ -38,6 +38,7 @@ public class PlayerEquipment : MonoBehaviour
             if(equipment.slots[i].CanPlaceInSlot(defalutItemObjects[i])) //디펄트 아이템이 해당 슬롯에 장착 가능한 타입인지 체크
                 equipment.slots[i].UpdateSlot(defalutItemObjects[i].data, 1);
         }
+        Managers.Craft.UpdateContainItems();
     }
 
     private void OnEquipItem(InventorySlot slot)
@@ -46,7 +47,7 @@ public class PlayerEquipment : MonoBehaviour
         if(itemObject == null)
         {
             //장비 인벤토리가 비어있다면 해당 슬롯의 첫번째 장비 타입으로 디펄트 아이템 장착
-            EquipDefalutItem(slot.allowedItems[0]);
+            //EquipDefalutItem(slot.allowedItems[0]);
             return;
         }
 

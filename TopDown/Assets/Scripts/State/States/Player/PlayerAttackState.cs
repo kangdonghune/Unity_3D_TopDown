@@ -27,6 +27,7 @@ public class PlayerAttackState : State<PlayerController>
 
     public override void Enter()
     {
+        context.state = Define.PlayerState.Attack;
         context.CheckAttackBehavior();
         if (_attackable.CurrentAttackBehavior == null)
         {

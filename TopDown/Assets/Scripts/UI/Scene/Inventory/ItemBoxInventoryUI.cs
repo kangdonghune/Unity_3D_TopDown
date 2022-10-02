@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemBoxInventoryUI : InventoryUI
+public class ItemBoxInventoryUI : SlotUI
 {
     public GameObject ConnectUserInven = null;
     private StaticInventoryUI equipment;
@@ -30,16 +30,16 @@ public class ItemBoxInventoryUI : InventoryUI
     [Min(1), SerializeField]
     protected int numberOfColumn = 5;
 
-    protected override void Awake()
+    protected void Awake()
     {
         //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
         InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/ItemBoxInventory");
         inventoryObject = Instantiate(original);
-        base.Awake();
+        CreateSlotUIs();
     }
 
 
-    public override void CreateSlotUIs()
+    public void CreateSlotUIs()
     {
         slotUIs = new Dictionary<GameObject, InventorySlot>();
 
@@ -86,13 +86,31 @@ public class ItemBoxInventoryUI : InventoryUI
         return new Vector3(x, y, 0f);
     }
 
+    public override void OnEnterSlot(GameObject go)
+    {
+        base.OnEnterSlot(go);
+        UpdateItemBox();
+        if (ItemTextBox != null)
+            ItemTextBox.transform.GetChild(0).GetComponent<RectTransform>().pivot = new Vector2(1f, 1f);
+    }
+
+    public override void OnExitSlot(GameObject go)
+    {
+        base.OnExitSlot(go);
+        Managers.Resource.Destroy(ItemTextBox);
+    }
+
     public override void OnRButtonClick(InventorySlot slot)
     {
         //slot의 아이템이 없거나 연결된 유저 인벤이 없는 상황이라면
         if (slot.ItemObject == null || ConnectUserInven == null)
             return;
         SendItem(slot);
+        Managers.Resource.Destroy(ItemTextBox);
+        UpdateItemBox();
     }
+
+
 
     private void SendItem(InventorySlot ItemBoxslot)
     {
@@ -101,12 +119,18 @@ public class ItemBoxInventoryUI : InventoryUI
             if (equipment.inventoryObject.slots[i].ItemObject == null)
             {
                 if (inventoryObject.SwapItems(ItemBoxslot, equipment.inventoryObject.slots[i]))
+                {
+                    Managers.Craft.UpdateContainItems();
                     return;
+                }
             }
               
         }
         if(inven.inventoryObject.AddItem(ItemBoxslot.item, ItemBoxslot.amount))
+        {
+            Managers.Craft.UpdateContainItems();
             ItemBoxslot.RemoveItem();
+        }
 
     }
 

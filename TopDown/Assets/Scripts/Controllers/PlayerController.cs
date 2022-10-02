@@ -27,7 +27,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     protected StateMachine<PlayerController> _stateMachine;
     public StateMachine<PlayerController> StateMachine { get { return _stateMachine; } }
-
+    public Define.PlayerState state;
 
     //UI
     [HideInInspector]
@@ -39,6 +39,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     private PlayerInGameUI _playerInGameUI;
     private PlayerStatUI _statUI;
     private SkillUI _skillUI;
+    private ReadyProductsUI _readycraftUI;
     [HideInInspector]
     public bool _isOnUI;
 
@@ -83,6 +84,9 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             //스킬UI
             _skillUI = Inventory.FindChild<SkillUI>();
             _skillUI.skills = SkillBehaviors;
+            //제작 UI
+            _readycraftUI = Inventory.FindChild<ReadyProductsUI>();
+            _readycraftUI.Owner = gameObject;
 
         } //UI 별 이벤트 추가
         PlayerEquipment equip = GetComponent<PlayerEquipment>(); //아이템 장착 시 해당 아이템의 prefab생성하여 착용하기 위한 컴퍼넌트
@@ -121,7 +125,39 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
 
     #region Skill
+    private void OnSkillReady()
+    {
+        //이미 예약된 스킬이 있다면 스킵
+        foreach (AttackBehavior behavior in SkillBehaviors)
+        {
+            if (behavior.Ready)
+                return;
+        }
 
+        //예약된 스킬이 없다면 예약
+
+        KeyCode key = KeyCode.None;
+        if (Input.GetKeyDown(KeyCode.Q))
+            key = KeyCode.Q;
+        if (Input.GetKeyDown(KeyCode.W))
+            key = KeyCode.W;
+        if (Input.GetKeyDown(KeyCode.E))
+            key = KeyCode.E;
+        if (Input.GetKeyDown(KeyCode.R))
+            key = KeyCode.R;
+
+        foreach (AttackBehavior behavior in SkillBehaviors)
+        {
+            if (behavior.Active == true && behavior.Key == key && behavior.isAvailable)
+            {
+                behavior.Ready = true;
+                if (behavior.type == Define.AttackType.Skill_Target && Target != null) //스킬이 타겟팅이면 재타겟팅
+                    SetTarget(Target, behavior.Range);
+                break;
+            }
+        }
+
+    }
     protected void SkillUnlock()
     {
         if (Stats.level > 3)
@@ -223,39 +259,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         }
     }
 
-    private void OnSkillReady()
-    {
-        //이미 예약된 스킬이 있다면 스킵
-        foreach (AttackBehavior behavior in SkillBehaviors)
-        {
-            if (behavior.Ready)
-                return;
-        }
-                
-        //예약된 스킬이 없다면 예약
 
-        KeyCode key = KeyCode.None;
-        if (Input.GetKeyDown(KeyCode.Q))
-            key = KeyCode.Q;
-        if (Input.GetKeyDown(KeyCode.W))
-            key = KeyCode.W;
-        if (Input.GetKeyDown(KeyCode.E))
-            key = KeyCode.E;
-        if (Input.GetKeyDown(KeyCode.R))
-            key = KeyCode.R;
-
-        foreach (AttackBehavior behavior in SkillBehaviors)
-        {
-            if (behavior.Key == key && behavior.isAvailable)
-            {
-                behavior.Ready = true;
-                if (behavior.type == Define.AttackType.Skill_Target && Target != null) //스킬이 타겟팅이면 재타겟팅
-                    SetTarget(Target, behavior.Range);    
-                break;
-            }
-        }
-    
-    }
 
     private void OpenStatUI()
     {
@@ -311,11 +315,13 @@ public class PlayerController : BaseController, IAttackable, IDamageable
             if (_equipInven.AddItemPossible(groundItem.ItemObject, groundItem.ItemObject.itemAmount))
             {
                 Managers.Resource.Destroy(groundItem.gameObject);
+                Managers.Craft.UpdateContainItems();
                 return true;
             }
             if (_dynamicInven.AddItemPossible(groundItem.ItemObject, groundItem.ItemObject.itemAmount))
             {
                 Managers.Resource.Destroy(groundItem.gameObject);
+                Managers.Craft.UpdateContainItems();
                 return true;
             }
             return false;

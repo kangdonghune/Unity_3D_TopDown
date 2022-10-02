@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_TargetPointer : UI_World
+public class UI_TargetPointer : MonoBehaviour
 {
     public float playTime = 0.5f;
     public float surfaceOffset = 0.2f; //지면에서 특정 높이 만큼 위로

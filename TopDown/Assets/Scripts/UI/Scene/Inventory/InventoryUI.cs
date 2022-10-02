@@ -22,6 +22,7 @@ public abstract class InventoryUI : MonoBehaviour
     public InventoryObject inventoryObject;
     public GameObject Owner { get; set; } = null;
     private InventoryObject preInventoryObject;
+    protected GameObject ItemTextBox;
 
     public Dictionary<GameObject, InventorySlot> slotUIs = new Dictionary<GameObject, InventorySlot>();
     #region UnityFunc
@@ -37,6 +38,7 @@ public abstract class InventoryUI : MonoBehaviour
 
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
+        
     }
 
     protected virtual void Start()
@@ -51,12 +53,24 @@ public abstract class InventoryUI : MonoBehaviour
 
     public abstract void CreateSlotUIs();
 
+    public void UpdateItemBox()
+    {
+        if (slotUIs[MouseData.slotHoveredOver].ItemObject != null)
+        {
+            ItemTextBox = Managers.Resource.Instantiate("UI/Inventory/ItemTextBox", null, 1);
+            ItemTextBox.GetComponentInChildren<ItemInfo>().ItemObject = slotUIs[MouseData.slotHoveredOver].ItemObject;
+        }
+        else
+            Managers.Resource.Destroy(ItemTextBox);
+
+    }
+
     #region Event
     protected void AddEvent(GameObject go, EventTriggerType type, UnityAction<BaseEventData> action)
     {
         EventTrigger trigger = go.GetOrAddComponent<EventTrigger>();
         EventTrigger.Entry eventTrigger = new EventTrigger.Entry() { eventID = type };
-        eventTrigger.callback.RemoveListener(action);//이미 있는 상태라면 제거를 해줘야 중복 추가가 안된다.
+        //eventTrigger.callback.RemoveListener(action);//이미 있는 상태라면 제거를 해줘야 중복 추가가 안된다.
         eventTrigger.callback.AddListener(action);
         trigger.triggers.Add(eventTrigger);
     }
@@ -107,15 +121,22 @@ public abstract class InventoryUI : MonoBehaviour
     public void OnEndDrag(GameObject go)
     {
         Destroy(MouseData.tempItemBeginDragged);
+
+        if(Owner.GetComponent<PlayerController>().state == Define.PlayerState.Craft)
+        {
+            return;
+        }
+
         if(MouseData.interfaceMouseIsOver == null) // 인벤토리 밖으로 드래그 했다면 인벤토리에서 아이템 제거
         {
             if (slotUIs[go].ItemObject == null)
                 return;
             GameObject groundItme = Managers.Resource.Instantiate("UI/Inventory/GroundItem");//바닥 아이템 생성
-            groundItme.transform.position = Owner.transform.position;
+            groundItme.transform.position = Owner.transform.position + Vector3.up/2;
             groundItme.GetComponent<GroundItem>().ItemObject = slotUIs[go].ItemObject;//아이템복사
             groundItme.GetComponent<GroundItem>().ItemObject.itemAmount = slotUIs[go].amount; //아이템 개수 저장
             slotUIs[go].RemoveItem();//아이템 제거
+            Managers.Craft.UpdateContainItems();
         }
         else if(MouseData.slotHoveredOver) //드래그 종료 지점에 슬롯이 존재한다면 해당 슬롯의 아이템과 드래그하고 있던 것을 교체
         {
@@ -174,6 +195,14 @@ public abstract class InventoryUI : MonoBehaviour
         return dragImage;
     }
 
+
+    private void OnDestroy()
+    {
+        if (Managers.UI == null)
+            return;
+        if (Managers.UI.inventorys.Contains(inventoryObject))
+            Managers.UI.inventorys.Remove(inventoryObject);
+    }
     #endregion
 
     public virtual bool AddItemPossible(ItemObject item, int amount) { return false; }

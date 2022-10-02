@@ -27,14 +27,15 @@ public class DynamicInventoryUI : InventoryUI
     [Min(1), SerializeField]
     protected int numberOfColumn = 5;
 
-    private GameObject ItemTextBox;
-
 
     protected override void Awake()
     {
         //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
         InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/PlayerInventory");
         inventoryObject = Object.Instantiate(original);
+        //인벤토리 생성 시 매니저에 추가
+        Managers.UI.inventorys.Add(inventoryObject);
+        Managers.UI.inventoryUIs.Add(this);
         base.Awake();
     }
 
@@ -54,7 +55,7 @@ public class DynamicInventoryUI : InventoryUI
             GameObject go = Managers.Resource.Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, transform);
             go.GetComponent<RectTransform>().anchoredPosition = CalculatePosition(i);
             go.GetComponent<RectTransform>().sizeDelta = size;
-            go.GetOrAddComponent<EventTrigger>().triggers.Clear();
+     
 
             AddEvent(go, EventTriggerType.PointerEnter, delegate { OnEnterSlot(go); });
             AddEvent(go, EventTriggerType.PointerExit, delegate { OnExitSlot(go); });
@@ -72,16 +73,16 @@ public class DynamicInventoryUI : InventoryUI
             go.name += ": " + i;
             go.FindChild<TextMeshProUGUI>().text = i.ToString();
 
-
-            slotUIs[go].parent.AddItem(database.itemObjects[0].data, 10);
         }
     }
+
 
     public override void OnEnterSlot(GameObject go)
     {
         base.OnEnterSlot(go);
-        ItemTextBox = Managers.Resource.Instantiate("UI/Inventory/ItemTextBox", null, 1);
-        ItemTextBox.GetComponentInChildren<ItemInfo>().ItemObject = slotUIs[MouseData.slotHoveredOver].ItemObject;
+        UpdateItemBox();
+        if (ItemTextBox != null)
+            ItemTextBox.transform.GetChild(0).GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);
     }
 
     public override void OnExitSlot(GameObject go)
@@ -104,6 +105,8 @@ public class DynamicInventoryUI : InventoryUI
             SetEquipment(slot);
         else
             UsingConsumable(slot);
+        Managers.Resource.Destroy(ItemTextBox);
+        UpdateItemBox();
     }
 
     public override bool AddItemPossible(ItemObject itemObj, int amount)
@@ -125,6 +128,7 @@ public class DynamicInventoryUI : InventoryUI
     {
         slot.parent.OnUseItem(slot.ItemObject);
         slot.RemoveAmount(1);
+        Managers.Craft.UpdateContainItems();
     }
 
     public Vector3 CalculatePosition(int i)

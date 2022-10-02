@@ -113,13 +113,14 @@ public class CursorController : MonoBehaviour
         {
 			if (Physics.Raycast(ray, out hit, 100.0f, mask))
 			{
-				_pointer = Managers.UI.CreateWorldUI<UI_TargetPointer>("MovePoint", transform);
+				_pointer = Managers.Resource.Instantiate($"UI/WorldSpace/MovePoint", transform).GetOrAddComponent<UI_TargetPointer>();
 				_pointer.SetPosition(hit);
 			}
 		}
 		else
-        {
-			_pointer = Managers.UI.CreateWorldUI<UI_TargetPointer>("Targeting", transform);
+
+		{
+			_pointer = Managers.Resource.Instantiate($"UI/WorldSpace/Targeting", transform).GetOrAddComponent<UI_TargetPointer>();
 			_pointer.SetTarget(Target.transform);
 
 		}

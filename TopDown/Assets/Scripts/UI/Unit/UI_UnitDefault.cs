@@ -4,12 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_UnitDefault : UI_Unit
+public class UI_UnitDefault : MonoBehaviour
 {
-    enum Sliders
-    {
-        HP,
-    }
 
     public Slider _hpSlider;
     public GameObject DamageText;
@@ -33,13 +29,6 @@ public class UI_UnitDefault : UI_Unit
         set { _hpSlider.value = value; }
     }
 
-    public override void Init()
-    {
-        base.Init();
-        Bind<Slider>(typeof(Sliders));
-        _hpSlider = Get<Slider>((int)Sliders.HP);
-
-    }
 
     public void CreateDamageText(int damage)
     {

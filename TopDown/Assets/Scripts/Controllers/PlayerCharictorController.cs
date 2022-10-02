@@ -15,6 +15,7 @@ public class PlayerCharictorController : PlayerController
         _stateMachine = new StateMachine<PlayerController>(this, new PlayerIdleState());
         _stateMachine.AddState(new PlayerMoveState());
         _stateMachine.AddState(new PlayerAttackState());
+        _stateMachine.AddState(new PlayerCraftState());
     }
 
     protected override void Update()

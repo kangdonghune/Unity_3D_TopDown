@@ -8,17 +8,9 @@ public class ItemInfo : MonoBehaviour
     enum Texts { ItemName, Stats, Description, End}
     private ItemObject _itemObject;
     public ItemObject ItemObject { get { return _itemObject; } set { _itemObject = value; TextUpdate();} }
-    private TextMeshProUGUI[] _texts = new TextMeshProUGUI[(int)Texts.End];
+    public GameObject[] texts;
 
-    private void Awake()
-    {
-        for (int i = 0; i < _texts.Length; i++)
-        {
-            _texts[i] = transform.GetChild(i).GetComponent<TextMeshProUGUI>();
-        }
-    }
-
-    private void OnGUI()
+    private void LateUpdate()
     {
         Vector3 screenPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z);
         gameObject.GetComponent<RectTransform>().position = screenPos;
@@ -26,14 +18,14 @@ public class ItemInfo : MonoBehaviour
 
     private void TextUpdate()
     {
-        _texts[(int)Texts.ItemName].text = _itemObject.data.name;
+        texts[(int)Texts.ItemName].GetComponent<TextMeshProUGUI>().text = _itemObject.data.name;
         string stats = "";
         foreach(ItemBuff buff in _itemObject.data.buffs)
         {
             stats += buff.stat.ToString() + " : " + buff.value.ToString("n2") +"\n";
         }
-        _texts[(int)Texts.Stats].text =stats;
-        _texts[(int)Texts.Description].text = _itemObject.description;
+        texts[(int)Texts.Stats].GetComponent<TextMeshProUGUI>().text =stats;
+        texts[(int)Texts.Description].GetComponent<TextMeshProUGUI>().text = _itemObject.description;
 
     }
 }

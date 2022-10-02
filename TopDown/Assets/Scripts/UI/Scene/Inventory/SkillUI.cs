@@ -6,18 +6,18 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillUI : InventoryUI
+public class SkillUI : SlotUI
 {
     public GameObject[] SkillsSlots = null;
     public GameObject TextBoard = null;
     public List<AttackBehavior> skills;
 
-    protected override void Awake()
+    protected void Awake()
     {
         //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
         InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/SKill");
         inventoryObject = Instantiate(original);
-        base.Awake();
+        CreateSlotUIs();
     }
 
     protected override void Start()
@@ -33,7 +33,7 @@ public class SkillUI : InventoryUI
         }
     }
 
-    public override void CreateSlotUIs()
+    public void CreateSlotUIs()
     {
         slotUIs = new Dictionary<GameObject, InventorySlot>();
 
@@ -89,8 +89,8 @@ public class SkillUI : InventoryUI
     {
         base.OnEnterSlot(go);
         TextBoard.SetActive(true);
-        string test = MouseData.slotHoveredOver.GetComponent<SkillInfo>().Text;
-        TextBoard.GetComponentInChildren<TextMeshProUGUI>().text = MouseData.slotHoveredOver.GetComponent<SkillInfo>().Text;
+        string test = OnMouseSlotData.slotHoveredOver.GetComponent<SkillInfo>().Text;
+        TextBoard.GetComponentInChildren<TextMeshProUGUI>().text = OnMouseSlotData.slotHoveredOver.GetComponent<SkillInfo>().Text;
 
     }
 

@@ -88,7 +88,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     protected virtual void Update()
     {
         CheckAttackBehavior();
-        _defalutUI.Value = Data.stats.HP;
+        _defalutUI.Value = Data.stats.HealthPercentage;
     }
 
     protected void InitAttackBehavior()
@@ -155,11 +155,11 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
 
         Data.stats.AddHP(-damage);
         _defalutUI.CreateDamageText(damage);
-        _defalutUI.Value = Data.stats.HP;
+        _defalutUI.Value = Data.stats.HealthPercentage;
 
         if (IsAlive == false)
         {
-            attacker.GetComponent<BaseController>().Stats.exp += Data.stats.exp;
+            attacker.GetComponent<BaseController>().Stats.AddExp(Data.stats.exp);
             StateMachine.ChangeState<DeadState>();
         }
 

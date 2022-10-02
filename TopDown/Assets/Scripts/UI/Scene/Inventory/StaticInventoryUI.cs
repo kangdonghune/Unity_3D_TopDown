@@ -20,13 +20,14 @@ public class StaticInventoryUI : InventoryUI
     [SerializeField]
     protected Vector2 space;
 
-    private GameObject ItemTextBox;
-
     protected override void Awake()
     {
         //인벤토리를 그대로 넣으면 해당 인벤토리 객체가 공유되고 또한 저장되는 현상이 발생. 복사 생성하여 임시 객체로 사용
         InventoryObject original = Resources.Load<InventoryObject>("Prefab/UI/Inventory/PlayerEquipment");
         inventoryObject = Object.Instantiate(original);
+        //인벤토리 생성 시 매니저에 추가
+        Managers.UI.inventorys.Add(inventoryObject);
+        Managers.UI.inventoryUIs.Add(this);
         base.Awake();
     }
 
@@ -61,8 +62,10 @@ public class StaticInventoryUI : InventoryUI
     public override void OnEnterSlot(GameObject go)
     {
         base.OnEnterSlot(go);
-        ItemTextBox = Managers.Resource.Instantiate("UI/Inventory/ItemTextBox", null, 1);
-        ItemTextBox.GetComponentInChildren<ItemInfo>().ItemObject = slotUIs[MouseData.slotHoveredOver].ItemObject;
+        UpdateItemBox();
+        if(ItemTextBox != null)
+            ItemTextBox.transform.GetChild(0).GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);
+
     }
 
     public override void OnExitSlot(GameObject go)
@@ -86,7 +89,7 @@ public class StaticInventoryUI : InventoryUI
             emptySlot.parent.AddItem(slot.item, slot.amount); //빈 슬롯에 아이템 추가
             slot.RemoveItem();// 아이템 제거
         }
-
+        Managers.Resource.Destroy(ItemTextBox);
     }
 
     public override bool AddItemPossible(ItemObject itemObj, int amount)

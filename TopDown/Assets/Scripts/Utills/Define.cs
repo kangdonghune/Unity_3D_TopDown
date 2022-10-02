@@ -15,6 +15,7 @@ public class Define
     public enum KeyEvent { Down, Press, None}
     public enum AttackType { Default, Skill_Target, Skill_NoneTarget}
     public enum PlayerAttackIndex { Default = 0, Q = 1, W = 2, E = 3, R = 4}
+    public enum PlayerState { Idle, Move, Attack, Craft}
     public enum MonsterAttackPattern { Attack1 = 0, Attack2 =1 , Projectile = 2 }
     public enum AttackPrioty { Firts = 5, Second = 4, Third = 3, Forth = 2, Fifth = 1, }
     public enum ItemType { Weapon = 0, Helmet = 1, Chest = 2, Gloves = 3, Pants = 4, Boots = 5, Accessories = 6, Consumable, Food, Default }

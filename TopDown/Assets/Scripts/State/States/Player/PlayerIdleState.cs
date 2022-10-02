@@ -9,8 +9,9 @@ public class PlayerIdleState : State<PlayerController>
     private CharacterController _controller;
     private NavMeshAgent _navAgent;
 
-    protected int hasMove = Animator.StringToHash("Move");
-    protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
+    protected int hashIdle = Animator.StringToHash("Idle");
+    protected int hashMove = Animator.StringToHash("Move");
+    protected int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
 
 
     public override void Init()
@@ -24,8 +25,10 @@ public class PlayerIdleState : State<PlayerController>
 
     public override void Enter()
     {
-        _animator.SetBool(hasMove, false);
-        _animator.SetFloat(hasMoveSpeed, 0f);
+        context.state = Define.PlayerState.Idle;
+        _animator.SetBool(hashIdle, true);
+        _animator.SetBool(hashMove, false);
+        _animator.SetFloat(hashMoveSpeed, 0f);
     }
 
     public override void Update(float deltaTime)
@@ -51,5 +54,6 @@ public class PlayerIdleState : State<PlayerController>
 
     public override void Exit()
     {
+        _animator.SetBool(hashIdle, false);
     }
 }

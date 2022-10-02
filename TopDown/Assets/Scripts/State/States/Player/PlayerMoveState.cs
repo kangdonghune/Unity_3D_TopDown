@@ -21,6 +21,7 @@ public class PlayerMoveState : State<PlayerController>
 
     public override void Enter()
     {
+        context.state = Define.PlayerState.Move;
         _animator.SetBool(hashMove, true);
         _animator.SetFloat(hashMoveSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed));
     }

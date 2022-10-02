@@ -42,6 +42,7 @@ public class CameraController : MonoBehaviour
         CameraRayCast(mode); // 카메라와 플레이어 레이캐스팅 후 위치 조정
     }
 
+
     public void SetTarget(GameObject obj)
     {
         Target = obj;
@@ -97,13 +98,22 @@ public class CameraController : MonoBehaviour
         Vector3 _lookTargetPosition = Target.transform.position;
         _lookTargetPosition.y += lookAtHeight;
 
-        Vector3 dir = _lookTargetPosition - transform.position;
+        Vector3 cameraToPlayerDir = _lookTargetPosition - transform.position;
+        Vector3 PlayerToCameraDir = transform.position - _lookTargetPosition;
         RaycastHit hit;
         LayerMask mask = LayerMask.GetMask("Wall");
 
-        if (Physics.Raycast(transform.position, dir.normalized, out hit, dir.magnitude, mask))
+        if (Physics.Raycast(transform.position, cameraToPlayerDir.normalized, out hit, cameraToPlayerDir.magnitude, mask))
         {
-            hit.collider.gameObject.GetComponent<MeshRenderer>().enabled =false;
+            hit.collider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            hit.collider.gameObject.layer = (int)Define.Layer.Enabled;
+            _enabledObjects.Add(hit.collider.gameObject);
+            CameraRayCast(mode);
+        }
+
+        if (Physics.Raycast(_lookTargetPosition, PlayerToCameraDir.normalized, out hit, PlayerToCameraDir.magnitude, mask))
+        {
+            hit.collider.gameObject.GetComponent<MeshRenderer>().enabled = false;
             hit.collider.gameObject.layer = (int)Define.Layer.Enabled;
             _enabledObjects.Add(hit.collider.gameObject);
             CameraRayCast(mode);
