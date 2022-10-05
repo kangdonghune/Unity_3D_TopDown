@@ -5,12 +5,13 @@ using UnityEngine;
 public class FieldOfView : MonoBehaviour
 {
     public float ViewRadius { get; set; } = 5f;
-    private float _viewAngle = 90f;
+    private float _viewAngle = 120f;
     private float _delay = 0.2f;
 
     public float ViewAngle
     {
         get { return _viewAngle; }
+        set { _viewAngle = value; }
     }
 
     private int _targetMask = (1 << (int)Define.Layer.Player);
@@ -27,11 +28,6 @@ public class FieldOfView : MonoBehaviour
     void Start()
     {
         StartCoroutine("FindTargetwithDelay", _delay);
-    }
-
-    void Update()
-    {
-        
     }
 
     IEnumerator FindTargetwithDelay(float delay)

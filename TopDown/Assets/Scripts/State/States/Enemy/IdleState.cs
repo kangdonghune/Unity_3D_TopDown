@@ -12,6 +12,7 @@ public class IdleState : State<EnemyController>
 
     protected int hasMove = Animator.StringToHash("Move");
     protected int hasMoveSpeed = Animator.StringToHash("MoveSpeed");
+    public int HashDead = Animator.StringToHash("IsDead");
 
 
     public override void Init()
@@ -31,7 +32,8 @@ public class IdleState : State<EnemyController>
 
         if (context.Data.isPatrol)
         {
-            _wayPoint.idleTime = Random.Range(_wayPoint.MinIdleTime, _wayPoint.MaxIdleTime);
+            //_wayPoint.idleTime = Random.Range(_wayPoint.MinIdleTime, _wayPoint.MaxIdleTime);
+            _wayPoint.idleTime = 0f;
         }
     }
 

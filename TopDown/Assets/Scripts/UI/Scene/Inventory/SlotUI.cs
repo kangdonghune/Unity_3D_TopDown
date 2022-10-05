@@ -113,6 +113,9 @@ public abstract class SlotUI : MonoBehaviour
     }
 
 
-
+    private void OnDestroy()
+    {
+        Managers.Resource.Destroy(ItemTextBox);
+    }
     #endregion
 }

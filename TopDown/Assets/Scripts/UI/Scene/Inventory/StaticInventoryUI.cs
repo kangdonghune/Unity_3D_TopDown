@@ -89,6 +89,7 @@ public class StaticInventoryUI : InventoryUI
             emptySlot.parent.AddItem(slot.item, slot.amount); //빈 슬롯에 아이템 추가
             slot.RemoveItem();// 아이템 제거
         }
+        Managers.Sound.Play("ItemGet");
         Managers.Resource.Destroy(ItemTextBox);
     }
 

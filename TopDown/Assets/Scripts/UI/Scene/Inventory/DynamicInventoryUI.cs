@@ -122,6 +122,7 @@ public class DynamicInventoryUI : InventoryUI
             if (inventoryObject.SwapItems(slot, equipment.inventoryObject.slots[i]))
                 break;
         }
+        Managers.Sound.Play("ItemGet");
 
     }
     private void UsingConsumable(InventorySlot slot)

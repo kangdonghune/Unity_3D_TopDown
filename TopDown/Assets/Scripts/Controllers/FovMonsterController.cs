@@ -8,6 +8,7 @@ public class FovMonsterController : EnemyController
     #region Variable
     public override Transform Target { get { return _fov.NearestTarget; } }
     private FieldOfView _fov;
+    private StatsObject _stats;
     #endregion
 
     internal override Transform SearchEnemy()
@@ -29,11 +30,14 @@ public class FovMonsterController : EnemyController
             SettingWayPoint();
             _stateMachine.AddState(new MoveToWayPointState());
         }
+        _stats = gameObject.GetComponent<EnemyController>().Stats;
     }
 
     protected override void Update()
     {
         base.Update();
         _stateMachine.Update(Time.deltaTime);
+        if (_stats.HP < _stats.GetModifiedValue(Define.UnitAttribute.HP)) //피격 당한 상태라면
+            _fov.ViewAngle = 360f;
     }
 }

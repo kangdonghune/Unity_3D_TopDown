@@ -26,7 +26,8 @@ public class GroundItem : MonoBehaviour, IInteractable
         if (calcDistance - 0.1f > distance)
             return false;
 
-       return other.GetComponent<PlayerController>()?.PickUpItem(this) ?? false;
+        Managers.Sound.Play("ItemGet");
+        return other.GetComponent<PlayerController>()?.PickUpItem(this) ?? false;
     }
 
     public void StopInteract(GameObject other)

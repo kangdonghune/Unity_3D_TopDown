@@ -31,14 +31,14 @@ public class EffectManager
         ParticleSystem particleSystem = VFX.GetComponent<ParticleSystem>();
         if (particleSystem)
         {
-            DestroyCount(effect,particleSystem.main.duration);
+            DestroyCount(effect,particleSystem.main.duration - 0.05f);
         }
         else
         {
             ParticleSystem childParticleSystem = VFX.transform.GetChild(0).GetComponent<ParticleSystem>();
             if (childParticleSystem)
             {
-                DestroyCount(effect, childParticleSystem.main.duration);
+                DestroyCount(effect, childParticleSystem.main.duration - 0.05f);
             }
         }
 

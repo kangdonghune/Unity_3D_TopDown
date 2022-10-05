@@ -16,10 +16,10 @@ public class Define
     public enum AttackType { Default, Skill_Target, Skill_NoneTarget}
     public enum PlayerAttackIndex { Default = 0, Q = 1, W = 2, E = 3, R = 4}
     public enum PlayerState { Idle, Move, Attack, Craft}
-    public enum MonsterAttackPattern { Attack1 = 0, Attack2 =1 , Projectile = 2 }
+    public enum MonsterAttackPattern { Attack1 = 0, Attack2 =1 , Attack3 = 2, NonTarget = 3, Buff = 4,   Projectile = 5 }
     public enum AttackPrioty { Firts = 5, Second = 4, Third = 3, Forth = 2, Fifth = 1, }
     public enum ItemType { Weapon = 0, Helmet = 1, Chest = 2, Gloves = 3, Pants = 4, Boots = 5, Accessories = 6, Consumable, Food, Default }
     public enum UnitAttribute { HP, Mana, Attack, AttackSpeed, Defence, MoveSpeed, }
     public enum MonsterInterface {FOV,Patrol,}
-    public enum Tag { Bear, Palet,ItemBox}
+    public enum Tag { Bear, Palet, DogKnight, Barrel, WoodenBox,ItemBox}
 }

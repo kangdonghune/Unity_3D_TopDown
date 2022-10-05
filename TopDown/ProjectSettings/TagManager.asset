@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Bear
   - Palet
+  - Cloth
+  - Weapon
+  - DogKnight
+  - WoodenBox
+  - Barrel
   layers:
   - Default
   - TransparentFX

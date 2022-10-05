@@ -25,6 +25,7 @@ public abstract class AttackBehavior : MonoBehaviour
     public bool Active = true;
 
     public GameObject effectPrefab;
+    public AudioClip soundPrefab;
     public int targetMask;
 
 

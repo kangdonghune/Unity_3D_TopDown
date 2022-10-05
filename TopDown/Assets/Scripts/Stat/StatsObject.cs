@@ -27,6 +27,7 @@ public class StatsObject : ScriptableObject
                 if (attribute.type == Define.UnitAttribute.HP)
                 {
                     maxHealth = attribute.value.ModifiedValue;
+                    break;
                 }
             }
             return (maxHealth > 0 ? (health / maxHealth) : 0f);
@@ -142,6 +143,16 @@ public class StatsObject : ScriptableObject
         return HP;
     }
 
+    public float SetHP(float value)
+    {
+        HP = value;
+        if (HP > GetModifiedValue(Define.UnitAttribute.HP))
+            HP = GetModifiedValue(Define.UnitAttribute.HP);
+        OnChangeStats?.Invoke(this);
+
+        return HP;
+    }
+
     public float AddMana(float value)
     {
         Mana += value;
@@ -179,4 +190,5 @@ public class StatsObject : ScriptableObject
         }
         OnChangeStats?.Invoke(this);
     }
+
 }

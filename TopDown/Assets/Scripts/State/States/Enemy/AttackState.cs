@@ -17,6 +17,12 @@ public class AttackState : State<EnemyController>
         _animator = context.GetComponent<Animator>();
         _attackStateController = context.GetComponent<AttackStateController>();
         _attackable = context.GetComponent<IAttackable>();
+
+        //트리거를 키기 전에 컨트롤러 이벤트핸들러에 함수 추가
+        _attackStateController.enterAttackStateHandler -= OnEnterAttackState;
+        _attackStateController.exitAttackStateHandler -= OnExitAttackState;
+        _attackStateController.enterAttackStateHandler += OnEnterAttackState;
+        _attackStateController.exitAttackStateHandler += OnExitAttackState;
     }
 
     public override void Enter()
@@ -37,9 +43,7 @@ public class AttackState : State<EnemyController>
             stateMachine.ChangeState<IdleState>();
             return;
         }
-        //트리거를 키기 전에 컨트롤러 이벤트핸들러에 함수 추가
-        _attackStateController.enterAttackStateHandler += OnEnterAttackState;
-        _attackStateController.exitAttackStateHandler += OnExitAttackState;
+   
 
         _animator.SetInteger(hashAttackIndex, _attackable.CurrentAttackBehavior.AnimationIndex);
         //실제 애니메이터에서 state로 넘어가는 건 트리거를 켜주는 순간
@@ -52,19 +56,15 @@ public class AttackState : State<EnemyController>
     }
     public override void Exit()
     {
-        //퇴장 시 추가 했던 함수 제거(+는 중첩이 되지만 -는 중첩이 안되니 안전상 걸어두는편이 좋다.)
-        _attackStateController.enterAttackStateHandler -= OnEnterAttackState;
-        _attackStateController.exitAttackStateHandler -= OnExitAttackState;
     }
 
     public void OnEnterAttackState()
     {
-        stateMachine.ChangeState<AttackState>();
     }
 
     public void OnExitAttackState()
     {
-        stateMachine.ChangeState<IdleState>();
+
     }
 
 }

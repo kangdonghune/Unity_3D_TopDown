@@ -42,10 +42,12 @@ public class MoveToWayPointState : State<EnemyController>
             if (context.IsAvailableAttack)
             {
                 stateMachine.ChangeState<AttackState>();
+                return;
             }
             else
             {
                 stateMachine.ChangeState<MoveState>();
+                return;
             }
         }
         else
@@ -59,6 +61,7 @@ public class MoveToWayPointState : State<EnemyController>
                     _agent.SetDestination(nextDest.position);
                 }
                 stateMachine.ChangeState<IdleState>();
+                return;
             }
             else
             {

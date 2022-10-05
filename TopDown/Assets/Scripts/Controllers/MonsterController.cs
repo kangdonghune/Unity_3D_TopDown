@@ -13,7 +13,8 @@ public class MonsterController : EnemyController
     protected override void Init()
     {
         base.Init();
-        _stateMachine = new StateMachine<EnemyController>(this, new IdleState());
+        _stateMachine = new StateMachine<EnemyController>(this, new ReadyState());
+        _stateMachine.AddState(new IdleState());
         _stateMachine.AddState(new MoveState());
         _stateMachine.AddState(new AttackState());
         _stateMachine.AddState(new DeadState());
@@ -27,9 +28,17 @@ public class MonsterController : EnemyController
     protected override void Update()
     {
         base.Update();
+        SkillUnlock();
         _stateMachine.Update(Time.deltaTime);
     }
 
+    protected void SkillUnlock()
+    {
+        if (Stats.HealthPercentage < 0.7f)
+            SkillBehaviors[2].Active = true;
+        if (Stats.HealthPercentage < 0.5f)
+            SkillBehaviors[3].Active = true;
+    }
 
     #region GizMos
     private void OnDrawGizmos()

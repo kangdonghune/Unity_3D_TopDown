@@ -20,6 +20,7 @@ public class PlayerCraftState : State<PlayerController>
         context.state = Define.PlayerState.Craft;
         _animator.SetBool(hashCraft, true);
         context.attackCollider?.transform.parent.parent.gameObject.SetActive(false);
+        Managers.Sound.Play("Craft", Define.Sound.BGM);
     }
 
     public override void Update(float deltaTime)
@@ -32,6 +33,8 @@ public class PlayerCraftState : State<PlayerController>
     {
         context.attackCollider?.transform.parent.parent.gameObject.SetActive(true);
         _animator.SetBool(hashCraft, false);
+        Managers.Sound.Play("CraftEnd");
+        Managers.Sound.Stop(Define.Sound.BGM);
     }
 }
 

@@ -24,7 +24,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
     public MonsterObject Data { get; set; }
     private UI_UnitDefault _defalutUI;
 
-
+    public Collider attackCollider;
     #endregion
 
 
@@ -77,7 +77,9 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         {
             if (monsterObject.data.name == gameObject.tag)
             {
+                StatsObject original = Resources.Load<StatsObject>($"Prefab/Data/Monster/Stat/{gameObject.tag}Stat");
                 Data = Instantiate<MonsterObject>(monsterObject);
+                Data.stats = Instantiate<StatsObject>(original);
                 Data.stats.InitializeAttribute(Data.stats);
                 Stats = Data.stats;
                 break;
@@ -127,17 +129,32 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         if(CurrentAttackBehavior != null && Target != null)
         {
             CurrentAttackBehavior.ExecuteAttack(Target.gameObject, projectileTransform);
+  
         }
     }
 
     public void OnAttackStart()
     {
+        if (CurrentAttackBehavior != null)
+        {
+            CurrentAttackBehavior.AttackStart();
+        }
     }
+
     public void OnAttackUpdate()
     {
+        if (CurrentAttackBehavior != null)
+        {
+            CurrentAttackBehavior.AttackUpdate();
+        }
     }
+
     public void OnAttackEnd()
     {
+        if (CurrentAttackBehavior != null)
+        {
+            CurrentAttackBehavior.AttackEnd();
+        }
     }
 
     public bool IsAlive => Data.stats.HP > 0;
@@ -171,7 +188,10 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         transform.gameObject.GetOrAddComponent<WayPoint>();//만약 waypoint컴퍼넌트 없으면 추가
     }
 
-
+    public void AddBuff(ItemBuff buff, float duration)
+    {
+        StartCoroutine(CoAddBuff(buff, duration));
+    }
 
 
     #endregion

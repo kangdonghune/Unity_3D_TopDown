@@ -11,6 +11,7 @@ public class MoveState : State<EnemyController>
 
     protected int hashMove = Animator.StringToHash("Move");
     protected int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
+    protected int hashTarget = Animator.StringToHash("Target");
 
     public override void Init()
     {
@@ -28,19 +29,22 @@ public class MoveState : State<EnemyController>
     public override void Update(float deltaTime)
     {
         Transform enemy = context.SearchEnemy();
+        _animator.SetFloat(hashMoveSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * 10);
         if (enemy)
         {
+            _animator.SetBool(hashTarget, true);
             _agent.stoppingDistance = context.attackRange;
             _agent.SetDestination(context.Target.position);
             if (_agent.remainingDistance> _agent.stoppingDistance)
             {
-                _controller.Move(_agent.desiredVelocity * context.Data.stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed) * deltaTime);
+                _controller.Move(_agent.desiredVelocity * context.Data.stats.GetModifiedValue(Define.UnitAttribute.MoveSpeed ) * deltaTime);
                 context.transform.position = new Vector3(context.transform.position.x, _agent.nextPosition.y, context.transform.position.z);
                 _agent.velocity = _controller.velocity;
-                _animator.SetFloat(hashMoveSpeed, _agent.velocity.magnitude / _agent.speed, .1f, Time.deltaTime);
                 return;
             }
         }
+        else
+            _animator.SetBool(hashTarget, false);
         stateMachine.ChangeState<AttackState>();
 
     }

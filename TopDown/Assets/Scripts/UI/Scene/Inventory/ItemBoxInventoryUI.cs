@@ -131,7 +131,7 @@ public class ItemBoxInventoryUI : SlotUI
             Managers.Craft.UpdateContainItems();
             ItemBoxslot.RemoveItem();
         }
-
+        Managers.Sound.Play("ItemGet");
     }
 
     public bool ConnectInven(GameObject invenGo)

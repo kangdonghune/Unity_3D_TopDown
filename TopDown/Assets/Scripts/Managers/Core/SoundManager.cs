@@ -23,16 +23,24 @@ public class SoundManager
                 go.transform.parent = root.transform;
             }
             _audioSources[(int)Define.Sound.BGM].loop = true;
-            _audioSources[(int)Define.Sound.Effect].spatialBlend = 1.0f;
+            //3d 음향 여부. max 1 일 때 3d 음향 0으로 갈 수록 3d 음향효과 제거
+            _audioSources[(int)Define.Sound.Effect].spatialBlend = 0f;
         }
     }
 
+
+    public void Stop(Define.Sound type = Define.Sound.Effect)
+    {
+        AudioSource audiosource = _audioSources[(int)type];
+        audiosource.Stop();
+    }
 
     public void Play( string path, Define.Sound type = Define.Sound.Effect, float pitch =1.0f)
     {
         AudioClip audio = GetOrAddAudioClips(path,type); 
         Play(audio, type, pitch);
     }
+        
 
     public void Play(AudioClip audioClip, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
     {
@@ -88,24 +96,25 @@ public class SoundManager
         }
     }
 
+
     AudioClip GetOrAddAudioClips(string path, Define.Sound type = Define.Sound.Effect)
     {
 
-        if (path.Contains("Sounds/") == false)
+        if (path.Contains("Sounds") == false)
             path = $"Sounds/{path}";
 
         AudioClip audioClip = null;
 
         if (type == Define.Sound.BGM)
         {
-            audioClip = Managers.Resource.Load<AudioClip>(path);
+            audioClip = Managers.Resource.Load<AudioClip>($"Prefab/{path}");
         }
 
         else
         {
             if (_audioClips.TryGetValue(path, out audioClip) == false)
             {
-                audioClip = Managers.Resource.Load<AudioClip>(path);
+                audioClip = Managers.Resource.Load<AudioClip>($"Prefab/{path}");
                 _audioClips.Add(path, audioClip);
             }
 

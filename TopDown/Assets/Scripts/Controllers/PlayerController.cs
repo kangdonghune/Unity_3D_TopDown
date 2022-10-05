@@ -47,7 +47,11 @@ public class PlayerController : BaseController, IAttackable, IDamageable
     [HideInInspector]
     public bool isMove = false;
 
-    public Collider attackCollider; 
+    [HideInInspector]
+    public Collider attackCollider;
+    [HideInInspector]
+    public AudioClip attackSound;
+    public AudioClip stepSound;
 
 
     #endregion
@@ -212,6 +216,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                     IInteractable interactable = hit.collider.GetComponent<IInteractable>();
                     if(interactable != null)
                     {
+                        RemoveTarget();
                         SetTarget(hit.collider.transform, interactable.Distance);
                     }
                     _navAgent.SetDestination(hit.collider.transform.position);
@@ -220,6 +225,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                     break;
                 case (int)Define.Layer.Monster:
                     //ToDo 추후 스테이트패턴으로 변경
+                    RemoveTarget();
                     SetTarget(hit.collider.transform, CurrentAttackBehavior.Range);
                     isMove = true;
                     isStop = true;
@@ -341,6 +347,7 @@ public class PlayerController : BaseController, IAttackable, IDamageable
                 case Define.UnitAttribute.HP:
                     StartCoroutine(CoAddHp(buff, 5, 5f));
                     _defalutUI.CreateDamageText((int)buff.value);
+                    Managers.Sound.Play("Eat");
                     break;
                 case Define.UnitAttribute.Mana:
                     StartCoroutine(CoAddMana(buff, 5, 5f));
@@ -410,12 +417,16 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         if (CurrentAttackBehavior != null && targetObj != null)
         {
             CurrentAttackBehavior.ExecuteAttack(targetObj);
+            if(attackSound != null)
+                Managers.Sound.Play(attackSound);
             return;
         }    
 
         if (CurrentAttackBehavior != null && Target != null)
         {
             CurrentAttackBehavior.ExecuteAttack(Target.gameObject);
+            if (attackSound != null)
+                Managers.Sound.Play(attackSound);
         }
     }
 
@@ -423,8 +434,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
 
     public void TakeDamage(int damage, GameObject hitEffectPrefabs, GameObject attacker)
     {
-        if (!IsAlive)
-            return;
+        //if (!IsAlive)
+        //    return;
+        if (IsAlive == false)
+            Stats.SetHP(1);
 
         if (hitEffectPrefabs)
         {
@@ -447,7 +460,10 @@ public class PlayerController : BaseController, IAttackable, IDamageable
         StopAllCoroutines();
     }
 
-
+    public void OnStepEvent()
+    {
+        Managers.Sound.Play(stepSound);
+    }
     #endregion
 
     #region Corutine

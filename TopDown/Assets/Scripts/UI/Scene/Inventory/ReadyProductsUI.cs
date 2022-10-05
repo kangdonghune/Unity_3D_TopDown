@@ -128,7 +128,10 @@ public class ReadyProductsUI : SlotUI
         _controller.StateMachine.ChangeState<PlayerCraftState>();
         yield return new WaitForSeconds(time);
         if (Managers.Craft.Craft(slot.ItemObject))
+        {
+            _controller.Stats.AddExp(slot.ItemObject.exp); //제작 경험치 추가
             slot.RemoveItem();
+        }
         Managers.Craft.UpdateContainItems();//다 만들고 재료아이템도 제거했다면 다시 보유 아이템 업데이트
         _controller.StateMachine.ChangeState<PlayerIdleState>();
     }
