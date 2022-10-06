@@ -118,10 +118,17 @@ public class CursorController : MonoBehaviour
 			}
 		}
 		else
-
 		{
-			_pointer = Managers.Resource.Instantiate($"UI/WorldSpace/Targeting", transform).GetOrAddComponent<UI_TargetPointer>();
-			_pointer.SetTarget(Target.transform);
+			if(Target.GetComponent<IInteractable>() == null)
+            {
+				_pointer = Managers.Resource.Instantiate($"UI/WorldSpace/Targeting", transform).GetOrAddComponent<UI_TargetPointer>();
+				_pointer.SetTarget(Target.transform);
+			}
+			else
+            {
+				Target.GetComponent<Outline>().OutlineColor = Color.red;
+            }
+
 
 		}
 		
