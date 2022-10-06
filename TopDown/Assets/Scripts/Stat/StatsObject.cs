@@ -68,6 +68,13 @@ public class StatsObject : ScriptableObject
     {
         attributes = statsObject.attributes;
 
+        foreach (Attribute attribute in attributes)
+        {
+            attribute.value = new ModifiableFloat(attribute.value.ModifiedValue,OnModifiedValue); //스텟오브젝트에서 값이 변경된 경우로 초기화
+            ItemBuff buff = new ItemBuff(attribute.type, attribute.value.ModifiedValue);
+            attribute.value.AddModifier(buff);
+        }
+
         level = statsObject.level;
         exp = statsObject.exp;
 

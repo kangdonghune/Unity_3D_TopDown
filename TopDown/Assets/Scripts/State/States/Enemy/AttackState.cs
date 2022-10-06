@@ -11,7 +11,7 @@ public class AttackState : State<EnemyController>
 
     private int hashAttackTrigger = Animator.StringToHash("AttackTrigger");
     protected int hashAttackIndex = Animator.StringToHash("AttackIndex");
-
+    private int hashAttackSpeed = Animator.StringToHash("AttackSpeed");
     public override void Init()
     {
         _animator = context.GetComponent<Animator>();
@@ -52,6 +52,7 @@ public class AttackState : State<EnemyController>
     
     public override void Update(float deltaTime)
     {
+        _animator.SetFloat(hashAttackSpeed, context.Stats.GetModifiedValue(Define.UnitAttribute.AttackSpeed));
         context.transform.rotation = Quaternion.Slerp(context.transform.rotation, Quaternion.LookRotation(_lookDir), 0.2f);
     }
     public override void Exit()

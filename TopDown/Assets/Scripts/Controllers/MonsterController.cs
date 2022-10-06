@@ -35,9 +35,9 @@ public class MonsterController : EnemyController
     protected void SkillUnlock()
     {
         if (Stats.HealthPercentage < 0.7f)
-            SkillBehaviors[2].Active = true;
+            attackBehaviors[3].Ready = true;
         if (Stats.HealthPercentage < 0.5f)
-            SkillBehaviors[3].Active = true;
+            attackBehaviors[4].Ready = true;
     }
 
     #region GizMos

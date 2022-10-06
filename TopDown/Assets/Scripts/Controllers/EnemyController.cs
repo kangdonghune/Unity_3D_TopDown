@@ -112,7 +112,7 @@ public abstract class EnemyController : BaseController, IAttackable, IDamageable
         //어택 behavior를 순회하며 isAvailable이 참인 것 중 우선도가 가장 높은 것은 현재 실행할 behavior로 지정 
         foreach (AttackBehavior behavior in attackBehaviors)
         {
-            if(behavior.isAvailable)
+            if(behavior.isAvailable && behavior.Ready == true)
             {
                 if (CurrentAttackBehavior == null || CurrentAttackBehavior.Priority < behavior.Priority)
                     CurrentAttackBehavior = behavior;

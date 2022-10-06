@@ -18,6 +18,12 @@ public class ModifiableFloat
 
     private List<IModifier> modifiers = new List<IModifier>();
 
+    public ModifiableFloat(float value, Action<ModifiableFloat> method = null)
+    {
+        ModifiedValue = value;
+        RegisterModEvent(method); //생성 시 이벤트 추가
+    }
+
     public ModifiableFloat(Action<ModifiableFloat> method = null)
     {
         ModifiedValue = baseValue;
